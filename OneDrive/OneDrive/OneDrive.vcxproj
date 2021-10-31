@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{6b1b3bf0-766d-4884-b326-f672fe652e74}</ProjectGuid>
+    <ProjectGuid>{53768407-b782-4149-bb4f-cd9394bb571e}</ProjectGuid>
     <RootNamespace>OneDrive</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
