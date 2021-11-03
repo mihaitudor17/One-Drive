@@ -1,14 +1,17 @@
 #include <iostream>
+#include <chrono>
+#include <iomanip>
+#include <fstream>
+#include <filesystem>
 #include <string>
 
 int main()
 {
-    for (int i = 0; i < 10; i++) {
-        std::cout<<i << ". Simple commit test for commit counter script\n";
-    }
-    std::string input;
-    do {
-        std::getline(std::cin, input);
-        std::cout << input;
-    } while (input!="Close");
+	//initialise folder path
+	auto path = std::filesystem::temp_directory_path() / "C:/Users/gliza/Desktop/Synchronized Folder";
+
+	for (auto& p : std::filesystem::directory_iterator(path)) {
+		std::string fileName = p.path().string();
+		std::cout << fileName << std::endl;
+	}
 }
