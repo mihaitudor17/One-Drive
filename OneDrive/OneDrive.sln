@@ -1,31 +1,22 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.31321.278
+VisualStudioVersion = 16.0.30523.141
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OneDrive", "OneDrive\OneDrive.vcxproj", "{53768407-B782-4149-BB4F-CD9394BB571E}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OneDrive", "OneDrive\OneDrive.vcxproj", "{FEF7A763-8E68-47B8-A3CA-47BD8806D16F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
-		Debug|x86 = Debug|x86
-		Release|x64 = Release|x64
-		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{53768407-B782-4149-BB4F-CD9394BB571E}.Debug|x64.ActiveCfg = Debug|x64
-		{53768407-B782-4149-BB4F-CD9394BB571E}.Debug|x64.Build.0 = Debug|x64
-		{53768407-B782-4149-BB4F-CD9394BB571E}.Debug|x86.ActiveCfg = Debug|Win32
-		{53768407-B782-4149-BB4F-CD9394BB571E}.Debug|x86.Build.0 = Debug|Win32
-		{53768407-B782-4149-BB4F-CD9394BB571E}.Release|x64.ActiveCfg = Release|x64
-		{53768407-B782-4149-BB4F-CD9394BB571E}.Release|x64.Build.0 = Release|x64
-		{53768407-B782-4149-BB4F-CD9394BB571E}.Release|x86.ActiveCfg = Release|Win32
-		{53768407-B782-4149-BB4F-CD9394BB571E}.Release|x86.Build.0 = Release|Win32
+		{FEF7A763-8E68-47B8-A3CA-47BD8806D16F}.Debug|x64.ActiveCfg = Debug|x64
+		{FEF7A763-8E68-47B8-A3CA-47BD8806D16F}.Debug|x64.Build.0 = Debug|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {9E34FF1E-ECC2-4645-9D4D-8BCE5CA953FB}
+		SolutionGuid = {448D8D40-5FC3-4641-926A-4601257FE304}
 	EndGlobalSection
 EndGlobal

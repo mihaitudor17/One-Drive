@@ -1,14 +1,7 @@
-#include <iostream>
-#include <string>
+#include "OneDrive.h"
 
-int main()
+OneDrive::OneDrive(QWidget *parent)
+    : QMainWindow(parent)
 {
-    for (int i = 0; i < 10; i++) {
-        std::cout<<i << ". Simple commit test for commit counter script\n";
-    }
-    std::string input;
-    do {
-        std::getline(std::cin, input);
-        std::cout << input;
-    } while (input!="Close");
+    ui.setupUi(this);
 }
