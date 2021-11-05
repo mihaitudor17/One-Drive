@@ -29,16 +29,18 @@
     <QtUic Include="OneDrive.ui">
       <Filter>Form Files</Filter>
     </QtUic>
-    <QtMoc Include="OneDrive.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <ClCompile Include="OneDrive.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Window.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="Window.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
 </Project>
