@@ -60,8 +60,8 @@
   <ItemGroup>
     <QtRcc Include="OneDrive.qrc" />
     <QtUic Include="OneDrive.ui" />
-    <QtMoc Include="OneDrive.h" />
-    <ClCompile Include="OneDrive.cpp" />
+    <QtMoc Include="Window.h" />
+    <ClCompile Include="Window.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
