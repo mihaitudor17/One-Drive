@@ -2,7 +2,18 @@
 #include <QMessageBox>
 #include <QLineEdit>
 
+void Window::on_Button_clicked() // on click i take the username and store it
+{
+    if (!editUsername->text().isEmpty())
+    {
+        std::string username = editUsername->text().toStdString();
 
+        label->setText("Name saved");
+    }
+    else
+        label->setText("Introduceti scris");
+
+}
 
 
 
@@ -13,6 +24,7 @@ Window::Window(QWidget* parent)
     QPushButton* button;
     
     QHBoxLayout* mainLayout;
+    QVBoxLayout* secondLayout;
    
     setWindowTitle("Window test");
     
@@ -21,14 +33,20 @@ Window::Window(QWidget* parent)
     editUsername = new QLineEdit();
     label = new QLabel();
 
+    button->setFixedSize(100, 20);
+    button->setStyleSheet("border-radius:10px;background-color:grey;border:3 px solid black;");
+    connect(button, SIGNAL(clicked()), SLOT(on_Button_clicked()));
    
     mainLayout = new QHBoxLayout(this); 
-   
-    mainLayout->addWidget(labelUsername);
-    mainLayout->addWidget(editUsername, Qt::AlignCenter);
+    secondLayout = new QVBoxLayout(this);
+
+
+    secondLayout->addWidget(labelUsername);
+    secondLayout->addWidget(editUsername, Qt::AlignCenter);
     
-    mainLayout->addWidget(button, Qt::AlignCenter);
-    mainLayout->addWidget(label, Qt::AlignCenter);
+    secondLayout->addWidget(button, Qt::AlignCenter);
+    secondLayout->addWidget(label, Qt::AlignCenter);
+    mainLayout->addLayout(secondLayout, Qt::AlignCenter);
    
     
   
