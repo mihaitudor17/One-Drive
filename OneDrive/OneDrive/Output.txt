@@ -1,7 +1,1 @@
-Folder 1:
-./Synchronized Folder 1\Ceva 13280587729039
-./Synchronized Folder 1\Input.txt 13280434604177
-Folder 2:
-./Synchronized Folder 2\Ceva 13280589574901
-./Synchronized Folder 2\Input.txt 13280589598155
-./Synchronized Folder 2\moar.txt 13280757241576
+The last modified folder is: Synchronized Folder 2
