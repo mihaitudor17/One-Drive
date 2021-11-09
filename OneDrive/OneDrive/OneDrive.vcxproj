@@ -53,16 +53,21 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <QtRcc Include="OneDrive.qrc" />
     <QtUic Include="OneDrive.ui" />
-    <QtMoc Include="Window.h" />
-    <ClCompile Include="Window.cpp" />
-    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="JsonIntroduction.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="heroes.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="json.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
