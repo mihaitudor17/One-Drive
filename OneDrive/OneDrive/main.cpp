@@ -50,7 +50,14 @@ int main(int argc, char *argv[])
 		}
 		folder2NumberOfFiles++;
 	}
-	std::cout << "Number of files in folder 1: " << folder1NumberOfFiles;
+	std::cout << "Copying everything from folder 1 into folder 2:\n";
+	for (auto& it : std::filesystem::directory_iterator(path1)) {
+		std::cout << it.path().string() << std::endl;
+		if (std::filesystem::exists(path2 / it.path().filename())) {
+			remove(path2 / it.path().filename());
+		}
+		std::filesystem::copy(it, path2);
+	}
 	f << "The last modified folder is: " << lastWrittenFolder;
     return a.exec();
 }
