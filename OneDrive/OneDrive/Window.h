@@ -13,7 +13,8 @@ public:
     Window(QWidget* parent = 0);
 
     private slots:
-    void Window::on_Button_clicked();
+    void on_Button_clicked();
+    
 
 
 private:

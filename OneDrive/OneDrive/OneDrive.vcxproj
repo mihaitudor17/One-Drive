@@ -62,10 +62,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="JSON.cpp" />
-    <ClCompile Include="JsonMain.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="JSON.h" />
+    <QtMoc Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="heroes.json" />
