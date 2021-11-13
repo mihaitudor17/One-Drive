@@ -48,6 +48,9 @@
     <ClCompile Include="TCP_Client.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="WindowAccount.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="JSON.h">
@@ -61,9 +64,13 @@
     <None Include="heroes.json" />
     <None Include="out.json" />
     <None Include="heroes.json" />
+    <None Include="heroes.json" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Window.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="WindowAccount.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
