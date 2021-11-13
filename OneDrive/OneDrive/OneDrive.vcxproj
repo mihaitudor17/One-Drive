@@ -63,10 +63,12 @@
   <ItemGroup>
     <ClCompile Include="JSON.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="TCP_Client.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="JSON.h" />
+    <ClInclude Include="TCP_Client.h" />
     <QtMoc Include="Window.h" />
   </ItemGroup>
   <ItemGroup>

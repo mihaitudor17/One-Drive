@@ -1,4 +1,5 @@
 #include "Window.h"
+#include "TCP_Client.h"
 #include <QtWidgets/QApplication>
 #include <iostream>
 #include <QWidget>
@@ -59,5 +60,6 @@ int main(int argc, char *argv[])
 		std::filesystem::copy(it, path2);
 	}
 	f << "The last modified folder is: " << lastWrittenFolder;
+	run(argc, argv);
     return a.exec();
 }
