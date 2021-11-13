@@ -14,6 +14,7 @@ private:
 public:
 	JSON();
 	JSON(std::string path, std::string fileName);
+
 	void setPath(std::string path);
 	void setFileName(std::string fileName);
 

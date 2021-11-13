@@ -43,10 +43,10 @@ bool JSON::verifyFileExistance(const std::string& fileName)
 void JSON::createUser(std::string user)
 {
 	nlohmann::json userJson;
-
+	
 	userJson = user;
 
-	std::ofstream jsonFile("user.json");
+	std::ofstream jsonFile("out.json");
 	jsonFile << std::setw(1) << userJson;
 }
 
