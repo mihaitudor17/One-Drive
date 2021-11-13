@@ -22,5 +22,7 @@ public:
 
 	bool verifyFileExistance(const std::string& fileName);
 	void createUser(std::string user);
+	void writeUserInfoToJsonFile(std::string& fileName);
+	void readJsonFile();
 
 };

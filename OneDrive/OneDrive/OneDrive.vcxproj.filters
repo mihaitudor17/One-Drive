@@ -28,16 +28,21 @@
     </QtUic>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="JSON.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Window.cpp">
+    <ClCompile Include="JsonMain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="Window.h">
+    <ClInclude Include="JSON.h">
       <Filter>Header Files</Filter>
-    </QtMoc>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="heroes.json">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

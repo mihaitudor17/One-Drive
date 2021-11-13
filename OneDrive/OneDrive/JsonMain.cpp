@@ -5,9 +5,9 @@
 
 int main()
 {
-	JSON j;
+	JSON j("./heroes.json", "heroes.json");
 
-	std::cout << j.verifyFileExistance("heroes.json");
+	j.readJsonFile();
 
 	return 0;
 }

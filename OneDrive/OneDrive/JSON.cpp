@@ -49,3 +49,27 @@ void JSON::createUser(std::string user)
 	std::ofstream jsonFile("user.json");
 	jsonFile << std::setw(1) << userJson;
 }
+
+void JSON::writeUserInfoToJsonFile(std::string& fileName)
+{
+	m_fileName = fileName;
+
+	fileName = "{";
+	fileName += "\"users\": [";
+	//fileName += "\t\t[";
+	fileName += "Catalin";
+	fileName += "]";
+	fileName += "}";
+
+	//fileName = 
+}
+
+void JSON::readJsonFile()
+{
+	nlohmann::json readData;
+
+	std::ifstream in(m_fileName);
+	in >> readData;
+
+	std::cout << readData << '\n';
+}
