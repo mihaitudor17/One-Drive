@@ -15,6 +15,19 @@ void Window::on_Button_clicked() // on click i take the username and store it
 
 }
 
+void Window::Signup()
+{
+    if (!editUsername->text().isEmpty())
+    {
+        std::string username = editUsername->text().toStdString();
+
+        label->setText("Name saved");
+    }
+    else
+        label->setText("Introduceti scris");
+
+}
+
 
 Window::Window(QWidget* parent)
 {
@@ -39,7 +52,7 @@ Window::Window(QWidget* parent)
     connect(login, SIGNAL(clicked()), SLOT(on_Button_clicked()));
     signUp->setFixedSize(100, 20);
     signUp->setStyleSheet("border-radius:10px;background-color:grey;border:3 px solid black;");
- 
+    connect(signUp, SIGNAL(clicked()), SLOT(Signup()));
     editUsername->setMaximumSize(300, 20);
     mainLayout = new QHBoxLayout(this);
     secondLayout = new QVBoxLayout(this);
