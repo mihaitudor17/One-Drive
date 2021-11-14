@@ -58,8 +58,9 @@ int main(int argc, char *argv[])
 			remove(path2 / it.path().filename());
 		}
 		std::filesystem::copy(it, path2);
-	}
+
+	}//trimit getline din it in path2 pe server
 	f << "The last modified folder is: " << lastWrittenFolder;
-	run(argc, argv);
+	client(argc, argv);
     return a.exec();
 }
