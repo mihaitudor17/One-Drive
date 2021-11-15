@@ -8,6 +8,7 @@ int main()
 	JSON j("./heroes.json", "heroes.json");
 
 	j.readJsonFile();
+	j.inputJsonAndOutputInAnotherJson();
 
 	return 0;
 }

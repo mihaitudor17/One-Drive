@@ -70,6 +70,15 @@ void JSON::readJsonFile()
 
 	std::ifstream in(m_fileName);
 	in >> readData;
+}
 
-	std::cout << readData << '\n';
+void JSON::inputJsonAndOutputInAnotherJson()
+{
+	nlohmann::json inputJson;
+
+	std::ifstream in("heroes.json", std::ifstream::binary);
+	in >> inputJson;
+
+	std::ofstream out("out.json");
+	out << std::setw(1) << inputJson;
 }

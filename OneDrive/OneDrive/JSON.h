@@ -25,5 +25,6 @@ public:
 	void createUser(std::string user);
 	void writeUserInfoToJsonFile(std::string& fileName);
 	void readJsonFile();
+	void inputJsonAndOutputInAnotherJson();
 
 };
