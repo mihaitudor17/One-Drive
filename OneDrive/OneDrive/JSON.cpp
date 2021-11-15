@@ -43,7 +43,7 @@ bool JSON::verifyFileExistance(const std::string& fileName)
 void JSON::createUser(std::string user)
 {
 	nlohmann::json userJson;
-	
+
 	userJson = user;
 
 	std::ofstream jsonFile("out.json");
@@ -52,16 +52,7 @@ void JSON::createUser(std::string user)
 
 void JSON::writeUserInfoToJsonFile(std::string& fileName)
 {
-	m_fileName = fileName;
 
-	fileName = "{";
-	fileName += "\"users\": [";
-	//fileName += "\t\t[";
-	fileName += "Catalin";
-	fileName += "]";
-	fileName += "}";
-
-	//fileName = 
 }
 
 void JSON::readJsonFile()
@@ -76,9 +67,22 @@ void JSON::inputJsonAndOutputInAnotherJson()
 {
 	nlohmann::json inputJson;
 
-	std::ifstream in("heroes.json", std::ifstream::binary);
-	in >> inputJson;
+	std::ifstream input("heroes.json", std::ifstream::binary);
+	input >> inputJson;
 
-	std::ofstream out("out.json");
-	out << std::setw(1) << inputJson;
+	std::ofstream output("out.json");
+	output << std::setw(1) << inputJson;
+}
+
+void JSON::writeUsersWithoutOverwriting()
+{
+	std::ofstream out(getFileName(), std::fstream::app);
+
+	std::string user;
+	std::cout << "Input a username: ";
+	std::cin >> user;
+
+	out << user << '\n';
+
+	out.close();
 }

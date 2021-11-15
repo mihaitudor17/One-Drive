@@ -55,5 +55,8 @@
     <None Include="heroes.json" />
     <None Include="heroes.json" />
     <None Include="heroes.json" />
+    <None Include="userOutput.json">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

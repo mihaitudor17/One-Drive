@@ -69,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="heroes.json" />
+    <None Include="userOutput.json" />
   </ItemGroup>
   <ItemGroup>
     <None Include="heroes.json" />

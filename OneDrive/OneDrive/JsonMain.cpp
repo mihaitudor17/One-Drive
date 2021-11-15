@@ -5,10 +5,9 @@
 
 int main()
 {
-	JSON j("./heroes.json", "heroes.json");
+	JSON j(". / userOutput.json", "userOutput.json");
 
-	j.readJsonFile();
-	j.inputJsonAndOutputInAnotherJson();
+	j.writeUsersWithoutOverwriting();
 
 	return 0;
 }

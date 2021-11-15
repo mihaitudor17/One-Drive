@@ -26,5 +26,6 @@ public:
 	void writeUserInfoToJsonFile(std::string& fileName);
 	void readJsonFile();
 	void inputJsonAndOutputInAnotherJson();
+	void writeUsersWithoutOverwriting();
 
 };
