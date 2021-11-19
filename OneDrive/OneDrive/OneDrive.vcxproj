@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Folder.cpp" />
+    <ClCompile Include="JSON.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="TCP_Client.cpp" />
@@ -73,6 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Folder.h" />
+    <ClInclude Include="JSON.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="TCP_Client.h" />
     <QtMoc Include="WindowAccount.h" />

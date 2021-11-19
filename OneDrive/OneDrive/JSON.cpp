@@ -74,15 +74,12 @@ void JSON::inputJsonAndOutputInAnotherJson()
 	output << std::setw(1) << inputJson;
 }
 
-void JSON::writeUsersWithoutOverwriting()
+void JSON::writeUsersWithoutOverwriting(const std::string & text)
 {
 	std::ofstream out(getFileName(), std::fstream::app);
 
-	std::string user;
-	std::cout << "Input a username: ";
-	std::cin >> user;
 
-	out << user << '\n';
+	out << text << '\n';
 
 	out.close();
 }
