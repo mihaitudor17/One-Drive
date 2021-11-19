@@ -8,6 +8,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <filesystem>
 #pragma comment (lib, "Ws2_32.lib")
 #define DEFAULT_BUFLEN 512
 #define DEFAULT_PORT "27015"
@@ -36,7 +37,7 @@ int __cdecl main(void)
     ClientSocket = accept(ListenSocket, NULL, NULL);
     closesocket(ListenSocket);
     bool numeFisier= 0;
-    std::string path;
+    std::filesystem::path path;
     do {
         iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
         if (iResult > 0) {
@@ -44,7 +45,10 @@ int __cdecl main(void)
             if (!numeFisier)
             {
                 path = "./Synchronized Folder 2/" + temp;
-                numeFisier++;
+                if (std::filesystem::exists(path)) {
+                    remove(path);
+                }
+                numeFisier=1;
             }
             else
                 if (numeFisier)
@@ -54,7 +58,7 @@ int __cdecl main(void)
                     else
                     {
                         std::ofstream g;
-                        g.open(path, std::ios::app);//de sters fisier inainte de append
+                        g.open(path, std::ios::app);
                         g << temp << std::endl;
                         g.close();
                     }
