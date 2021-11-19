@@ -1,4 +1,8 @@
 #include "TCP_Client.h"
+#include <filesystem>
+#include <iostream>
+namespace fs = std::filesystem;
+fs::path pathToShow{"./Synchronized Folder 1"};
 int __cdecl client(int argc, char** argv)
 {
     WSADATA wsaData;
@@ -34,14 +38,21 @@ int __cdecl client(int argc, char** argv)
         WSACleanup();
         return 1;
     }
-    std::ifstream f("input.txt");
-    std::string temp;
-    while(std::getline(f, temp))
-    {
-        sendbuf = temp.c_str();
-        send(ConnectSocket, sendbuf, (int)strlen(sendbuf), 0);
-        iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
-        std::string s(recvbuf, iResult);
+    for (const auto& entry : fs::directory_iterator(pathToShow)) {
+        const auto filenameStr = entry.path().filename().string();
+        if (entry.is_regular_file()) {
+            std::cout << entry << std::endl;
+            std::ifstream f(entry.path().string());
+            std::string temp;
+            while (std::getline(f, temp))
+            {
+                sendbuf = temp.c_str();
+                send(ConnectSocket, sendbuf, (int)strlen(sendbuf), 0);
+                iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
+                std::string s(recvbuf, iResult);
+                std::cout << s << std::endl;
+            }
+        }
     }
     iResult = shutdown(ConnectSocket, SD_SEND);
     closesocket(ConnectSocket);

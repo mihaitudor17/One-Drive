@@ -42,6 +42,6 @@ int main(int argc, char* argv[])
 	else {
 		std::cout << folder2.m_folderName;
 	}
-	//client(argc, argv);
+	client(argc, argv);
 	return a.exec();
 }
