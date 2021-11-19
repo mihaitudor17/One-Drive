@@ -22,6 +22,9 @@ int main(int argc, char *argv[])
 	long long lastWrittenTime=0;
 	std::string lastWrittenFolder;
 
+	Folder test("Synchronized Folder 1",path1);
+	test.assignLastWrittenTime();
+	std::cout << test.m_lastWrittenTime << std::endl;
 	if (!std::filesystem::exists(path1)) {
 		std::filesystem::create_directory(path1);
 	}
@@ -37,7 +40,7 @@ int main(int argc, char *argv[])
 		}
 		folder1NumberOfFiles++;
 	}
-
+	std::cout << lastWrittenTime << std::endl;
 	for (auto& p : std::filesystem::directory_iterator(path2)) {
 		std::string fileName = p.path().string();
 		if (lastWrittenTime < std::chrono::duration_cast<std::chrono::milliseconds>(p.last_write_time().time_since_epoch()).count()) {
