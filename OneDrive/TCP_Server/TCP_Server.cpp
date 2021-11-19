@@ -5,6 +5,9 @@
 #include <ws2tcpip.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string>
+#include <iostream>
+#include <fstream>
 #pragma comment (lib, "Ws2_32.lib")
 #define DEFAULT_BUFLEN 512
 #define DEFAULT_PORT "27015"
@@ -32,13 +35,31 @@ int __cdecl main(void)
     iResult = listen(ListenSocket, SOMAXCONN);
     ClientSocket = accept(ListenSocket, NULL, NULL);
     closesocket(ListenSocket);
-    int ok = 0;
+    bool numeFisier= 0;
+    std::string path;
     do {
         iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
         if (iResult > 0) {
-            printf("Bytes received: %d\n", iResult);
+            std::string temp(recvbuf, iResult);
+            if (!numeFisier)
+            {
+                path = "./Synchronized Folder 2/" + temp;
+                numeFisier++;
+            }
+            else
+                if (numeFisier)
+                {
+                    if (temp == "/eof")
+                        numeFisier = 0;
+                    else
+                    {
+                        std::ofstream g;
+                        g.open(path, std::ios::app);//de sters fisier inainte de append
+                        g << temp << std::endl;
+                        g.close();
+                    }
+                }
             iSendResult = send(ClientSocket, recvbuf, iResult, 0);
-            printf("Bytes sent: %d\n", iSendResult);
         }
         else if (iResult == 0)
             printf("Connection closing...\n");
