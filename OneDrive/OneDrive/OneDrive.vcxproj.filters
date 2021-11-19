@@ -28,15 +28,6 @@
     </QtUic>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="TCP_Client.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Menu.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Folder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="JSON.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -44,7 +35,15 @@
   <ItemGroup>
     <None Include="heroes.json" />
     <None Include="heroes.json" />
-    <None Include="heroes.json" />
+    <None Include="heroes.json">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="out.json">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="userOutput.json">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Output.txt">
@@ -52,34 +51,11 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="TCP_Client.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Window.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="WindowAccount.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Menu.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Folder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="JSON.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <QtMoc Include="Window.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="WindowAccount.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
+    <ClCompile Include="JsonMain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

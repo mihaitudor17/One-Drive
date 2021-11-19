@@ -1,3 +1,10 @@
-Catalin
-Mihai
-Sorin
+{
+  "user": [
+    {
+      "username": "Catalin"
+    },
+    {
+      "username": "Tinel"
+    }
+  ]
+}

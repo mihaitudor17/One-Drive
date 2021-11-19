@@ -7,7 +7,7 @@ int main()
 {
 	JSON j(". / userOutput.json", "userOutput.json");
 
-	j.writeUsersWithoutOverwriting();
+	j.writeUserInfoToJsonFile("userOutput.json");
 
 	return 0;
 }
