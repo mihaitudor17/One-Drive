@@ -45,7 +45,6 @@
     <None Include="heroes.json" />
     <None Include="heroes.json" />
     <None Include="heroes.json" />
-    <None Include="heroes.json" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Output.txt">

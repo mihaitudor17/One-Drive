@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="TCP_Server.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
