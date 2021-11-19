@@ -1,15 +1,10 @@
 #include "Window.h"
 #include "TCP_Client.h"
 #include <QtWidgets/QApplication>
-#include <iostream>
 #include <QWidget>
 #include <QObject>
 #include <QString>
-#include <chrono>
-#include <iomanip>
-#include <fstream>
-#include <filesystem>
-#include <string>
+#include "Folder.h">
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -61,6 +56,6 @@ int main(int argc, char *argv[])
 
 	}//trimit getline din it in path2 pe server
 	f << "The last modified folder is: " << lastWrittenFolder;
-	client(argc, argv);
+	//client(argc, argv);
     return a.exec();
 }

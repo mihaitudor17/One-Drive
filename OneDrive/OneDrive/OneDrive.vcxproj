@@ -61,19 +61,22 @@
     <QtUic Include="OneDrive.ui" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="JSON.cpp" />
-    <ClCompile Include="JsonMain.cpp" />
+    <Text Include="Output.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="JSON.h" />
+    <ClCompile Include="Folder.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="TCP_Client.cpp" />
+    <ClCompile Include="Window.cpp" />
+    <ClCompile Include="WindowAccount.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="heroes.json" />
-    <None Include="userOutput.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="heroes.json" />
-    <None Include="out.json" />
+    <ClInclude Include="Folder.h" />
+    <ClInclude Include="Menu.h" />
+    <ClInclude Include="TCP_Client.h" />
+    <QtMoc Include="WindowAccount.h" />
+    <QtMoc Include="Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
