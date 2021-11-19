@@ -64,11 +64,19 @@
     <Text Include="Output.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Folder.cpp" />
     <ClCompile Include="JSON.cpp" />
-    <ClCompile Include="JsonMain.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="TCP_Client.cpp" />
+    <ClCompile Include="Window.cpp" />
+    <ClCompile Include="WindowAccount.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Folder.h" />
     <ClInclude Include="JSON.h" />
+    <ClInclude Include="TCP_Client.h" />
+    <QtMoc Include="WindowAccount.h" />
+    <QtMoc Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="heroes.json" />

@@ -2,8 +2,9 @@
 #include <QMessageBox>
 #include <QLineEdit>
 #include "WindowAccount.h"
+#include <fstream>
+#include <iostream>
 
-JSON databaseUsername("./Usernames.json", "Usernames.json");
 
 void Window::on_Button_clicked() // on click i take the username and store it
 {
@@ -29,12 +30,34 @@ void Window::Signup()
 	{
 		std::string username = editUsername->text().toStdString();
 
-		databaseUsername.writeUsersWithoutOverwriting(username);
-		
+		if (uniqueUsernames.find(username) == uniqueUsernames.end())
+		{
+			label->clear();
+			databaseUsername.writeUsersWithoutOverwriting(username);
+
+		}
+		else
+		{
+			label->setText("This user name already exists!");
+		}
+
+
 	}
 	else
-		label->setText("Introduceti scris");
+	{
+		std::cout << "e empty" << std::endl;
+	}
 
+}
+
+void Window::readJsonInSet(std::unordered_set<std::string>& uniqueUsernames)
+{
+	for (std::ifstream fis("Usernames.json"); !fis.eof();)
+	{
+		std::string read;
+		std::getline(fis, read);
+		uniqueUsernames.insert(read);
+	}
 }
 
 
@@ -43,12 +66,13 @@ Window::Window(QWidget* parent)
 	QWidget* ui_area = new QWidget;
 	setCentralWidget(ui_area);
 	QPushButton* login, * signUp;
-	
 	QHBoxLayout* mainLayout, * buttonLayout;
 	QVBoxLayout* secondLayout;
+	databaseUsername.setPath("./Usernames.json");
+	databaseUsername.setFileName("Usernames.json");
+	readJsonInSet(uniqueUsernames);
 
-	setWindowTitle("Window test");
-
+	setWindowTitle("Login");
 	labelUsername = new QLabel("Username");
 	labelUsername->setAlignment(Qt::AlignBottom);
 	signUp = new QPushButton("SignUp");
@@ -58,8 +82,7 @@ Window::Window(QWidget* parent)
 	QLabel* welcome = new QLabel("Welcome to OneDrive!");
 	welcome->setStyleSheet("font-size:30px;font-weight:bold;");
 
-	setWindowTitle("Account Window");
-
+	label->setStyleSheet("color:red;font-size:20px;font: \"Times New Roman\", Times;");
 	login->setFixedSize(100, 20);
 	login->setStyleSheet("border-radius:10px;background-color:grey;border:3 px solid black;");
 	connect(login, SIGNAL(clicked()), SLOT(on_Button_clicked()));
