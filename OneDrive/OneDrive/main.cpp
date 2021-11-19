@@ -4,61 +4,44 @@
 #include <QWidget>
 #include <QObject>
 #include <QString>
-#include "Folder.h">
-int main(int argc, char *argv[])
+#include "Folder.h"
+void copyDirectoryContentsFromTo(std::filesystem::path source, std::filesystem::path destination) {
+	for (auto& it : std::filesystem::directory_iterator(source)) {
+		if (std::filesystem::exists(destination / it.path().filename())) {
+			remove(destination / it.path().filename());
+		}
+		std::filesystem::copy(it, destination);
+	}
+}
+int main(int argc, char* argv[])
 {
-    QApplication a(argc, argv);
-    Window w;
-    w.setFixedSize(700, 700);
-    w.show();
+	QApplication a(argc, argv);
+	Window w;
+	w.setFixedSize(700, 700);
+	w.show();
+	if (!std::filesystem::exists("./Synchronized Folder 1")) {
+		std::filesystem::create_directory("./Synchronized Folder 1");
+	}
+	if (!std::filesystem::exists("./Synchronized Folder 2")) {
+		std::filesystem::create_directory("./Synchronized Folder 2");
+	}
 	//initialise folder path
-	std::string folder1 = "Synchronized Folder 1";
-	std::string folder2 = "Synchronized Folder 2";
-	int folder1NumberOfFiles = 0;
-	int folder2NumberOfFiles = 0;
-	std::filesystem::path path1 = "./"+ folder1;
-	std::filesystem::path path2 = "./"+ folder2;
-	std::ofstream f("Output.txt");
-	long long lastWrittenTime=0;
-	std::string lastWrittenFolder;
-
-	Folder test("Synchronized Folder 1",path1);
-	test.assignLastWrittenTime();
-	std::cout << test.m_lastWrittenTime << std::endl;
-	if (!std::filesystem::exists(path1)) {
-		std::filesystem::create_directory(path1);
+	Folder folder1("Synchronized Folder 1", "./Synchronized Folder 1");
+	Folder folder2("Synchronized Folder 2", "./Synchronized Folder 2");
+	folder1.assignLastWrittenTime();
+	folder1.assignNumberOfFiles();
+	folder2.assignLastWrittenTime();
+	folder2.assignNumberOfFiles();
+	copyDirectoryContentsFromTo(folder2.m_path,folder1.m_path);
+	folder1.assignLastWrittenTime();
+	folder2.assignLastWrittenTime();
+	std::cout << "The last modified folder is: ";
+	if (folder1.m_lastWrittenTime > folder2.m_lastWrittenTime) {
+		std::cout << folder1.m_folderName;
 	}
-	if (!std::filesystem::exists(path2)) {
-		std::filesystem::create_directory(path2);
+	else {
+		std::cout << folder2.m_folderName;
 	}
-
-	for (auto& p : std::filesystem::directory_iterator(path1)) {
-		std::string fileName = p.path().string();
-		if (lastWrittenTime < std::chrono::duration_cast<std::chrono::milliseconds>(p.last_write_time().time_since_epoch()).count()) {
-			lastWrittenTime = std::chrono::duration_cast<std::chrono::milliseconds>(p.last_write_time().time_since_epoch()).count();
-			lastWrittenFolder = folder1;
-		}
-		folder1NumberOfFiles++;
-	}
-	std::cout << lastWrittenTime << std::endl;
-	for (auto& p : std::filesystem::directory_iterator(path2)) {
-		std::string fileName = p.path().string();
-		if (lastWrittenTime < std::chrono::duration_cast<std::chrono::milliseconds>(p.last_write_time().time_since_epoch()).count()) {
-			lastWrittenTime = std::chrono::duration_cast<std::chrono::milliseconds>(p.last_write_time().time_since_epoch()).count();
-			lastWrittenFolder = folder2;
-		}
-		folder2NumberOfFiles++;
-	}
-	std::cout << "Copying everything from folder 1 into folder 2:\n";
-	for (auto& it : std::filesystem::directory_iterator(path1)) {
-		std::cout << it.path().string() << std::endl;
-		if (std::filesystem::exists(path2 / it.path().filename())) {
-			remove(path2 / it.path().filename());
-		}
-		std::filesystem::copy(it, path2);
-
-	}//trimit getline din it in path2 pe server
-	f << "The last modified folder is: " << lastWrittenFolder;
 	//client(argc, argv);
-    return a.exec();
+	return a.exec();
 }

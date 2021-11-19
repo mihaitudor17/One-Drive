@@ -14,5 +14,6 @@ public:
 public:
 	Folder(const std::string &name,std::filesystem::path path);
 	void assignLastWrittenTime();
+	void assignNumberOfFiles();
 };
 
