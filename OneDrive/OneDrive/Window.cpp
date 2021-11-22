@@ -33,7 +33,8 @@ void Window::Signup()
 		if (uniqueUsernames.find(username) == uniqueUsernames.end())
 		{
 			label->clear();
-			databaseUsername.writeUsersWithoutOverwriting(username);
+			databaseUsername.addNewUser(username);
+			databaseUsername.writeUsersToFile();
 
 		}
 		else
@@ -50,14 +51,22 @@ void Window::Signup()
 
 }
 
-void Window::readJsonInSet(std::unordered_set<std::string>& uniqueUsernames)
+
+
+void Window::initializeJson()
 {
-	for (std::ifstream fis("Usernames.json"); !fis.eof();)
-	{
-		std::string read;
-		std::getline(fis, read);
-		uniqueUsernames.insert(read);
+	databaseUsername.setPath("./Usernames.json");
+	databaseUsername.setFileName("Usernames.json");
+	databaseUsername.inputJson("Usernames.json");
+	std::unordered_set<std::string> aux;
+	for (int i = 0; i < databaseUsername.getBody()["user"].size(); i++) {
+		databaseUsername.getUserNames().push_back(databaseUsername.getBody()["user"][i]);
+		std::string toString = databaseUsername.getBody()["user"][i]["username"];
+		aux.insert(toString);
 	}
+	databaseUsername.setUniqueUsernames(aux);
+
+	
 }
 
 
@@ -68,28 +77,32 @@ Window::Window(QWidget* parent)
 	QPushButton* login, * signUp;
 	QHBoxLayout* mainLayout, * buttonLayout;
 	QVBoxLayout* secondLayout;
-	databaseUsername.setPath("./Usernames.json");
-	databaseUsername.setFileName("Usernames.json");
-	readJsonInSet(uniqueUsernames);
 
-	setWindowTitle("Login");
+
+	initializeJson();
+
+	
 	labelUsername = new QLabel("Username");
-	labelUsername->setAlignment(Qt::AlignBottom);
 	signUp = new QPushButton("SignUp");
 	login = new QPushButton("Login");
 	editUsername = new QLineEdit();
 	label = new QLabel();
 	QLabel* welcome = new QLabel("Welcome to OneDrive!");
-	welcome->setStyleSheet("font-size:30px;font-weight:bold;");
 
+	editUsername->setMaximumSize(300, 20);
+	setWindowTitle("Login");
+	welcome->setStyleSheet("font-size:30px;font-weight:bold;");
+	labelUsername->setAlignment(Qt::AlignBottom);
 	label->setStyleSheet("color:red;font-size:20px;font: \"Times New Roman\", Times;");
 	login->setFixedSize(100, 20);
 	login->setStyleSheet("border-radius:10px;background-color:grey;border:3 px solid black;");
-	connect(login, SIGNAL(clicked()), SLOT(on_Button_clicked()));
 	signUp->setFixedSize(100, 20);
 	signUp->setStyleSheet("border-radius:10px;background-color:grey;border:3 px solid black;");
+
+	connect(login, SIGNAL(clicked()), SLOT(on_Button_clicked()));
 	connect(signUp, SIGNAL(clicked()), SLOT(Signup()));
-	editUsername->setMaximumSize(300, 20);
+	
+
 	mainLayout = new QHBoxLayout(this);
 	secondLayout = new QVBoxLayout(this);
 	buttonLayout = new QHBoxLayout(this);

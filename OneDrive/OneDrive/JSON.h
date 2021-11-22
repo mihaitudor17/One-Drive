@@ -4,6 +4,7 @@
 #include <fstream>
 #include <filesystem>
 #include <iostream>
+#include <unordered_set>
 
 class JSON
 {
@@ -12,6 +13,7 @@ private:
 	std::string m_fileName;
 	nlohmann::json m_body;
 	std::vector<nlohmann::json> m_userNames;
+	std::unordered_set<std::string> m_uniqueUserNames;
 
 public:
 	JSON();
@@ -21,17 +23,20 @@ public:
 	void setFileName(const std::string& fileName);
 	void setBody(nlohmann::json body);
 	void setUserNames(const std::vector<nlohmann::json>& userNames);
+	void setUniqueUsernames(const std::unordered_set<std::string>& uniqueUserNames);
 
 	std::string getPath()const;
 	std::string getFileName()const;
 	nlohmann::json getBody()const;
 	std::vector<nlohmann::json> getUserNames()const;
+	std::unordered_set<std::string> getUniqueUserNames()const;
 
 	bool verifyFileExistance(const std::string& fileName);
 	void createUser(std::string user);
-	void writeUserInfoToJsonFile(const std::string& userName);
 	void inputJsonAndOutputInAnotherJson();
+	void addNewUser(const std::string& userName);
 	void writeUsersWithoutOverwriting(const std::string& text);
 	void writeUsersToFile();
+	void inputJson(const std::string& fileName);
 
 };

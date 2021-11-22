@@ -30,6 +30,11 @@ void JSON::setUserNames(const std::vector<nlohmann::json>& userNames)
 	m_userNames = userNames;
 }
 
+void JSON::setUniqueUsernames(const std::unordered_set<std::string>& uniqueUserNames)
+{
+	m_uniqueUserNames = uniqueUserNames;
+}
+
 std::string JSON::getPath() const
 {
 	return m_path;
@@ -48,6 +53,11 @@ nlohmann::json JSON::getBody() const
 std::vector<nlohmann::json> JSON::getUserNames() const
 {
 	return m_userNames;
+}
+
+std::unordered_set<std::string> JSON::getUniqueUserNames() const
+{
+	return m_uniqueUserNames;
 }
 
 bool JSON::verifyFileExistance(const std::string& fileName)
@@ -69,7 +79,7 @@ void JSON::createUser(std::string user)
 	jsonFile << std::setw(1) << userJson;
 }
 
-void JSON::writeUserInfoToJsonFile(const std::string& userName)
+void JSON::addNewUser(const std::string& userName)
 {
 	nlohmann::json aux;
 	aux["username"] = userName;
@@ -105,4 +115,14 @@ void JSON::writeUsersToFile()
 	out << std::setw(2) << m_body;
 
 	out.close();
+}
+
+void JSON::inputJson(const std::string& fileName)
+{
+	nlohmann::json inputJson;
+
+	std::ifstream input(fileName, std::ifstream::binary);
+	input >> inputJson;
+
+	m_body=inputJson;
 }
