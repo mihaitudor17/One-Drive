@@ -5,10 +5,9 @@ JSON::JSON()
 	/*empty*/
 }
 
-JSON::JSON(std::string path, std::string fileName)
+JSON::JSON(const std::string& path, const std::string& fileName) : m_path{ path }, m_fileName{ fileName }
 {
-	m_path = path;
-	m_fileName = fileName;
+	m_body["user"] = m_userNames;
 }
 
 void JSON::setPath(std::string path)
@@ -50,30 +49,14 @@ void JSON::createUser(std::string user)
 	jsonFile << std::setw(1) << userJson;
 }
 
-void JSON::writeUserInfoToJsonFile(const std::string& fileName)
+void JSON::writeUserInfoToJsonFile(const std::string& userName)
 {
-	std::vector<nlohmann::json> v;
-
-	nlohmann::json aux1;
-	aux1["username"] = "Catalin";
-	v.push_back(aux1);
-
-	nlohmann::json aux2;
-	aux2["username"] = "Tinel";
-	v.push_back(aux2);
-
-	m_j["user"] = v;
-	std::ofstream out(fileName);
-	out << std::setw(2) << m_j;
+	nlohmann::json aux;
+	aux["username"] = userName;
+	m_userNames.push_back(aux);
+	m_body["user"]=m_userNames;
 }
 
-void JSON::readJsonFile()
-{
-	nlohmann::json readData;
-
-	std::ifstream in(m_fileName);
-	in >> readData;
-}
 
 void JSON::inputJsonAndOutputInAnotherJson()
 {
@@ -90,13 +73,15 @@ void JSON::writeUsersWithoutOverwriting(const std::string& text)
 {
 	std::ofstream out(getFileName(), std::fstream::app);
 
-
 	out << text << '\n';
 
 	out.close();
 }
 
-void JSON::to_json(nlohmann::json& j, const std::string& text)
+void JSON::writeUsersToFile()
 {
-	j = { {"username", text} };
+	std::ofstream out(m_fileName);
+	out << std::setw(2) << m_body;
+
+	out.close();
 }

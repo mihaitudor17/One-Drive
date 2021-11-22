@@ -5,9 +5,14 @@
 
 int main()
 {
-	JSON j(". / userOutput.json", "userOutput.json");
+	JSON j("./userOutput.json", "userOutput.json");
 
-	j.writeUserInfoToJsonFile("userOutput.json");
+	j.writeUserInfoToJsonFile("Catalin");
+	j.writeUserInfoToJsonFile("Sorin");
+	j.writeUserInfoToJsonFile("Catalin");
+	j.writeUserInfoToJsonFile("Tinel;");
+
+	j.writeUsersToFile();
 
 	return 0;
 }

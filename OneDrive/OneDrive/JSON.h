@@ -10,11 +10,12 @@ class JSON
 private:
 	std::string m_path;
 	std::string m_fileName;
-	nlohmann::json m_j;
+	nlohmann::json m_body;
+	std::vector<nlohmann::json> m_userNames;
 
 public:
 	JSON();
-	JSON(std::string path, std::string fileName);
+	JSON(const std::string& path, const std::string& fileName);
 
 	void setPath(std::string path);
 	void setFileName(std::string fileName);
@@ -24,10 +25,9 @@ public:
 
 	bool verifyFileExistance(const std::string& fileName);
 	void createUser(std::string user);
-	void writeUserInfoToJsonFile(const std::string& fileName);
-	void readJsonFile();
+	void writeUserInfoToJsonFile(const std::string& userName);
 	void inputJsonAndOutputInAnotherJson();
 	void writeUsersWithoutOverwriting(const std::string & text);
-	void to_json(nlohmann::json& j, const std::string& text);
+	void writeUsersToFile();
 
 };
