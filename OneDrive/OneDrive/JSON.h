@@ -20,10 +20,12 @@ public:
 	void setPath(const std::string& path);
 	void setFileName(const std::string& fileName);
 	void setBody(nlohmann::json body);
+	void setUserNames(const std::vector<nlohmann::json>& userNames);
 
 	std::string getPath()const;
 	std::string getFileName()const;
 	nlohmann::json getBody()const;
+	std::vector<nlohmann::json> getUserNames()const;
 
 	bool verifyFileExistance(const std::string& fileName);
 	void createUser(std::string user);

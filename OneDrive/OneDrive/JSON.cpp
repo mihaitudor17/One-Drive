@@ -25,6 +25,11 @@ void JSON::setBody(nlohmann::json body)
 	m_body = body;
 }
 
+void JSON::setUserNames(const std::vector<nlohmann::json>& userNames)
+{
+	m_userNames = userNames;
+}
+
 std::string JSON::getPath() const
 {
 	return m_path;
@@ -38,6 +43,11 @@ std::string JSON::getFileName() const
 nlohmann::json JSON::getBody() const
 {
 	return m_body;
+}
+
+std::vector<nlohmann::json> JSON::getUserNames() const
+{
+	return m_userNames;
 }
 
 bool JSON::verifyFileExistance(const std::string& fileName)
