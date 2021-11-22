@@ -17,17 +17,19 @@ public:
 	JSON();
 	JSON(const std::string& path, const std::string& fileName);
 
-	void setPath(std::string path);
-	void setFileName(std::string fileName);
+	void setPath(const std::string& path);
+	void setFileName(const std::string& fileName);
+	void setBody(nlohmann::json body);
 
 	std::string getPath()const;
 	std::string getFileName()const;
+	nlohmann::json getBody()const;
 
 	bool verifyFileExistance(const std::string& fileName);
 	void createUser(std::string user);
 	void writeUserInfoToJsonFile(const std::string& userName);
 	void inputJsonAndOutputInAnotherJson();
-	void writeUsersWithoutOverwriting(const std::string & text);
+	void writeUsersWithoutOverwriting(const std::string& text);
 	void writeUsersToFile();
 
 };

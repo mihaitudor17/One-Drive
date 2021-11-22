@@ -9,8 +9,8 @@ int main()
 
 	j.writeUserInfoToJsonFile("Catalin");
 	j.writeUserInfoToJsonFile("Sorin");
-	j.writeUserInfoToJsonFile("Catalin");
-	j.writeUserInfoToJsonFile("Tinel;");
+	j.writeUserInfoToJsonFile("Mihai");
+	j.writeUserInfoToJsonFile("Tinel");
 
 	j.writeUsersToFile();
 

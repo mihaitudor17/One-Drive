@@ -10,14 +10,19 @@ JSON::JSON(const std::string& path, const std::string& fileName) : m_path{ path 
 	m_body["user"] = m_userNames;
 }
 
-void JSON::setPath(std::string path)
+void JSON::setPath(const std::string& path)
 {
 	m_path = path;
 }
 
-void JSON::setFileName(std::string fileName)
+void JSON::setFileName(const std::string& fileName)
 {
 	m_fileName = fileName;
+}
+
+void JSON::setBody(nlohmann::json body)
+{
+	m_body = body;
 }
 
 std::string JSON::getPath() const
@@ -28,6 +33,11 @@ std::string JSON::getPath() const
 std::string JSON::getFileName() const
 {
 	return m_fileName;
+}
+
+nlohmann::json JSON::getBody() const
+{
+	return m_body;
 }
 
 bool JSON::verifyFileExistance(const std::string& fileName)
@@ -54,6 +64,7 @@ void JSON::writeUserInfoToJsonFile(const std::string& userName)
 	nlohmann::json aux;
 	aux["username"] = userName;
 	m_userNames.push_back(aux);
+	
 	m_body["user"]=m_userNames;
 }
 
