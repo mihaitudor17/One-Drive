@@ -25,7 +25,7 @@ void JSON::setBody(nlohmann::json body)
 	m_body = body;
 }
 
-void JSON::setUserNames(const std::vector<nlohmann::json>& userNames)
+void JSON::setUserNames(std::vector<nlohmann::json>& userNames)
 {
 	m_userNames = userNames;
 }
@@ -112,6 +112,7 @@ void JSON::writeUsersWithoutOverwriting(const std::string& text)
 void JSON::writeUsersToFile()
 {
 	std::ofstream out(m_fileName);
+	
 	out << std::setw(2) << m_body;
 
 	out.close();

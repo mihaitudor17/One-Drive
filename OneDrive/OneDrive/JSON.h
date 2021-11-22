@@ -22,7 +22,7 @@ public:
 	void setPath(const std::string& path);
 	void setFileName(const std::string& fileName);
 	void setBody(nlohmann::json body);
-	void setUserNames(const std::vector<nlohmann::json>& userNames);
+	void setUserNames( std::vector<nlohmann::json>& userNames);
 	void setUniqueUsernames(const std::unordered_set<std::string>& uniqueUserNames);
 
 	std::string getPath()const;

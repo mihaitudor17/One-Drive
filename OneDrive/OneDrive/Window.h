@@ -15,11 +15,10 @@ public:
     private slots:
     void on_Button_clicked();
     void Signup();
-    void Window::readJsonInSet(std::unordered_set<std::string>& uniqueUsernames);
     void initializeJson();
 private:
     
-    std::unordered_set<std::string> uniqueUsernames;
+    
     JSON databaseUsername;
     QLabel* labelUsername;
     QLineEdit* editUsername;

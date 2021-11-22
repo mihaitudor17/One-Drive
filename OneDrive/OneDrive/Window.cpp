@@ -26,16 +26,18 @@ void Window::on_Button_clicked() // on click i take the username and store it
 
 void Window::Signup()
 {
+
 	if (!editUsername->text().isEmpty())
 	{
 		std::string username = editUsername->text().toStdString();
-
-		if (uniqueUsernames.find(username) == uniqueUsernames.end())
+		std::unordered_set<std::string> updateSet= databaseUsername.getUniqueUserNames();
+		if (updateSet.find(username) == updateSet.end())
 		{
 			label->clear();
 			databaseUsername.addNewUser(username);
 			databaseUsername.writeUsersToFile();
-
+			updateSet.insert(username);
+			databaseUsername.setUniqueUsernames(updateSet);
 		}
 		else
 		{
@@ -59,11 +61,13 @@ void Window::initializeJson()
 	databaseUsername.setFileName("Usernames.json");
 	databaseUsername.inputJson("Usernames.json");
 	std::unordered_set<std::string> aux;
+	std::vector<nlohmann::json> temp;
 	for (int i = 0; i < databaseUsername.getBody()["user"].size(); i++) {
-		databaseUsername.getUserNames().push_back(databaseUsername.getBody()["user"][i]);
+		temp.push_back(databaseUsername.getBody()["user"][i]);
 		std::string toString = databaseUsername.getBody()["user"][i]["username"];
 		aux.insert(toString);
 	}
+	databaseUsername.setUserNames(temp);
 	databaseUsername.setUniqueUsernames(aux);
 
 	
