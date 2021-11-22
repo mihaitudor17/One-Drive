@@ -6,21 +6,29 @@
 #include <iostream>
 
 
-void Window::on_Button_clicked() // on click i take the username and store it
+void Window::Login() 
 {
 	if (!editUsername->text().isEmpty())
 	{
 		std::string username = editUsername->text().toStdString();
-
-		label->setText("Name saved");
-		WindowAccount* back = new WindowAccount(this);
-		back->setFixedSize(700, 700);
-		back->show();
-		this->close();
+		std::unordered_set<std::string> verifySet = databaseUsername.getUniqueUserNames();
+		if (verifySet.find(username) != verifySet.end())
+		{
+		
+			WindowAccount* back = new WindowAccount(this);
+			back->setFixedSize(700, 700);
+			back->show();
+			this->close();
+			
+		}
+		else
+		{
+			label->setText("This user name doesn't exists!");
+		}
 
 	}
 	else
-		label->setText("Introduceti scris");
+		label->setText("Please type a valid user name!");
 
 }
 
@@ -103,7 +111,7 @@ Window::Window(QWidget* parent)
 	signUp->setFixedSize(100, 20);
 	signUp->setStyleSheet("border-radius:10px;background-color:grey;border:3 px solid black;");
 
-	connect(login, SIGNAL(clicked()), SLOT(on_Button_clicked()));
+	connect(login, SIGNAL(clicked()), SLOT(Login()));
 	connect(signUp, SIGNAL(clicked()), SLOT(Signup()));
 	
 

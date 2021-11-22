@@ -13,7 +13,7 @@ public:
     Window(QWidget* parent = 0);
 
     private slots:
-    void on_Button_clicked();
+    void Login();
     void Signup();
     void initializeJson();
 private:
