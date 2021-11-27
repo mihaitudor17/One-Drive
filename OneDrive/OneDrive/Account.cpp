@@ -41,16 +41,44 @@ void Account::showContentsOfFile()
 					label->setGeometry(coordinatesX + 30, coordinatesY + widthAdjust, coordinatesWidth, coordinatesHeight);
 
 				}
-
 			}
 			else if (file.path().filename().string().find(".jpg") != std::string::npos || file.path().filename().string().find(".png") != std::string::npos) {
-				std::cout << "Este o poza!" << std::endl;
+				QString filename = "./Assets/ImageIcon.jpg";
+				if (pix.load(filename)) {
+					pix = pix.scaled(image->size(), Qt::KeepAspectRatio);
+					image->setPixmap(pix);
+					image->setGeometry(coordinatesX, coordinatesY + widthAdjust, coordinatesWidth, coordinatesHeight);
+					QString labelText = QString::fromStdString(file.path().filename().string());
+					label->setText(labelText);
+					label->setGeometry(coordinatesX + 30, coordinatesY + widthAdjust, coordinatesWidth, coordinatesHeight);
+
+				}
+
 			}
 			else if (file.path().filename().string().find(".mp4") != std::string::npos) {
-				std::cout << "Este un film!" << std::endl;
+				std::cout << "Crig";
+				QString filename = "./Assets/MovieIcon.png";
+				if (pix.load(filename)) {
+					pix = pix.scaled(image->size(), Qt::KeepAspectRatio);
+					image->setPixmap(pix);
+					image->setGeometry(coordinatesX, coordinatesY + widthAdjust, coordinatesWidth, coordinatesHeight);
+					QString labelText = QString::fromStdString(file.path().filename().string());
+					label->setText(labelText);
+					label->setGeometry(coordinatesX + 30, coordinatesY + widthAdjust, coordinatesWidth, coordinatesHeight);
+
+				}
 			}
 			else {
-				std::cout << "Este un alt tip de fisier!" << std::endl;
+				QString filename = "./Assets/UndefinedIcon.jpg";
+				if (pix.load(filename)) {
+					pix = pix.scaled(image->size(), Qt::KeepAspectRatio);
+					image->setPixmap(pix);
+					image->setGeometry(coordinatesX, coordinatesY + widthAdjust, coordinatesWidth, coordinatesHeight);
+					QString labelText = QString::fromStdString(file.path().filename().string());
+					label->setText(labelText);
+					label->setGeometry(coordinatesX + 30, coordinatesY + widthAdjust, coordinatesWidth, coordinatesHeight);
+
+				}
 			}
 		}
 
