@@ -6,6 +6,7 @@
 #include <iostream>
 
 
+
 void Window::LoginToAccount()
 {
 	userName = ui.Username->toPlainText().toStdString();
@@ -16,10 +17,10 @@ void Window::LoginToAccount()
 		if (verifySet.find(userName) != verifySet.end())
 		{
 
-			WindowAccount* back = new WindowAccount(this);
+			Account* back = new Account();
 			back->setFixedSize(700, 700);
 			back->show();
-			this->close();
+			this->hide();
 
 		}
 		else

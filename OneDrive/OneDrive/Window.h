@@ -5,6 +5,7 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <unordered_set>
+#include "Account.h"
 class Window : public QMainWindow
 {
     Q_OBJECT

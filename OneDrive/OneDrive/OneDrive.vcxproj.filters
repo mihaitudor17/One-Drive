@@ -29,6 +29,9 @@
     <QtUic Include="WindowAccount.ui">
       <Filter>Form Files</Filter>
     </QtUic>
+    <QtUic Include="Account.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="JSON.h">
@@ -78,12 +81,18 @@
     <ClCompile Include="TCP_Client.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Account.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Window.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="WindowAccount.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Account.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

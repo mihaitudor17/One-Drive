@@ -58,7 +58,7 @@ background: rgb(206, 195, 247);
     </property>
     <property name="geometry">
      <rect>
-      <x>150</x>
+      <x>160</x>
       <y>260</y>
       <width>291</width>
       <height>31</height>
@@ -97,7 +97,7 @@ p, li { white-space: pre-wrap; }
    <widget class="QPushButton" name="login">
     <property name="geometry">
      <rect>
-      <x>150</x>
+      <x>170</x>
       <y>310</y>
       <width>111</width>
       <height>31</height>
@@ -139,7 +139,7 @@ p, li { white-space: pre-wrap; }
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>330</x>
+      <x>340</x>
       <y>310</y>
       <width>111</width>
       <height>31</height>
@@ -184,7 +184,7 @@ p, li { white-space: pre-wrap; }
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>110</x>
+      <x>130</x>
       <y>10</y>
       <width>441</width>
       <height>81</height>
@@ -449,7 +449,7 @@ border-radius:40px;</string>
    <widget class="QLabel" name="label_17">
     <property name="geometry">
      <rect>
-      <x>80</x>
+      <x>110</x>
       <y>50</y>
       <width>411</width>
       <height>301</height>

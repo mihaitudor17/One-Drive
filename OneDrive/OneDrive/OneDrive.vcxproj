@@ -58,6 +58,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <QtUic Include="Account.ui" />
     <QtUic Include="OneDrive.ui" />
     <QtUic Include="WindowAccount.ui" />
   </ItemGroup>
@@ -65,6 +66,7 @@
     <Text Include="Output.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Account.cpp" />
     <ClCompile Include="Folder.cpp" />
     <ClCompile Include="JSON.cpp" />
     <ClCompile Include="main.cpp" />
@@ -73,6 +75,7 @@
     <ClCompile Include="WindowAccount.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="Account.h" />
     <ClInclude Include="Folder.h" />
     <ClInclude Include="JSON.h" />
     <ClInclude Include="TCP_Client.h" />
