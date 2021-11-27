@@ -26,9 +26,6 @@
     <QtUic Include="OneDrive.ui">
       <Filter>Form Files</Filter>
     </QtUic>
-    <QtUic Include="WindowAccount.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
     <QtUic Include="Account.ui">
       <Filter>Form Files</Filter>
     </QtUic>
@@ -72,9 +69,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WindowAccount.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -87,9 +81,6 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Window.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="WindowAccount.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="Account.h">

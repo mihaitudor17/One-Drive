@@ -1,7 +1,6 @@
 #include "Window.h"
 #include <QMessageBox>
 #include <QLineEdit>
-#include "WindowAccount.h"
 #include <fstream>
 #include <iostream>
 
@@ -17,7 +16,7 @@ void Window::LoginToAccount()
 		if (verifySet.find(userName) != verifySet.end())
 		{
 
-			Account* back = new Account();
+			Account* back = new Account(userName);
 			back->setFixedSize(700, 700);
 			back->show();
 			this->hide();

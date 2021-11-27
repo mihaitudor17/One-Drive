@@ -60,7 +60,6 @@
   <ItemGroup>
     <QtUic Include="Account.ui" />
     <QtUic Include="OneDrive.ui" />
-    <QtUic Include="WindowAccount.ui" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Output.txt" />
@@ -72,14 +71,12 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="TCP_Client.cpp" />
     <ClCompile Include="Window.cpp" />
-    <ClCompile Include="WindowAccount.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Account.h" />
     <ClInclude Include="Folder.h" />
     <ClInclude Include="JSON.h" />
     <ClInclude Include="TCP_Client.h" />
-    <QtMoc Include="WindowAccount.h" />
     <QtMoc Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
