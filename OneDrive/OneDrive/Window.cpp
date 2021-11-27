@@ -6,57 +6,77 @@
 #include <iostream>
 
 
-void Window::Login() 
+void Window::LoginToAccount()
 {
-	if (!editUsername->text().isEmpty())
+	userName = ui.Username->toPlainText().toStdString();
+	if (userName != "")
 	{
-		std::string username = editUsername->text().toStdString();
+
 		std::unordered_set<std::string> verifySet = databaseUsername.getUniqueUserNames();
-		if (verifySet.find(username) != verifySet.end())
+		if (verifySet.find(userName) != verifySet.end())
 		{
-		
+
 			WindowAccount* back = new WindowAccount(this);
 			back->setFixedSize(700, 700);
 			back->show();
 			this->close();
-			
+
 		}
 		else
 		{
-			label->setText("This user name doesn't exists!");
+			ui.userSucces->setVisible(false);
+			ui.userTakenIcon->setVisible(true);
+			ui.UserTaken->setText("Please enter a valid name!");
 		}
 
 	}
 	else
-		label->setText("Please type a valid user name!");
-
+	{
+		ui.userSucces->setVisible(false);
+		ui.userTakenIcon->setVisible(true);
+		ui.UserTaken->setText("Please enter a valid name!");
+	}
+		
 }
+
+
+
 
 void Window::Signup()
 {
-
-	if (!editUsername->text().isEmpty())
+	userName = ui.Username->toPlainText().toStdString();
+	if (userName!= "")
 	{
-		std::string username = editUsername->text().toStdString();
+		
 		std::unordered_set<std::string> updateSet= databaseUsername.getUniqueUserNames();
-		if (updateSet.find(username) == updateSet.end())
+		if (updateSet.find(userName) == updateSet.end())
 		{
-			label->clear();
-			databaseUsername.addNewUser(username);
+			ui.userTakenIcon->clear();
+			if(ui.UserTaken->isVisible()==false)
+				ui.UserTaken->setVisible(true);
+			std::string message = "You have succesfully registered, " + userName+" !";
+			ui.UserTaken->setText(QString::fromStdString(message));
+			ui.userSucces->setVisible(true);
+			databaseUsername.addNewUser(userName);
 			databaseUsername.writeUsersToFile();
-			updateSet.insert(username);
+			updateSet.insert(userName);
 			databaseUsername.setUniqueUsernames(updateSet);
 		}
 		else
 		{
-			label->setText("This user name already exists!");
+			ui.userSucces->setVisible(false);
+			ui.userTakenIcon->setVisible(true);
+			ui.UserTaken->setVisible(true);
+			ui.UserTaken->setText("The user name is already taken!");
 		}
 
 
 	}
 	else
 	{
-		std::cout << "e empty" << std::endl;
+		ui.userSucces->setVisible(false);
+		ui.userTakenIcon->setVisible(true);
+		ui.UserTaken->setText("Please enter a valid name!");
 	}
 
 }
@@ -84,55 +104,14 @@ void Window::initializeJson()
 
 Window::Window(QWidget* parent)
 {
-	QWidget* ui_area = new QWidget;
-	setCentralWidget(ui_area);
-	QPushButton* login, * signUp;
-	QHBoxLayout* mainLayout, * buttonLayout;
-	QVBoxLayout* secondLayout;
-
-
 	initializeJson();
-
+	ui.setupUi(this);
+	ui.userTakenIcon->setVisible(false);
+	ui.UserTaken->setVisible(false);
+	ui.userSucces->setVisible(false);
 	
-	labelUsername = new QLabel("Username");
-	signUp = new QPushButton("SignUp");
-	login = new QPushButton("Login");
-	editUsername = new QLineEdit();
-	label = new QLabel();
-	QLabel* welcome = new QLabel("Welcome to OneDrive!");
-
-	editUsername->setMaximumSize(300, 20);
-	setWindowTitle("Login");
-	welcome->setStyleSheet("font-size:30px;font-weight:bold;");
-	labelUsername->setAlignment(Qt::AlignBottom);
-	label->setStyleSheet("color:red;font-size:20px;font: \"Times New Roman\", Times;");
-	login->setFixedSize(100, 20);
-	login->setStyleSheet("border-radius:10px;background-color:grey;border:3 px solid black;");
-	signUp->setFixedSize(100, 20);
-	signUp->setStyleSheet("border-radius:10px;background-color:grey;border:3 px solid black;");
-
-	connect(login, SIGNAL(clicked()), SLOT(Login()));
-	connect(signUp, SIGNAL(clicked()), SLOT(Signup()));
 	
-
-	mainLayout = new QHBoxLayout(this);
-	secondLayout = new QVBoxLayout(this);
-	buttonLayout = new QHBoxLayout(this);
-
-	secondLayout->addWidget(welcome);
-	secondLayout->addWidget(labelUsername);
-	secondLayout->addWidget(editUsername);
-
-
-	buttonLayout->addWidget(login);
-	buttonLayout->addWidget(signUp);
-	secondLayout->addLayout(buttonLayout);
-	secondLayout->addWidget(label);
-	mainLayout->addLayout(secondLayout, Qt::AlignCenter);
-
-
-
-	ui_area->setLayout(mainLayout);
+	
 
 
 

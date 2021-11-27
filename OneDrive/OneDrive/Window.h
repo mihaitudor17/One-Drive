@@ -13,14 +13,15 @@ public:
     Window(QWidget* parent = 0);
 
     private slots:
-    void Login();
+    void LoginToAccount();
     void Signup();
-    void initializeJson();
+    
+
+   
+
 private:
-    
-    
+    Ui::OneDriveClass ui;
+    std::string userName;
     JSON databaseUsername;
-    QLabel* labelUsername;
-    QLineEdit* editUsername;
-    QLabel* label;
+    void initializeJson();
 };

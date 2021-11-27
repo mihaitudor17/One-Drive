@@ -59,6 +59,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <QtUic Include="OneDrive.ui" />
+    <QtUic Include="WindowAccount.ui" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Output.txt" />

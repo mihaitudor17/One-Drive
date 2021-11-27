@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
 {
 	QApplication a(argc, argv);
 	Window w;
-	w.setFixedSize(700, 700);
+	
 	w.show();
 	//if (!std::filesystem::exists("./Synchronized Folder 1")) {
 	//	std::filesystem::create_directory("./Synchronized Folder 1");

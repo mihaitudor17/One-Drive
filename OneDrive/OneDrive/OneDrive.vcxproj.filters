@@ -26,6 +26,9 @@
     <QtUic Include="OneDrive.ui">
       <Filter>Form Files</Filter>
     </QtUic>
+    <QtUic Include="WindowAccount.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="JSON.h">
