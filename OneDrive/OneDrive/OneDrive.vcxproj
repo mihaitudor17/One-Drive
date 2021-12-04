@@ -63,26 +63,24 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="Output.txt" />
+    <Text Include="text.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Account.cpp" />
-    <ClCompile Include="Folder.cpp" />
+    <ClCompile Include="FowlerMain.cpp" />
+    <ClCompile Include="FowlerNollVo.cpp" />
     <ClCompile Include="JSON.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="TCP_Client.cpp" />
-    <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="Account.h" />
-    <ClInclude Include="Folder.h" />
+    <ClInclude Include="FowlerNollVo.h" />
     <ClInclude Include="JSON.h" />
-    <ClInclude Include="TCP_Client.h" />
-    <QtMoc Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="heroes.json" />
     <None Include="out.json" />
     <None Include="userOutput.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assets\FolderIcon.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
