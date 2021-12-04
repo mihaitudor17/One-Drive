@@ -8,5 +8,6 @@ private:
 
 public:
 	size_t getHash(const std::string& m_text, uint32_t hash);
+	size_t hashingTextFile(const std::string& filePath);
 };
 
