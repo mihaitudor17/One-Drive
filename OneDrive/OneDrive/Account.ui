@@ -61,7 +61,39 @@
       <width>182</width>
       <height>0</height>
      </size>
-   
+    </property>
+    <widget class="QFrame" name="frame">
+     <property name="geometry">
+      <rect>
+       <x>-50</x>
+       <y>-20</y>
+       <width>271</width>
+       <height>381</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QWidget" name="test" native="true">
+   <property name="geometry">
+    <rect>
+     <x>90</x>
+     <y>140</y>
+     <width>181</width>
+     <height>251</height>
+    </rect>
+   </property>
+  </widget>
+ </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
  <connections/>
