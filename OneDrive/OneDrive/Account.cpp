@@ -1,32 +1,31 @@
 #include "Account.h"
 #include<QPushButton>
 #include <iostream>
-
-void Account::openFile()
-{
-
-
-
-}
+#include <QVBoxLayout>
+#include <QGridLayout>
 
 
 void Account::showContentsOfFile()
 {
-	std::cout << pathLocal;
 	int widthAdjust = -30;
 	QPixmap pix;
-
+	QGridLayout* grid = new QGridLayout(ui.test);
+	int i = -1;
 
 	for (auto& file : std::filesystem::directory_iterator(pathLocal))
 	{
 
+		i++;
 		widthAdjust += 30;
-		QLabel* image = new QLabel(ui.frame);
+		QLabel* image = new QLabel(ui.test);
+		image->setMinimumSize(QSize(40, 40));
 		int coordinatesX = image->x();
 		int coordinatesY = image->y();
 		int coordinatesWidth = image->width();
 		int coordinatesHeight = image->height();
-		QPushButton* label = new QPushButton(ui.frame);
+		QPushButton* label = new QPushButton(ui.test);
+		label->setMinimumSize(QSize(10, 10));
+
 		label->setVisible(true);
 
 		label->setStyleSheet("QPushButton { background-color: rgba(10, 0, 0, 0); }");
@@ -34,19 +33,23 @@ void Account::showContentsOfFile()
 		if (std::filesystem::is_directory(file)) {
 			QString filename = "./Assets/FolderIcon.png";
 
-			connect(label, &QPushButton::released, this, [=]() { pathLocal += "/" + file.path().filename().string();
-			qDeleteAll(ui.frame->findChildren<QWidget*>("", Qt::FindDirectChildrenOnly));
+			connect(label, &QPushButton::released, this, [=]()
+				{ pathLocal += "/" + file.path().filename().string();
+			qDeleteAll(ui.folderLocal->findChildren<QWidget*>("", Qt::FindDirectChildrenOnly));
 			showContentsOfFile(); });
 
 			if (pix.load(filename)) {
 
 				pix = pix.scaled(image->size(), Qt::KeepAspectRatio);
 				image->setPixmap(pix);
-				image->setGeometry(coordinatesX, coordinatesY + widthAdjust, coordinatesWidth, coordinatesHeight);
+				//image->setGeometry(coordinatesX, coordinatesY + widthAdjust, coordinatesWidth, coordinatesHeight);
+				image->setVisible(true);
+				grid->addWidget(image, i, 0);
 				QString labelText = QString::fromStdString(file.path().filename().string());
 				label->setText(labelText);
-				label->setGeometry(coordinatesX + 30, coordinatesY + widthAdjust, coordinatesWidth, coordinatesHeight);
-				image->setVisible(true);
+				//label->setGeometry(coordinatesX + 30, coordinatesY + widthAdjust, coordinatesWidth, coordinatesHeight);
+				grid->addWidget(label, i, 1);
+
 			}
 		}
 		else {
@@ -57,11 +60,13 @@ void Account::showContentsOfFile()
 				if (pix.load(filename)) {
 					pix = pix.scaled(image->size(), Qt::KeepAspectRatio);
 					image->setPixmap(pix);
-					image->setGeometry(coordinatesX, coordinatesY + widthAdjust, coordinatesWidth, coordinatesHeight);
+					//image->setGeometry(coordinatesX, coordinatesY + widthAdjust, coordinatesWidth, coordinatesHeight);
 					QString labelText = QString::fromStdString(file.path().filename().string());
 					label->setText(labelText);
-					label->setGeometry(coordinatesX + 30, coordinatesY + widthAdjust, coordinatesWidth, coordinatesHeight);
+					//label->setGeometry(coordinatesX + 30, coordinatesY + widthAdjust, coordinatesWidth, coordinatesHeight);
 					image->setVisible(true);
+					grid->addWidget(image, i, 0);
+					grid->addWidget(label, i, 1);
 
 				}
 			}
@@ -70,11 +75,13 @@ void Account::showContentsOfFile()
 				if (pix.load(filename)) {
 					pix = pix.scaled(image->size(), Qt::KeepAspectRatio);
 					image->setPixmap(pix);
-					image->setGeometry(coordinatesX, coordinatesY + widthAdjust, coordinatesWidth, coordinatesHeight);
+					//image->setGeometry(coordinatesX, coordinatesY + widthAdjust, coordinatesWidth, coordinatesHeight);
 					QString labelText = QString::fromStdString(file.path().filename().string());
 					label->setText(labelText);
-					label->setGeometry(coordinatesX + 30, coordinatesY + widthAdjust, coordinatesWidth, coordinatesHeight);
+					//label->setGeometry(coordinatesX + 30, coordinatesY + widthAdjust, coordinatesWidth, coordinatesHeight);
 					image->setVisible(true);
+					grid->addWidget(image, i, 0);
+					grid->addWidget(label, i, 1);
 
 				}
 
@@ -85,11 +92,13 @@ void Account::showContentsOfFile()
 				if (pix.load(filename)) {
 					pix = pix.scaled(image->size(), Qt::KeepAspectRatio);
 					image->setPixmap(pix);
-					image->setGeometry(coordinatesX, coordinatesY + widthAdjust, coordinatesWidth, coordinatesHeight);
+					//image->setGeometry(coordinatesX, coordinatesY + widthAdjust, coordinatesWidth, coordinatesHeight);
 					QString labelText = QString::fromStdString(file.path().filename().string());
 					label->setText(labelText);
-					label->setGeometry(coordinatesX + 30, coordinatesY + widthAdjust, coordinatesWidth, coordinatesHeight);
+					//label->setGeometry(coordinatesX + 30, coordinatesY + widthAdjust, coordinatesWidth, coordinatesHeight);
 					image->setVisible(true);
+					grid->addWidget(image, i, 0);
+					grid->addWidget(label, i, 1);
 
 				}
 			}
@@ -98,17 +107,26 @@ void Account::showContentsOfFile()
 				if (pix.load(filename)) {
 					pix = pix.scaled(image->size(), Qt::KeepAspectRatio);
 					image->setPixmap(pix);
-					image->setGeometry(coordinatesX, coordinatesY + widthAdjust, coordinatesWidth, coordinatesHeight);
+					//image->setGeometry(coordinatesX, coordinatesY + widthAdjust, coordinatesWidth, coordinatesHeight);
 					QString labelText = QString::fromStdString(file.path().filename().string());
 					label->setText(labelText);
-					label->setGeometry(coordinatesX + 30, coordinatesY + widthAdjust, coordinatesWidth, coordinatesHeight);
+					//label->setGeometry(coordinatesX + 30, coordinatesY + widthAdjust, coordinatesWidth, coordinatesHeight);
 					image->setVisible(true);
+					grid->addWidget(image, i, 0);
+					grid->addWidget(label, i, 1);
 
 				}
 			}
 		}
 
 	}
+
+	ui.test->setVisible(true);
+	ui.folderLocal->setWidgetResizable(true);
+	ui.folderLocal->setWidget(ui.test);
+
+
+
 }
 
 
