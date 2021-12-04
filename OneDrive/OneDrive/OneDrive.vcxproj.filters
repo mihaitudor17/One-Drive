@@ -43,9 +43,6 @@
     <ClInclude Include="Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Account.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="TCP_Client.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -98,5 +95,10 @@
     <Image Include="Assets\FolderIcon.png">
       <Filter>Resource Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="Account.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
 </Project>

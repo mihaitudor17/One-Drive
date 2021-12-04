@@ -75,7 +75,7 @@
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Account.h" />
+    <QtMoc Include="Account.h" />
     <ClInclude Include="Folder.h" />
     <ClInclude Include="FowlerNollVo.h" />
     <ClInclude Include="JSON.h" />
