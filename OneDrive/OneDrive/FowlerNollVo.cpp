@@ -1,9 +1,6 @@
 #include "FowlerNollVo.h"
 
-static const size_t InitialFNV = 2166136261U;
-static const size_t FNVMultiple = 16777619;
-
-size_t getHash(const std::string& text)
+size_t FowlerNollVo::getHash(const std::string& text)
 {
 	size_t hash = InitialFNV;
 	
@@ -12,11 +9,22 @@ size_t getHash(const std::string& text)
 		hash = hash ^ (character);       /* xor  the low 8 bits */
 		hash = hash * FNVMultiple;  /* multiply by the magic number */
 	}
-
 	return hash;
 }
 
 size_t FowlerNollVo::hashingTextFile(const std::string& filePath)
 {
-	return size_t();
+	std::string text;
+
+	for (std::ifstream fis(filePath); !fis.eof(); /*empty*/)
+	{
+		std::string aux;
+		getline(fis, aux);
+
+		text += aux;
+	}
+
+	const size_t rez = getHash(text);
+
+	return rez;
 }

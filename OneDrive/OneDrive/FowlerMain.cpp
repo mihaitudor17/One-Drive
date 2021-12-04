@@ -1,9 +1,7 @@
-#include <iostream>
-#include <string>
-#include <filesystem>
-#include <fstream>
+#include "FowlerNollVo.h"
 
 int main()
 {
-	
+	FowlerNollVo f;
+	std::cout << f.hashingTextFile("./text.txt");
 }
