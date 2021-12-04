@@ -1,6 +1,10 @@
 #include "Account.h"
 #include <iostream>
+void Account::openFile()
+{
+	this->setStyleSheet("color:blue;");
 
+}
 void Account::showContentsOfFile()
 {
 
@@ -32,6 +36,7 @@ void Account::showContentsOfFile()
 		else {
 			if (file.path().filename().string().find(".txt") != std::string::npos) {
 				QString filename = "./Assets/FileIcon.jpg";
+				connect(label, &QPushButton::released, this, &Account::openFile);
 				if (pix.load(filename)) {
 					pix = pix.scaled(image->size(), Qt::KeepAspectRatio);
 					image->setPixmap(pix);
@@ -94,5 +99,3 @@ Account::Account(const std::string& userName, QWidget* parent)
 	showContentsOfFile();
 
 }
-
-
