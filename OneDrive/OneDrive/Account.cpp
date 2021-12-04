@@ -1,28 +1,43 @@
 #include "Account.h"
+#include<QPushButton>
 #include <iostream>
+
 void Account::openFile()
 {
-	this->setStyleSheet("color:blue;");
+
+
 
 }
+
+
 void Account::showContentsOfFile()
 {
-
+	std::cout << pathLocal;
 	int widthAdjust = -30;
 	QPixmap pix;
-	std::filesystem::path path = "./StoredFiles/" + userName;
 
-	for (auto& file : std::filesystem::directory_iterator(path))
+
+	for (auto& file : std::filesystem::directory_iterator(pathLocal))
 	{
+
 		widthAdjust += 30;
 		QLabel* image = new QLabel(ui.frame);
 		int coordinatesX = image->x();
 		int coordinatesY = image->y();
 		int coordinatesWidth = image->width();
 		int coordinatesHeight = image->height();
-		QLabel* label = new QLabel(ui.frame);
+		QPushButton* label = new QPushButton(ui.frame);
+		label->setVisible(true);
+
+		label->setStyleSheet("QPushButton { background-color: rgba(10, 0, 0, 0); }");
+
 		if (std::filesystem::is_directory(file)) {
 			QString filename = "./Assets/FolderIcon.png";
+
+			connect(label, &QPushButton::released, this, [=]() { pathLocal += "/" + file.path().filename().string();
+			qDeleteAll(ui.frame->findChildren<QWidget*>("", Qt::FindDirectChildrenOnly));
+			showContentsOfFile(); });
+
 			if (pix.load(filename)) {
 
 				pix = pix.scaled(image->size(), Qt::KeepAspectRatio);
@@ -31,12 +46,14 @@ void Account::showContentsOfFile()
 				QString labelText = QString::fromStdString(file.path().filename().string());
 				label->setText(labelText);
 				label->setGeometry(coordinatesX + 30, coordinatesY + widthAdjust, coordinatesWidth, coordinatesHeight);
+				image->setVisible(true);
 			}
 		}
 		else {
 			if (file.path().filename().string().find(".txt") != std::string::npos) {
-				QString filename = "./Assets/FileIcon.jpg";
-				connect(label, &QPushButton::released, this, &Account::openFile);
+				QString filename = "./Assets/FileIcon.png";
+
+
 				if (pix.load(filename)) {
 					pix = pix.scaled(image->size(), Qt::KeepAspectRatio);
 					image->setPixmap(pix);
@@ -44,6 +61,7 @@ void Account::showContentsOfFile()
 					QString labelText = QString::fromStdString(file.path().filename().string());
 					label->setText(labelText);
 					label->setGeometry(coordinatesX + 30, coordinatesY + widthAdjust, coordinatesWidth, coordinatesHeight);
+					image->setVisible(true);
 
 				}
 			}
@@ -56,6 +74,7 @@ void Account::showContentsOfFile()
 					QString labelText = QString::fromStdString(file.path().filename().string());
 					label->setText(labelText);
 					label->setGeometry(coordinatesX + 30, coordinatesY + widthAdjust, coordinatesWidth, coordinatesHeight);
+					image->setVisible(true);
 
 				}
 
@@ -70,6 +89,7 @@ void Account::showContentsOfFile()
 					QString labelText = QString::fromStdString(file.path().filename().string());
 					label->setText(labelText);
 					label->setGeometry(coordinatesX + 30, coordinatesY + widthAdjust, coordinatesWidth, coordinatesHeight);
+					image->setVisible(true);
 
 				}
 			}
@@ -82,6 +102,7 @@ void Account::showContentsOfFile()
 					QString labelText = QString::fromStdString(file.path().filename().string());
 					label->setText(labelText);
 					label->setGeometry(coordinatesX + 30, coordinatesY + widthAdjust, coordinatesWidth, coordinatesHeight);
+					image->setVisible(true);
 
 				}
 			}
@@ -95,7 +116,10 @@ Account::Account(const std::string& userName, QWidget* parent)
 	: QWidget(parent)
 {
 	this->userName = userName;
+	pathLocal = "./StoredFiles/" + userName;
 	ui.setupUi(this);
 	showContentsOfFile();
 
 }
+
+
