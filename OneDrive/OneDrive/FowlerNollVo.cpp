@@ -36,4 +36,13 @@ size_t FowlerNollVo::hashingImageFile(const std::string& imagePath)
 
 	int size = fis.tellg();
 	char* image = new char[size];
+
+	fis.seekg(0, std::ios::beg);
+	fis.read(image, size);
+	std::cout << "Size of the file is" << " " << size << " " << "bytes\n";
+	std::cout << "Image size " << strlen(image) << '\n';
+
+	const size_t rez = getHash(image);
+
+	return rez;
 }

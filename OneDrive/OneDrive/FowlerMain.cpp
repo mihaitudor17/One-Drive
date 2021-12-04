@@ -3,7 +3,5 @@
 int main()
 {
 	FowlerNollVo f;
-	f.hashingImageFile("./Assets/ImageIcon.jpg");
-
-
+	std::cout << f.hashingImageFile("./Assets/FolderIcon.png");
 }
