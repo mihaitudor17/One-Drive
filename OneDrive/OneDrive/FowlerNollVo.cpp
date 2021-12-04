@@ -28,3 +28,12 @@ size_t FowlerNollVo::hashingTextFile(const std::string& filePath)
 
 	return rez;
 }
+
+size_t FowlerNollVo::hashingImageFile(const std::string& imagePath)
+{
+	std::ifstream fis(imagePath, std::ios::binary);
+	fis.seekg(0, std::ios::end);
+
+	int size = fis.tellg();
+	char* image = new char[size];
+}
