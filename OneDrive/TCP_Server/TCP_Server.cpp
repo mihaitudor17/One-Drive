@@ -1,88 +1,134 @@
-#undef UNICODE
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include <winsock2.h>
-#include <ws2tcpip.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string>
 #include <iostream>
 #include <fstream>
-#include <filesystem>
-#pragma comment (lib, "Ws2_32.lib")
-#define DEFAULT_BUFLEN 512
-#define DEFAULT_PORT "27015"
-int __cdecl main(void)
-{
-    WSADATA wsaData;
-    int iResult;
-    SOCKET ListenSocket = INVALID_SOCKET;
-    SOCKET ClientSocket = INVALID_SOCKET;
-    struct addrinfo* result = NULL;
-    struct addrinfo hints;
-    int iSendResult;
-    char recvbuf[DEFAULT_BUFLEN];
-    int recvbuflen = DEFAULT_BUFLEN;
-    iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
-    ZeroMemory(&hints, sizeof(hints));
-    hints.ai_family = AF_INET;
-    hints.ai_socktype = SOCK_STREAM;
-    hints.ai_protocol = IPPROTO_TCP;
-    hints.ai_flags = AI_PASSIVE;
-    iResult = getaddrinfo(NULL, DEFAULT_PORT, &hints, &result);
-    ListenSocket = socket(result->ai_family, result->ai_socktype, result->ai_protocol);
-    iResult = bind(ListenSocket, result->ai_addr, (int)result->ai_addrlen);
-    freeaddrinfo(result);
-    iResult = listen(ListenSocket, SOMAXCONN);
-    ClientSocket = accept(ListenSocket, NULL, NULL);
-    closesocket(ListenSocket);
-    bool numeFisier= 0;
-    std::filesystem::path path;
-    do {
-        iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
-        if (iResult > 0) {
-            std::string temp(recvbuf, iResult);
-            if (!numeFisier)
-            {
-                path = "./Synchronized Folder 2/" + temp;
-                if (std::filesystem::exists(path)) {
-                    remove(path);
-                }
-                numeFisier=1;
-            }
-            else
-                if (numeFisier)
-                {
-                    if (temp == "/eof")
-                        numeFisier = 0;
-                    else
-                    {
-                        std::ofstream g;
-                        g.open(path, std::ios::app);
-                        g << temp << std::endl;
-                        g.close();
-                    }
-                }
-            iSendResult = send(ClientSocket, recvbuf, iResult, 0);
-        }
-        else if (iResult == 0)
-            printf("Connection closing...\n");
-        else {
-            printf("recv failed with error: %d\n", WSAGetLastError());
-            closesocket(ClientSocket);
-            WSACleanup();
-            return 1;
-        }
+#include <ws2tcpip.h>
+#include <WinSock2.h>
 
-    } while (iResult > 0);
-    iResult = shutdown(ClientSocket, SD_SEND);
-    if (iResult == SOCKET_ERROR) {
-        printf("shutdown failed with error: %d\n", WSAGetLastError());
-        closesocket(ClientSocket);
-        WSACleanup();
-        return 1;
-    }
-    closesocket(ClientSocket);
-    WSACleanup();
-    return 0;
+#pragma comment(lib, "ws2_32.lib")
+
+int main() {
+	WSADATA wsData;
+	WORD ver = MAKEWORD(2, 2);
+
+	if (WSAStartup(ver, &wsData) != 0) {
+		std::cerr << "Error starting winsock!" << std::endl;
+		return -1;
+	}
+
+	SOCKET listenerSock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+
+	if (listenerSock == INVALID_SOCKET) {
+		std::cerr << "Error creating listener socket! " << WSAGetLastError() << std::endl;
+		WSACleanup();
+		return -1;
+	}
+
+	sockaddr_in listenerHint;
+	listenerHint.sin_family = AF_INET;
+	listenerHint.sin_port = htons(55000);
+	listenerHint.sin_addr.S_un.S_addr = INADDR_ANY;
+
+	bind(listenerSock, (sockaddr*)&listenerHint, sizeof(listenerHint));
+	listen(listenerSock, SOMAXCONN);
+
+	sockaddr_in clientHint;
+	int clientSize = sizeof(clientHint);
+
+	SOCKET clientSock = accept(listenerSock, (sockaddr*)&clientHint, &clientSize);
+
+	if (clientSock == SOCKET_ERROR) {
+		std::cerr << "Error accept socket! " << WSAGetLastError() << std::endl;
+		closesocket(listenerSock);
+		WSACleanup();
+		return -1;
+	}
+
+	char host[NI_MAXHOST];
+	char serv[NI_MAXSERV];
+
+	if (getnameinfo((sockaddr*)&clientHint, sizeof(clientHint), host, NI_MAXHOST, serv, NI_MAXSERV, 0) == 0) {
+		std::cout << "Host: " << host << " connected on port: " << serv << std::endl;
+	}
+	else {
+		inet_ntop(AF_INET, &clientHint.sin_addr, host, NI_MAXHOST);
+		std::cout << "Host: " << host << " connected on port: " << ntohs(clientHint.sin_port) << std::endl;
+	}
+
+	closesocket(listenerSock);
+
+	const char* welcomeMsg = "Welcome to file server.";
+	bool clientClose = false;
+	char fileRequested[FILENAME_MAX];
+	const int fileAvailable = 200;
+	const int fileNotfound = 404;
+	const int BUFFER_SIZE = 1024;
+	char bufferFile[BUFFER_SIZE];
+	std::ifstream file;
+
+	
+	int bysendMsg = send(clientSock, welcomeMsg, strlen(welcomeMsg), 0);
+
+	if (bysendMsg == 0) {
+		
+		closesocket(clientSock);
+		WSACleanup();
+		return -1;
+	}
+
+	do {
+		memset(fileRequested, 0, FILENAME_MAX);
+		int byRecv = recv(clientSock, fileRequested, FILENAME_MAX, 0);
+
+		if (byRecv == 0 || byRecv == -1) {
+			
+			clientClose = true;
+		}
+
+		
+		file.open(fileRequested, std::ios::binary);
+
+		if (file.is_open()) {
+			
+			int bySendinfo = send(clientSock, (char*)&fileAvailable, sizeof(int), 0);
+			if (bySendinfo == 0 || bySendinfo == -1) {
+				
+				clientClose = true;
+			}
+
+			
+			file.seekg(0, std::ios::end);
+			long fileSize = file.tellg();
+
+			
+			bySendinfo = send(clientSock, (char*)&fileSize, sizeof(long), 0);
+			if (bySendinfo == 0 || bySendinfo == -1) {
+				
+				clientClose = true;
+			}
+			file.seekg(0, std::ios::beg);
+			
+			do {
+				
+				file.read(bufferFile, BUFFER_SIZE);
+				if (file.gcount() > 0)
+					bySendinfo = send(clientSock, bufferFile, file.gcount(), 0);
+
+				if (bySendinfo == 0 || bySendinfo == -1) {
+					
+					clientClose = true;
+					break;
+				}
+			} while (file.gcount() > 0);
+			file.close();
+		}
+		else {
+			
+			int bySendCode = send(clientSock, (char*)&fileNotfound, sizeof(int), 0);
+			if (bySendCode == 0 || bySendCode == -1) {
+				
+				clientClose = true;
+			}
+		}
+	} while (!clientClose);
+
+	return 0;
 }

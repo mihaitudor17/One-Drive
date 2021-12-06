@@ -31,18 +31,6 @@
     </QtUic>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="FowlerNollVo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="JSON.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Folder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Window.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="TCP_Client.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -69,21 +57,6 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="JSON.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FowlerNollVo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Folder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Window.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Account.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -95,10 +68,5 @@
     <Image Include="Assets\FolderIcon.png">
       <Filter>Resource Files</Filter>
     </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <QtMoc Include="Account.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
   </ItemGroup>
 </Project>

@@ -15,7 +15,7 @@
 #pragma comment (lib, "AdvApi32.lib")
 
 
-#define DEFAULT_BUFLEN 512
+#define DEFAULT_BUFLEN 64000
 #define DEFAULT_PORT "27015"
-int __cdecl client(int argc, char** argv);
+int client();
 
