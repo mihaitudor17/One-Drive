@@ -146,9 +146,60 @@ void Account::showContentServer()
 		label->setVisible(true);
 		label->setStyleSheet("QPushButton { background-color: rgba(10, 0, 0, 0); }");
 
+		if (std::filesystem::is_directory(file)) {
+			QString filename = "./Assets/FolderIcon.png";
+
+			connect(label, &QPushButton::released, this, [=]()
+				{ delete gridServer;
+			pathGlobal += "/" + file.path().filename().string();
+			qDeleteAll(ui.serverWidget->findChildren<QWidget*>("", Qt::FindDirectChildrenOnly));
+			showContentServer(); });
+
+			if (pix.load(filename)) {
+
+				pix = pix.scaled(image->size(), Qt::KeepAspectRatio);
+				image->setPixmap(pix);
+				image->setVisible(true);
+				gridServer->addWidget(image, contorServerGrid, 0);
+				QString labelText = QString::fromStdString(file.path().filename().string());
+				label->setText(labelText);
+				gridServer->addWidget(label, contorServerGrid, 1);
+
+			}
+		}
+		else {
+			if (file.path().filename().string().find(".txt") != std::string::npos) {
+				QString filename = "./Assets/FileIcon.png";
+
+
+				if (pix.load(filename)) {
+					pix = pix.scaled(image->size(), Qt::KeepAspectRatio);
+					image->setPixmap(pix);
+					QString labelText = QString::fromStdString(file.path().filename().string());
+					label->setText(labelText);
+					image->setVisible(true);
+					gridServer->addWidget(image, contorServerGrid, 0);
+					gridServer->addWidget(label, contorServerGrid, 1);
+
+				}
+			}
+			else if (file.path().filename().string().find(".jpg") != std::string::npos || file.path().filename().string().find(".png") != std::string::npos) {
+				QString filename = "./Assets/ImageIcon.jpg";
+				if (pix.load(filename)) {
+					pix = pix.scaled(image->size(), Qt::KeepAspectRatio);
+					image->setPixmap(pix);
+					QString labelText = QString::fromStdString(file.path().filename().string());
+					label->setText(labelText);
+					image->setVisible(true);
+					gridServer->addWidget(image, contorServerGrid, 0);
+					gridServer->addWidget(label, contorServerGrid, 1);
+
+				}
+
+			}
+		}
+
 	}
-
-
 
 
 }
