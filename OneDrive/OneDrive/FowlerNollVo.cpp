@@ -58,3 +58,35 @@ size_t FowlerNollVo::hashingImageFile(const std::string& imagePath)
 
 	return result;
 }
+
+size_t FowlerNollVo::hashingVideoFile(const std::string& videoPath)
+{
+	const int BUFFER_SIZE = 1024;
+	char bufferFile[BUFFER_SIZE];
+
+	std::ifstream file;
+	size_t result;
+
+	file.open(videoPath, std::ios::binary);
+
+	if (file.is_open())
+	{
+		file.seekg(0, std::ios::end);
+		long fileSize = file.tellg();
+
+		file.seekg(0, std::ios::beg);
+
+		int index = 0;
+
+		do
+		{
+			file.read(bufferFile, BUFFER_SIZE);
+
+			result = getHash(bufferFile);
+
+			
+		} while (file.gcount() > 0);
+		file.close();
+	}
+	return result;
+}

@@ -16,5 +16,6 @@ public:
 	size_t getHash(const std::string& text);
 	size_t hashingTextFile(const std::string& filePath);
 	size_t hashingImageFile(const std::string& imagePath);
+	size_t hashingVideoFile(const std::string& videoPath);
 };
 
