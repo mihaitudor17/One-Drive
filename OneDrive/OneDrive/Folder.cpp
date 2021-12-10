@@ -1,27 +1,19 @@
 #include "Folder.h"
 void copyDirectoryContents(std::filesystem::path source, std::filesystem::path destination) {
-	for (auto& it : std::filesystem::directory_iterator(source)) {
-		if (std::filesystem::exists(destination / it.path().filename())) {
-			remove(destination / it.path().filename());
+	for (auto it : std::filesystem::directory_iterator(source)) {
+		if (it.is_directory()) {
+			std::filesystem::create_directory(destination / it.path().filename());
+			copyDirectoryContents(it.path(), destination / it.path().filename());
 		}
-		std::filesystem::copy(it, destination);
+		else {
+			if (std::filesystem::exists(destination / it.path().filename())) {
+				remove(destination / it.path().filename());
+			}
+			std::filesystem::copy(it.path(), destination);
+		}
 	}
 }
 
-//{
-//	for (auto it : std::filesystem::directory_iterator(source)) {
-//		if (it.is_directory()) {
-//			std::filesystem::create_directory(destination / it.path().filename());
-//			copyDirectoryContentsFromTo(it.path(), destination / it.path().filename());
-//		}
-//		else {
-//			if (std::filesystem::exists(destination / it.path().filename())) {
-//				remove(destination / it.path().filename());
-//			}
-//			std::filesystem::copy(it.path(), destination);
-//		}
-//	}
-//}
 Folder::Folder(const std::string& name, std::filesystem::path path) :
 	m_folderName{ name }, m_path{ path }
 {
