@@ -41,7 +41,19 @@ size_t FowlerNollVo::hashingImageFile(const std::string& imagePath)
 
 	if (file.is_open())
 	{
-		
+		file.seekg(0, std::ios::end);
+		long fileSize = file.tellg();
+
+		file.seekg(0, std::ios::beg);
+
+		do
+		{
+			file.read(bufferFile, BUFFER_SIZE);
+
+			result = getHash(bufferFile);
+
+		} while (file.gcount() > 0);
+		file.close();
 	}
 
 	return result;
