@@ -197,10 +197,50 @@ void Account::showContentServer()
 				}
 
 			}
+			else if (file.path().filename().string().find(".mp4") != std::string::npos) {
+				QString filename = "./Assets/MovieIcon.png";
+				if (pix.load(filename)) {
+					pix = pix.scaled(image->size(), Qt::KeepAspectRatio);
+					image->setPixmap(pix);
+					QString labelText = QString::fromStdString(file.path().filename().string());
+					label->setText(labelText);
+					image->setVisible(true);
+					gridServer->addWidget(image, contorServerGrid, 0);
+					gridServer->addWidget(label, contorServerGrid, 1);
+
+				}
+			}
+			else {
+				QString filename = "./Assets/UndefinedIcon.jpg";
+				if (pix.load(filename)) {
+					pix = pix.scaled(image->size(), Qt::KeepAspectRatio);
+					image->setPixmap(pix);
+					QString labelText = QString::fromStdString(file.path().filename().string());
+					label->setText(labelText);
+					image->setVisible(true);
+					gridServer->addWidget(image, contorServerGrid, 0);
+					gridServer->addWidget(label, contorServerGrid, 1);
+
+				}
+			}
 		}
 
 	}
+	if (contorServerGrid < 3)
 
+	{
+
+		QWidget* spaceExpand = new QWidget();
+		spaceExpand->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+		gridServer->addWidget(spaceExpand, contorServerGrid, 0);
+		gridServer->addWidget(spaceExpand, contorServerGrid, 1);
+		gridServer->addWidget(spaceExpand, contorServerGrid + 1, 0);
+		gridServer->addWidget(spaceExpand, contorServerGrid + 1, 1);
+		gridServer->addWidget(spaceExpand, contorServerGrid + 2, 0);
+		gridServer->addWidget(spaceExpand, contorServerGrid + 2, 1);
+	}
+	ui.serverWidget->setVisible(true);
+	ui.serverFolder->setWidgetResizable(true);
 
 }
 
