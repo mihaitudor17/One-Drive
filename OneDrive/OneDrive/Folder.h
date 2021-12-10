@@ -16,4 +16,4 @@ public:
 	void assignLastWrittenTime();
 	void assignNumberOfFiles();
 };
-
+void copyDirectoryContents(std::filesystem::path source, std::filesystem::path destination);

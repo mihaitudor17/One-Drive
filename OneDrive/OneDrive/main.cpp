@@ -34,7 +34,7 @@ int main(int argc, char* argv[])
 	//else {
 	//	std::cout << folder2.m_folderName;
 	//}
-	client();
-
+	//client();
+	copyDirectoryContents("./Synchronized Folder 1", "./Synchronized Folder 2");
 	return a.exec();
 }
