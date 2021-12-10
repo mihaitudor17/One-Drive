@@ -124,7 +124,7 @@ p, li { white-space: pre-wrap; }
     </property>
     <property name="icon">
      <iconset>
-      <normaloff>logoLoginButton.png</normaloff>logoLoginButton.png</iconset>
+      <normaloff>Assets/logoLoginButton.png</normaloff>Assets/logoLoginButton.png</iconset>
     </property>
     <property name="iconSize">
      <size>
@@ -459,7 +459,7 @@ border-radius:40px;</string>
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>LogoQtFinal.png</pixmap>
+     <pixmap>Assets/LogoQtFinal.png</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
@@ -497,7 +497,7 @@ color:white;
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>wrong.png</pixmap>
+     <pixmap>Assets/wrong.png</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
@@ -516,7 +516,7 @@ color:white;
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>../../../../.designer/backup/LogoQtFinal.png</pixmap>
+     <pixmap>../../../../../../.designer/backup/LogoQtFinal.png</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
@@ -535,7 +535,7 @@ color:white;
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>right.png</pixmap>
+     <pixmap>Assets/right.png</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
