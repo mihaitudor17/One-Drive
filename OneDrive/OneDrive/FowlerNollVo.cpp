@@ -3,7 +3,7 @@
 size_t FowlerNollVo::getHash(const std::string& text)
 {
 	size_t hash = InitialFNV;
-	
+
 	for (const auto& character : text)
 	{
 		hash = hash ^ (character);       /* xor  the low 8 bits */
@@ -31,18 +31,18 @@ size_t FowlerNollVo::hashingTextFile(const std::string& filePath)
 
 size_t FowlerNollVo::hashingImageFile(const std::string& imagePath)
 {
-	std::ifstream fis(imagePath, std::ios::binary);
-	fis.seekg(0, std::ios::end);
+	const int BUFFER_SIZE = 1024;
+	char bufferFile[BUFFER_SIZE];
 
-	int size = fis.tellg();
-	char* image = new char[size];
+	std::ifstream file;
+	size_t result;
 
-	fis.seekg(0, std::ios::beg);
-	fis.read(image, size);
-	std::cout << "Size of the file is" << " " << size << " " << "bytes\n";
-	std::cout << "Image size " << strlen(image) << '\n';
+	file.open(imagePath, std::ios::binary);
 
-	const size_t rez = getHash(image);
+	if (file.is_open())
+	{
+		
+	}
 
-	return rez;
+	return result;
 }
