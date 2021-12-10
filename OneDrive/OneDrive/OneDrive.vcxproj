@@ -15,7 +15,7 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt_defaults.props')">
@@ -66,11 +66,19 @@
     <Text Include="text.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Account.cpp" />
+    <ClCompile Include="Folder.cpp" />
+    <ClCompile Include="JSON.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="TCP_Client.cpp" />
+    <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="Account.h" />
+    <ClInclude Include="Folder.h" />
+    <ClInclude Include="JSON.h" />
     <ClInclude Include="TCP_Client.h" />
+    <QtMoc Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="heroes.json" />

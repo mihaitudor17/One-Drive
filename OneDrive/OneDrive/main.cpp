@@ -1,10 +1,10 @@
-//#include "Window.h"
+#include "Window.h"
 #include "TCP_Client.h"
-//#include <QtWidgets/QApplication>
-//#include <QWidget>
-//#include <QObject>
-//#include <QString>
-//#include "Folder.h"
+#include <QtWidgets/QApplication>
+#include <QWidget>
+#include <QObject>
+#include <QString>
+#include "Folder.h"
 void copyDirectoryContentsFromTo(std::filesystem::path source, std::filesystem::path destination) {
 	for (auto& it : std::filesystem::directory_iterator(source)) {
 		if (std::filesystem::exists(destination / it.path().filename())) {
@@ -15,10 +15,10 @@ void copyDirectoryContentsFromTo(std::filesystem::path source, std::filesystem::
 }
 int main(int argc, char* argv[])
 {
-	/*QApplication a(argc, argv);
+	QApplication a(argc, argv);
 	Window w;
 	
-	w.show();*/
+	w.show();
 	//if (!std::filesystem::exists("./Synchronized Folder 1")) {
 	//	std::filesystem::create_directory("./Synchronized Folder 1");
 	//}
@@ -43,6 +43,6 @@ int main(int argc, char* argv[])
 	//	std::cout << folder2.m_folderName;
 	//}
 	client();
-	return 0;
-	/*return a.exec();*/
+
+	return a.exec();
 }

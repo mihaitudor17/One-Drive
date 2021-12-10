@@ -11,13 +11,14 @@ class Account : public QWidget
 public:
 	Account(const std::string& userName, QWidget* parent = 0);
 
-private slots:
-	void openFile();
+
 
 private:
 	std::filesystem::path pathLocal;
+	std::filesystem::path pathGlobal;
 	std::string fileNameGlobal;
 	Ui::Account ui;
 	std::string userName;
-	void showContentsOfFile();
+	void showContentLocal();
+	void showContentServer();
 };

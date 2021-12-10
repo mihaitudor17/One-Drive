@@ -17,7 +17,7 @@ void Window::LoginToAccount()
 		{
 
 			Account* back = new Account(userName);
-			back->setFixedSize(700, 700);
+			back->setFixedSize(1200, 700);
 			back->show();
 			this->hide();
 
