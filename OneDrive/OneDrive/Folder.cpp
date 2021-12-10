@@ -1,4 +1,12 @@
 #include "Folder.h"
+void copyDirectoryContentsFromTo(std::filesystem::path source, std::filesystem::path destination) {
+	for (auto& it : std::filesystem::directory_iterator(source)) {
+		if (std::filesystem::exists(destination / it.path().filename())) {
+			remove(destination / it.path().filename());
+		}
+		std::filesystem::copy(it, destination);
+	}
+}
 
 Folder::Folder(const std::string& name, std::filesystem::path path) :
 	m_folderName{ name }, m_path{ path }
