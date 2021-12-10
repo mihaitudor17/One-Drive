@@ -74,11 +74,21 @@
     <Image Include="Assets\FolderIcon.png" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="FowlerMain.cpp" />
+    <ClCompile Include="Account.cpp" />
+    <ClCompile Include="Folder.cpp" />
     <ClCompile Include="FowlerNollVo.cpp" />
+    <ClCompile Include="JSON.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="TCP_Client.cpp" />
+    <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="JSON.h" />
+    <ClInclude Include="TCP_Client.h" />
+    <QtMoc Include="Account.h" />
+    <ClInclude Include="Folder.h" />
     <ClInclude Include="FowlerNollVo.h" />
+    <QtMoc Include="Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
