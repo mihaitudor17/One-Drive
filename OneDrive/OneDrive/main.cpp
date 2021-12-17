@@ -6,18 +6,21 @@
 #include <QString>
 #include "Folder.h"
 #include <thread>
-void keepFoldersInSync(Folder folder1, Folder folder2) {
+void keepFoldersInSync(Folder& folder1, Folder& folder2) {
 	while (true) {
-		std::cout << "The last modified folder is: ";
+		folder1.assignLastWrittenTime(folder1.m_path);
+		folder2.assignLastWrittenTime(folder2.m_path);
+		std::cout << folder1.m_lastWrittenTime << ' ' << folder2.m_lastWrittenTime << ' ' << "The last modified folder is: ";
 		if (folder1.m_lastWrittenTime > folder2.m_lastWrittenTime) {
 			std::cout << folder1.m_folderName;
+			copyDirectoryContents(folder1.m_path, folder2.m_path);
 		}
-		else {
+		else if (folder2.m_lastWrittenTime > folder1.m_lastWrittenTime) {
 			std::cout << folder2.m_folderName;
+			copyDirectoryContents(folder2.m_path, folder1.m_path);
 		}
-		std::cout<<std::endl;
-		//copyDirectoryContents("./Synchronized Folder 1", "./Synchronized Folder 2");
-		std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+		std::cout << std::endl;
+		std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 	}
 }
 int main(int argc, char* argv[])
@@ -35,10 +38,8 @@ int main(int argc, char* argv[])
 	//initialise folder path
 	Folder folder1("Synchronized Folder 1", "./Synchronized Folder 1");
 	Folder folder2("Synchronized Folder 2", "./Synchronized Folder 2");
-	folder1.assignLastWrittenTime();
 	folder1.assignNumberOfFiles();
-	folder2.assignLastWrittenTime();
 	folder2.assignNumberOfFiles();
-	//keepFoldersInSync(folder1, folder2);
+	keepFoldersInSync(folder1, folder2);
 	return a.exec();
 }

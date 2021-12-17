@@ -12,8 +12,8 @@ public:
 	std::filesystem::path m_path;
 	long long m_lastWrittenTime;
 public:
-	Folder(const std::string &name,std::filesystem::path path);
-	void assignLastWrittenTime();
+	Folder(const std::string& name, std::filesystem::path path);
+	void assignLastWrittenTime(const std::filesystem::path& m_path);
 	void assignNumberOfFiles();
 };
 void copyDirectoryContents(std::filesystem::path source, std::filesystem::path destination);
