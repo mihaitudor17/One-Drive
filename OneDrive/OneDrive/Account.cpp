@@ -5,17 +5,31 @@
 #include <QGridLayout>
 
 
+void Account::back_folder_local()
+{
+	std::string path_aux = pathLocal.string();
+	while (path_aux[path_aux.length() - 1] != '/')
+	{
+		path_aux.erase(path_aux.begin() + path_aux.length() - 1);
+	}
+	path_aux.erase(path_aux.begin() + path_aux.length() - 1);
+
+	pathLocal = path_aux;
+	showContentLocal();
+}
+
+
 void Account::showContentLocal()
 {
 	QPixmap pix;
-	QGridLayout* grid = new QGridLayout();
-	ui.localWidget->setLayout(grid);
-	int contorLocalGrid = -1;
+	QGridLayout* gridLocal = new QGridLayout();
+	ui.localWidget->setLayout(gridLocal);
+	int contorServerGrid = -1;
 
 	for (auto& file : std::filesystem::directory_iterator(pathLocal))
 	{
 
-		contorLocalGrid++;
+		contorServerGrid++;
 
 		QLabel* image = new QLabel(ui.localWidget);
 		image->setMinimumSize(QSize(40, 40));
@@ -29,7 +43,7 @@ void Account::showContentLocal()
 			QString filename = "./Assets/FolderIcon.png";
 
 			connect(label, &QPushButton::released, this, [=]()
-				{ delete grid;
+				{ delete gridLocal;
 			pathLocal += "/" + file.path().filename().string();
 			qDeleteAll(ui.localWidget->findChildren<QWidget*>("", Qt::FindDirectChildrenOnly));
 			showContentLocal(); });
@@ -39,10 +53,10 @@ void Account::showContentLocal()
 				pix = pix.scaled(image->size(), Qt::KeepAspectRatio);
 				image->setPixmap(pix);
 				image->setVisible(true);
-				grid->addWidget(image, contorLocalGrid, 0);
+				gridLocal->addWidget(image, contorServerGrid, 0);
 				QString labelText = QString::fromStdString(file.path().filename().string());
 				label->setText(labelText);
-				grid->addWidget(label, contorLocalGrid, 1);
+				gridLocal->addWidget(label, contorServerGrid, 1);
 
 			}
 		}
@@ -57,21 +71,21 @@ void Account::showContentLocal()
 					QString labelText = QString::fromStdString(file.path().filename().string());
 					label->setText(labelText);
 					image->setVisible(true);
-					grid->addWidget(image, contorLocalGrid, 0);
-					grid->addWidget(label, contorLocalGrid, 1);
+					gridLocal->addWidget(image, contorServerGrid, 0);
+					gridLocal->addWidget(label, contorServerGrid, 1);
 
 				}
 			}
 			else if (file.path().filename().string().find(".jpg") != std::string::npos || file.path().filename().string().find(".png") != std::string::npos) {
-				QString filename = "./Assets/ImageIcon.png";
+				QString filename = "./Assets/ImageIcon.jpg";
 				if (pix.load(filename)) {
 					pix = pix.scaled(image->size(), Qt::KeepAspectRatio);
 					image->setPixmap(pix);
 					QString labelText = QString::fromStdString(file.path().filename().string());
 					label->setText(labelText);
 					image->setVisible(true);
-					grid->addWidget(image, contorLocalGrid, 0);
-					grid->addWidget(label, contorLocalGrid, 1);
+					gridLocal->addWidget(image, contorServerGrid, 0);
+					gridLocal->addWidget(label, contorServerGrid, 1);
 
 				}
 
@@ -84,45 +98,42 @@ void Account::showContentLocal()
 					QString labelText = QString::fromStdString(file.path().filename().string());
 					label->setText(labelText);
 					image->setVisible(true);
-					grid->addWidget(image, contorLocalGrid, 0);
-					grid->addWidget(label, contorLocalGrid, 1);
+					gridLocal->addWidget(image, contorServerGrid, 0);
+					gridLocal->addWidget(label, contorServerGrid, 1);
 
 				}
 			}
 			else {
-				QString filename = "./Assets/UndefinedIcon.png";
+				QString filename = "./Assets/UndefinedIcon.jpg";
 				if (pix.load(filename)) {
 					pix = pix.scaled(image->size(), Qt::KeepAspectRatio);
 					image->setPixmap(pix);
 					QString labelText = QString::fromStdString(file.path().filename().string());
 					label->setText(labelText);
 					image->setVisible(true);
-					grid->addWidget(image, contorLocalGrid, 0);
-					grid->addWidget(label, contorLocalGrid, 1);
+					gridLocal->addWidget(image, contorServerGrid, 0);
+					gridLocal->addWidget(label, contorServerGrid, 1);
 
 				}
 			}
 		}
 
 	}
-	if (contorLocalGrid < 3)
+	if (contorServerGrid < 3)
 
 	{
 
 		QWidget* spaceExpand = new QWidget();
 		spaceExpand->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-		grid->addWidget(spaceExpand, contorLocalGrid, 0);
-		grid->addWidget(spaceExpand, contorLocalGrid, 1);
-		grid->addWidget(spaceExpand, contorLocalGrid + 1, 0);
-		grid->addWidget(spaceExpand, contorLocalGrid + 1, 1);
-		grid->addWidget(spaceExpand, contorLocalGrid + 2, 0);
-		grid->addWidget(spaceExpand, contorLocalGrid + 2, 1);
+		gridLocal->addWidget(spaceExpand, contorServerGrid, 0);
+		gridLocal->addWidget(spaceExpand, contorServerGrid, 1);
+		gridLocal->addWidget(spaceExpand, contorServerGrid + 1, 0);
+		gridLocal->addWidget(spaceExpand, contorServerGrid + 1, 1);
+		gridLocal->addWidget(spaceExpand, contorServerGrid + 2, 0);
+		gridLocal->addWidget(spaceExpand, contorServerGrid + 2, 1);
 	}
 	ui.localWidget->setVisible(true);
 	ui.localFolder->setWidgetResizable(true);
-
-
-
 
 }
 

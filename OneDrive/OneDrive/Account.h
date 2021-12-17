@@ -11,7 +11,8 @@ class Account : public QWidget
 public:
 	Account(const std::string& userName, QWidget* parent = 0);
 
-
+private slots:
+	void back_folder_local();
 
 private:
 	std::filesystem::path pathLocal;
