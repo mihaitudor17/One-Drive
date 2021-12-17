@@ -107,7 +107,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QWidget" name="widget" native="true">
+  <widget class="QWidget" name="menu_bar_local" native="true">
    <property name="geometry">
     <rect>
      <x>100</x>
@@ -119,7 +119,7 @@
    <property name="styleSheet">
     <string notr="true">background:rgb(71, 61, 124);</string>
    </property>
-   <widget class="QPushButton" name="back">
+   <widget class="QPushButton" name="back_local">
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -149,7 +149,7 @@ QPushButton:hover
      <string>&lt;- Back</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="rename">
+   <widget class="QPushButton" name="rename_local">
     <property name="geometry">
      <rect>
       <x>90</x>
@@ -179,7 +179,110 @@ QPushButton:hover
      <string>Rename</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="delete_2">
+   <widget class="QPushButton" name="delete_local">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>0</y>
+      <width>75</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton
+{
+font-weight:bold ;
+font-style : normal;
+border: 0.1px solid black;
+border-radius:15px;
+background:rgb(71, 61, 124);
+color:white;
+font-size:16px;
+}
+
+QPushButton:hover
+{
+   background-color:rgb(170, 149, 255);
+}</string>
+    </property>
+    <property name="text">
+     <string>Delete</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QWidget" name="menu_bar_server" native="true">
+   <property name="geometry">
+    <rect>
+     <x>650</x>
+     <y>90</y>
+     <width>271</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background:rgb(71, 61, 124);</string>
+   </property>
+   <widget class="QPushButton" name="back_server">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>81</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton
+{
+font-weight:bold ;
+font-style : normal;
+border: 0.1px solid black;
+border-radius:15px;
+background:rgb(71, 61, 124);
+color:white;
+font-size:16px;
+}
+
+QPushButton:hover
+{
+   background-color:rgb(170, 149, 255);
+}</string>
+    </property>
+    <property name="text">
+     <string>&lt;- Back</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="rename_server">
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>0</y>
+      <width>75</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton
+{
+font-weight:bold ;
+font-style : normal;
+border: 0.1px solid black;
+border-radius:15px;
+background:rgb(71, 61, 124);
+color:white;
+font-size:16px;
+}
+
+QPushButton:hover
+{
+   background-color:rgb(170, 149, 255);
+}</string>
+    </property>
+    <property name="text">
+     <string>Rename</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="delete_server">
     <property name="geometry">
      <rect>
       <x>180</x>
@@ -215,7 +318,7 @@ QPushButton:hover
  <resources/>
  <connections>
   <connection>
-   <sender>back</sender>
+   <sender>back_local</sender>
    <signal>clicked()</signal>
    <receiver>Account</receiver>
    <slot>back_folder_local()</slot>
@@ -230,8 +333,25 @@ QPushButton:hover
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>back_server</sender>
+   <signal>clicked()</signal>
+   <receiver>Account</receiver>
+   <slot>back_folder_server()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>689</x>
+     <y>98</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>626</x>
+     <y>34</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>back_folder_local()</slot>
+  <slot>back_folder_server()</slot>
  </slots>
 </ui>
