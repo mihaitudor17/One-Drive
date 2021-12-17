@@ -107,5 +107,6 @@ int client() {
 	} while (!clientClose);
 	closesocket(clientSock);
 	WSACleanup();
+	std::cout << "GG";
 	return 0;
 }

@@ -5,6 +5,21 @@
 #include <QObject>
 #include <QString>
 #include "Folder.h"
+#include <thread>
+void keepFoldersInSync(Folder folder1, Folder folder2) {
+	while (true) {
+		std::cout << "The last modified folder is: ";
+		if (folder1.m_lastWrittenTime > folder2.m_lastWrittenTime) {
+			std::cout << folder1.m_folderName;
+		}
+		else {
+			std::cout << folder2.m_folderName;
+		}
+		std::cout<<std::endl;
+		//copyDirectoryContents("./Synchronized Folder 1", "./Synchronized Folder 2");
+		std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+	}
+}
 int main(int argc, char* argv[])
 {
 	QApplication a(argc, argv);
@@ -24,20 +39,6 @@ int main(int argc, char* argv[])
 	folder1.assignNumberOfFiles();
 	folder2.assignLastWrittenTime();
 	folder2.assignNumberOfFiles();
-	int i = 0;
-	return a.exec();
-	while (true) {
-		std::cout << "Iteration " << ++i;
-		//std::cout << "The last modified folder is: ";
-		//if (folder1.m_lastWrittenTime > folder2.m_lastWrittenTime) {
-		//	std::cout << folder1.m_folderName;
-		//}
-		//else {
-		//	std::cout << folder2.m_folderName;
-		//}
-		//client();
-		//copyDirectoryContents("./Synchronized Folder 1", "./Synchronized Folder 2");
-		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-	}
+	//keepFoldersInSync(folder1, folder2);
 	return a.exec();
 }

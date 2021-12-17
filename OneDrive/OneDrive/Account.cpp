@@ -63,7 +63,7 @@ void Account::showContentLocal()
 				}
 			}
 			else if (file.path().filename().string().find(".jpg") != std::string::npos || file.path().filename().string().find(".png") != std::string::npos) {
-				QString filename = "./Assets/ImageIcon.jpg";
+				QString filename = "./Assets/ImageIcon.png";
 				if (pix.load(filename)) {
 					pix = pix.scaled(image->size(), Qt::KeepAspectRatio);
 					image->setPixmap(pix);
@@ -90,7 +90,7 @@ void Account::showContentLocal()
 				}
 			}
 			else {
-				QString filename = "./Assets/UndefinedIcon.jpg";
+				QString filename = "./Assets/UndefinedIcon.png";
 				if (pix.load(filename)) {
 					pix = pix.scaled(image->size(), Qt::KeepAspectRatio);
 					image->setPixmap(pix);
