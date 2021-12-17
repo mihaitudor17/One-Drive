@@ -21,13 +21,19 @@ Folder::Folder(const std::string& name, std::filesystem::path path) :
 	m_numberOfFiles = 0;
 }
 
-void Folder::assignLastWrittenTime()
+void Folder::assignLastWrittenTime(const std::filesystem::path& m_path)
 {
-	m_lastWrittenTime = 0;
-	for (auto& p : std::filesystem::directory_iterator(m_path)) {
+	std::cout << "Sunt in " << m_path.filename().string() << std::endl;
+	for (auto p : std::filesystem::directory_iterator(m_path)) {
 		std::string fileName = p.path().string();
-		if (m_lastWrittenTime < std::chrono::duration_cast<std::chrono::milliseconds>(p.last_write_time().time_since_epoch()).count()) {
-			m_lastWrittenTime = std::chrono::duration_cast<std::chrono::milliseconds>(p.last_write_time().time_since_epoch()).count();
+		std::cout << fileName << std::chrono::duration_cast<std::chrono::milliseconds>(p.last_write_time().time_since_epoch()).count() << std::endl;
+		if (p.is_directory()) {
+			this->assignLastWrittenTime(p.path());
+		}
+		else {
+			if (m_lastWrittenTime < std::chrono::duration_cast<std::chrono::milliseconds>(p.last_write_time().time_since_epoch()).count()) {
+				m_lastWrittenTime = std::chrono::duration_cast<std::chrono::milliseconds>(p.last_write_time().time_since_epoch()).count();
+			}
 		}
 	}
 }
