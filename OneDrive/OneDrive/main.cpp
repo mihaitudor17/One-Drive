@@ -10,7 +10,7 @@ void keepFoldersInSync(Folder& folder1, Folder& folder2) {
 	while (true) {
 		folder1.assignLastWrittenTime(folder1.m_path);
 		folder2.assignLastWrittenTime(folder2.m_path);
-		std::cout << folder1.m_lastWrittenTime << ' ' << folder2.m_lastWrittenTime << ' ' << "The last modified folder is: ";
+		std::cout << "The last modified folder is: ";
 		if (folder1.m_lastWrittenTime > folder2.m_lastWrittenTime) {
 			std::cout << folder1.m_folderName;
 			copyDirectoryContents(folder1.m_path, folder2.m_path);
