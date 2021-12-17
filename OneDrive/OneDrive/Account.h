@@ -20,6 +20,7 @@ private:
 	std::string fileNameGlobal;
 	Ui::Account ui;
 	std::string userName;
+	void checkLayout();
 	void showContentLocal();
 	void showContentServer();
 };

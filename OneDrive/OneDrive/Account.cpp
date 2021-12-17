@@ -13,16 +13,29 @@ void Account::back_folder_local()
 		path_aux.erase(path_aux.begin() + path_aux.length() - 1);
 	}
 	path_aux.erase(path_aux.begin() + path_aux.length() - 1);
-
+	qDeleteAll(ui.localWidget->findChildren<QWidget*>("", Qt::FindDirectChildrenOnly));
 	pathLocal = path_aux;
 	showContentLocal();
 }
 
 
+void Account::checkLayout()
+{
+	QLayout* layout = ui.localWidget->layout();
+	if (layout != 0)
+	{
+		QLayoutItem* item;
+		while ((item = layout->takeAt(0)) != 0)
+			layout->removeItem(item);
+		delete layout;
+	}
+}
+
 void Account::showContentLocal()
 {
 	QPixmap pix;
-	QGridLayout* gridLocal = new QGridLayout();
+	checkLayout();
+	QGridLayout* gridLocal = new  QGridLayout();
 	ui.localWidget->setLayout(gridLocal);
 	int contorServerGrid = -1;
 
@@ -35,7 +48,7 @@ void Account::showContentLocal()
 		image->setMinimumSize(QSize(40, 40));
 
 		QPushButton* label = new QPushButton(ui.localWidget);
-		label->setMinimumSize(QSize(10, 10));
+		label->setMinimumSize(QSize(50, 10));
 		label->setVisible(true);
 		label->setStyleSheet("QPushButton { background-color: rgba(10, 0, 0, 0); }");
 
