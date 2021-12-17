@@ -110,23 +110,40 @@
   <widget class="QWidget" name="widget" native="true">
    <property name="geometry">
     <rect>
-     <x>90</x>
+     <x>100</x>
      <y>79</y>
-     <width>281</width>
+     <width>271</width>
      <height>21</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background:rgb(182, 182, 182)</string>
+    <string notr="true">background:rgb(71, 61, 124);</string>
    </property>
    <widget class="QPushButton" name="back">
     <property name="geometry">
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>75</width>
+      <width>81</width>
       <height>24</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton
+{
+font-weight:bold ;
+font-style : normal;
+border: 0.1px solid black;
+border-radius:15px;
+background:rgb(71, 61, 124);
+color:white;
+font-size:16px;
+}
+
+QPushButton:hover
+{
+   background-color:rgb(170, 149, 255);
+}</string>
     </property>
     <property name="text">
      <string>&lt;- Back</string>
@@ -135,11 +152,28 @@
    <widget class="QPushButton" name="rename">
     <property name="geometry">
      <rect>
-      <x>70</x>
+      <x>90</x>
       <y>0</y>
       <width>75</width>
       <height>24</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton
+{
+font-weight:bold ;
+font-style : normal;
+border: 0.1px solid black;
+border-radius:15px;
+background:rgb(71, 61, 124);
+color:white;
+font-size:16px;
+}
+
+QPushButton:hover
+{
+   background-color:rgb(170, 149, 255);
+}</string>
     </property>
     <property name="text">
      <string>Rename</string>
@@ -148,11 +182,28 @@
    <widget class="QPushButton" name="delete_2">
     <property name="geometry">
      <rect>
-      <x>140</x>
+      <x>180</x>
       <y>0</y>
       <width>75</width>
       <height>24</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton
+{
+font-weight:bold ;
+font-style : normal;
+border: 0.1px solid black;
+border-radius:15px;
+background:rgb(71, 61, 124);
+color:white;
+font-size:16px;
+}
+
+QPushButton:hover
+{
+   background-color:rgb(170, 149, 255);
+}</string>
     </property>
     <property name="text">
      <string>Delete</string>

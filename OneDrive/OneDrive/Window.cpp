@@ -8,7 +8,7 @@
 
 void Window::LoginToAccount()
 {
-	userName = ui.Username->toPlainText().toStdString();
+	userName = ui.Username->text().toStdString();
 	if (userName != "")
 	{
 
@@ -44,7 +44,7 @@ void Window::LoginToAccount()
 
 void Window::Signup()
 {
-	userName = ui.Username->toPlainText().toStdString();
+	userName = ui.Username->text().toStdString();
 	if (userName!= "")
 	{
 		
@@ -109,7 +109,7 @@ Window::Window(QWidget* parent)
 	ui.userTakenIcon->setVisible(false);
 	ui.UserTaken->setVisible(false);
 	ui.userSucces->setVisible(false);
-	
+	QObject::connect(ui.Username, SIGNAL(returnPressed()), SLOT(LoginToAccount()));
 	
 	
 

@@ -52,48 +52,6 @@ background: rgb(206, 195, 247);
    </size>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QTextEdit" name="Username">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>160</x>
-      <y>260</y>
-      <width>291</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>10</pointsize>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">border: 1px solid;
- border-radius:15px;
- background-color: palette(base);
-font-weight:bold;
-</string>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::Panel</enum>
-    </property>
-    <property name="verticalScrollBarPolicy">
-     <enum>Qt::ScrollBarAlwaysOff</enum>
-    </property>
-    <property name="horizontalScrollBarPolicy">
-     <enum>Qt::ScrollBarAlwaysOff</enum>
-    </property>
-    <property name="html">
-     <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Segoe UI'; font-size:10pt; font-weight:700; font-style:normal;&quot;&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="login">
     <property name="geometry">
      <rect>
@@ -541,6 +499,23 @@ color:white;
      <bool>true</bool>
     </property>
    </widget>
+   <widget class="QLineEdit" name="Username">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>270</y>
+      <width>291</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: 1px solid;
+ border-radius:15px;
+ background-color: palette(base);
+font-weight:bold;
+</string>
+    </property>
+   </widget>
    <zorder>label_18</zorder>
    <zorder>label_17</zorder>
    <zorder>label_16</zorder>
@@ -548,7 +523,6 @@ color:white;
    <zorder>label_7</zorder>
    <zorder>label_6</zorder>
    <zorder>label_3</zorder>
-   <zorder>Username</zorder>
    <zorder>login</zorder>
    <zorder>pushButton</zorder>
    <zorder>label</zorder>
@@ -565,6 +539,7 @@ color:white;
    <zorder>userTakenIcon</zorder>
    <zorder>userSucces</zorder>
    <zorder>UserTaken</zorder>
+   <zorder>Username</zorder>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

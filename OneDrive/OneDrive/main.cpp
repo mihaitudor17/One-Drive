@@ -40,6 +40,6 @@ int main(int argc, char* argv[])
 	Folder folder2("Synchronized Folder 2", "./Synchronized Folder 2");
 	folder1.assignNumberOfFiles();
 	folder2.assignNumberOfFiles();
-	keepFoldersInSync(folder1, folder2);
+	//keepFoldersInSync(folder1, folder2);
 	return a.exec();
 }

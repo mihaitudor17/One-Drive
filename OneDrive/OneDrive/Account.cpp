@@ -5,9 +5,17 @@
 #include <QGridLayout>
 
 
+
+
 void Account::back_folder_local()
 {
+
 	std::string path_aux = pathLocal.string();
+	if (path_aux == ("./StoredFiles/" + userName))
+	{
+		//throw "Back out of the restricted area";
+		return;
+	}
 	while (path_aux[path_aux.length() - 1] != '/')
 	{
 		path_aux.erase(path_aux.begin() + path_aux.length() - 1);
@@ -135,7 +143,8 @@ void Account::showContentLocal()
 	if (contorServerGrid < 3)
 
 	{
-
+		if (contorServerGrid == -1)
+			contorServerGrid++;
 		QWidget* spaceExpand = new QWidget();
 		spaceExpand->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 		gridLocal->addWidget(spaceExpand, contorServerGrid, 0);
@@ -253,7 +262,8 @@ void Account::showContentServer()
 	if (contorServerGrid < 3)
 
 	{
-
+		if (contorServerGrid == -1)
+			contorServerGrid++;
 		QWidget* spaceExpand = new QWidget();
 		spaceExpand->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 		gridServer->addWidget(spaceExpand, contorServerGrid, 0);
@@ -280,6 +290,7 @@ Account::Account(const std::string& userName, QWidget* parent)
 	showContentServer();
 	ui.localFolder->setWidget(ui.localWidget);
 	ui.serverFolder->setWidget(ui.serverWidget);
+	
 
 }
 
