@@ -342,14 +342,27 @@ QPushButton:hover
   <widget class="QPushButton" name="pushButton_3">
    <property name="geometry">
     <rect>
-     <x>750</x>
-     <y>460</y>
+     <x>100</x>
+     <y>500</y>
      <width>75</width>
      <height>24</height>
     </rect>
    </property>
    <property name="text">
-    <string>add Folder</string>
+    <string>addItem</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_4">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>530</y>
+     <width>75</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>addItem</string>
    </property>
   </widget>
  </widget>
