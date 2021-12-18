@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1236</width>
+    <width>1234</width>
     <height>604</height>
    </rect>
   </property>
@@ -313,6 +313,19 @@ QPushButton:hover
     </property>
    </widget>
   </widget>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>470</y>
+     <width>75</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>addItem</string>
+   </property>
+  </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
@@ -349,9 +362,43 @@ QPushButton:hover
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>rename_local</sender>
+   <signal>clicked()</signal>
+   <receiver>Account</receiver>
+   <slot>rename()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>241</x>
+     <y>87</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>175</x>
+     <y>26</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>delete_local</sender>
+   <signal>clicked()</signal>
+   <receiver>Account</receiver>
+   <slot>delete()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>325</x>
+     <y>90</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>283</x>
+     <y>16</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>back_folder_local()</slot>
   <slot>back_folder_server()</slot>
+  <slot>rename()</slot>
+  <slot>delete()</slot>
  </slots>
 </ui>
