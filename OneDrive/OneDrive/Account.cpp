@@ -52,13 +52,28 @@ void Account::renameFileSlot(std::string selected)
 	QString text = QInputDialog::getText(this, tr("New name"),
 		tr("Please insert a new name:"), QLineEdit::Normal,
 		QDir::home().dirName(), &ok);
+
 	if (ok && !text.isEmpty())
 	{
-		std::cout << text.toStdString();
+		bool found = false;
+		for (auto& file : std::filesystem::directory_iterator(pathLocal))
+		{
+			if (file.path().filename() == text.toStdString())
+			{
+				found = true;
+				break;
+			}
+		}
+		if (!found)
+		{
+			std::filesystem::rename(pathLocal/selected, pathLocal/text.toStdString());
+			qDeleteAll(ui.localWidget->findChildren<QWidget*>("", Qt::FindDirectChildrenOnly));
+			showContentLocal();
+		}
 	}
 
 	
-	//std::filesystem::rename("./Synchronized Folder 5", "./Synchronized Folder 1");
+	
 }
 
 void Account::renameLocalSendSignal()
