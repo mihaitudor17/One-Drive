@@ -38,12 +38,15 @@ void Account::back_folder_server()
 	{
 		path_aux.erase(path_aux.begin() + path_aux.length() - 1);
 	}
-	
+	path_aux.erase(path_aux.begin() + path_aux.length() - 1);
+	qDeleteAll(ui.serverWidget->findChildren<QWidget*>("", Qt::FindDirectChildrenOnly));
+	pathGlobal = path_aux;
+	showContentServer();
 }
 
-void Account::checkLayout()
+void Account::checkLayout(QWidget* currentWidget)
 {
-	QLayout* layout = ui.localWidget->layout();
+	QLayout* layout = currentWidget->layout();
 	if (layout != 0)
 	{
 		QLayoutItem* item;
@@ -56,7 +59,7 @@ void Account::checkLayout()
 void Account::showContentLocal()
 {
 	QPixmap pix;
-	checkLayout();
+	checkLayout(ui.localWidget);
 	QGridLayout* gridLocal = new  QGridLayout();
 	ui.localWidget->setLayout(gridLocal);
 	int contorServerGrid = -1;
@@ -175,6 +178,8 @@ void Account::showContentLocal()
 
 void Account::showContentServer()
 {
+	checkLayout(ui.serverWidget);
+
 	QPixmap pix;
 	QGridLayout* gridServer = new QGridLayout();
 	ui.serverWidget->setLayout(gridServer);

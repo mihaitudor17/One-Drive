@@ -21,7 +21,7 @@ private:
 	std::string fileNameGlobal;
 	Ui::Account ui;
 	std::string userName;
-	void checkLayout();
+	void checkLayout(QWidget* currentWidget);
 	void showContentLocal();
 	void showContentServer();
 };
