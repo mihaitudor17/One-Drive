@@ -3,6 +3,8 @@
 #include <iostream>
 #include <QVBoxLayout>
 #include <QGridLayout>
+#include <QInputDialog>
+#include <QDir>
 
 
 
@@ -46,7 +48,17 @@ void Account::back_folder_server()
 
 void Account::renameFileSlot(std::string selected)
 {
-	std::cout << selected;
+	bool ok;
+	QString text = QInputDialog::getText(this, tr("New name"),
+		tr("Please insert a new name:"), QLineEdit::Normal,
+		QDir::home().dirName(), &ok);
+	if (ok && !text.isEmpty())
+	{
+		std::cout << text.toStdString();
+	}
+
+	
+	//std::filesystem::rename("./Synchronized Folder 5", "./Synchronized Folder 1");
 }
 
 void Account::renameLocalSendSignal()
