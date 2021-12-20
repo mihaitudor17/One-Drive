@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <QLabel>
 
+
 class Account : public QWidget
 {
 	Q_OBJECT
@@ -16,6 +17,8 @@ private slots:
 	void back_folder_server();
 
 private:
+	QPushButton* labelToBeDeselected;
+	std::string selected;
 	std::filesystem::path pathLocal;
 	std::filesystem::path pathGlobal;
 	std::string fileNameGlobal;

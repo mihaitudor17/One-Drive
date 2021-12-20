@@ -58,6 +58,7 @@ void Account::checkLayout(QWidget* currentWidget)
 
 void Account::showContentLocal()
 {
+	labelToBeDeselected = nullptr;
 	QPixmap pix;
 	checkLayout(ui.localWidget);
 	QGridLayout* gridLocal = new  QGridLayout();
@@ -81,10 +82,28 @@ void Account::showContentLocal()
 			QString filename = "./Assets/FolderIcon.png";
 
 			connect(label, &QPushButton::released, this, [=]()
-				{ delete gridLocal;
-			pathLocal += "/" + file.path().filename().string();
-			qDeleteAll(ui.localWidget->findChildren<QWidget*>("", Qt::FindDirectChildrenOnly));
-			showContentLocal(); });
+				{ 
+					if (selected==file.path().filename().string())
+					{
+						selected = "";
+						delete gridLocal;
+						pathLocal += "/" + file.path().filename().string();
+						qDeleteAll(ui.localWidget->findChildren<QWidget*>("", Qt::FindDirectChildrenOnly));
+						showContentLocal();
+					}
+					else
+					{
+						if (labelToBeDeselected != nullptr)
+						{
+							labelToBeDeselected->setStyleSheet("QPushButton { background-color: rgba(10, 0, 0, 0);color:black; }");
+						}
+						labelToBeDeselected = label;
+						selected  = file.path().filename().string();
+						label->setStyleSheet("QPushButton { background-color: rgba(10, 0, 0, 0);color:blue; }");
+					}
+						
+			
+				});
 
 			if (pix.load(filename)) {
 
@@ -301,6 +320,7 @@ void Account::showContentServer()
 Account::Account(const std::string& userName, QWidget* parent)
 	: QWidget(parent)
 {
+	selected = "";
 	this->userName = userName;
 	pathLocal = "./StoredFiles/" + userName;
 	pathGlobal = "./StoredServerFiles/" + userName;
