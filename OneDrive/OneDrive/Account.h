@@ -13,6 +13,7 @@ public:
 
 private slots:
 	void back_folder_local();
+	void back_folder_server();
 
 private:
 	std::filesystem::path pathLocal;

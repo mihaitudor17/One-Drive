@@ -26,6 +26,20 @@ void Account::back_folder_local()
 	showContentLocal();
 }
 
+void Account::back_folder_server()
+{
+	std::string path_aux = pathGlobal.string();
+	if (path_aux == ("./StoredServerFiles/" + userName))
+	{
+		//throw "Back out of the restricted area";
+		return;
+	}
+	while (path_aux[path_aux.length() - 1] != '/')
+	{
+		path_aux.erase(path_aux.begin() + path_aux.length() - 1);
+	}
+	
+}
 
 void Account::checkLayout()
 {
