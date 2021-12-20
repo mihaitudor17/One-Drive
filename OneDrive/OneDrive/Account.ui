@@ -365,13 +365,29 @@ QPushButton:hover
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>delete_local</sender>
+   <signal>clicked()</signal>
+   <receiver>Account</receiver>
+   <slot>deleteLocalSendSignal()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>315</x>
+     <y>91</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>284</x>
+     <y>16</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <signal>signal_rename_local(int)</signal>
   <slot>back_folder_local()</slot>
   <slot>back_folder_server()</slot>
   <slot>renameLocalSendSignal()</slot>
-  <slot>delete_local_folder()</slot>
+  <slot>deleteLocalSendSignal()</slot>
   <slot>delete_server_folder()</slot>
   <slot>rename_server_folder()</slot>
  </slots>

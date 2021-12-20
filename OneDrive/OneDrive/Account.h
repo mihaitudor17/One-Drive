@@ -12,13 +12,14 @@ class Account : public QWidget
 
  signals:
 	void renameFileSignal(std::string selected);
-
+	void deleteFileSignal(std::string selected);
 private slots:
 	void back_folder_local();
 	void back_folder_server();
 	void renameFileSlot(std::string selected);
 	void renameLocalSendSignal();
-
+	void deleteLocalSendSignal();
+	void deleteFileSlot(std::string selected);
 
 private:
 	QPushButton* labelToBeDeselected;

@@ -5,6 +5,7 @@
 #include <QGridLayout>
 #include <QInputDialog>
 #include <QDir>
+#include <QMessageBox>
 
 
 
@@ -48,28 +49,42 @@ void Account::back_folder_server()
 
 void Account::renameFileSlot(std::string selected)
 {
-	bool ok;
-	QString text = QInputDialog::getText(this, tr("New name"),
-		tr("Please insert a new name:"), QLineEdit::Normal,
-		QDir::home().dirName(), &ok);
-
-	if (ok && !text.isEmpty())
+	if (selected != "")
 	{
-		bool found = false;
-		for (auto& file : std::filesystem::directory_iterator(pathLocal))
+		bool ok;
+		QString text = QInputDialog::getText(this, tr("New name"),
+			tr("Please insert a new name:"), QLineEdit::Normal,
+			QDir::home().dirName(), &ok);
+
+		if (ok && !text.isEmpty())
 		{
-			if (file.path().filename() == text.toStdString())
+			bool found = false;
+			for (auto& file : std::filesystem::directory_iterator(pathLocal))
 			{
-				found = true;
-				break;
+				if (file.path().filename() == text.toStdString())
+				{
+					found = true;
+					break;
+				}
+			}
+			if (!found)
+			{
+				std::filesystem::rename(pathLocal / selected, pathLocal / text.toStdString());
+				qDeleteAll(ui.localWidget->findChildren<QWidget*>("", Qt::FindDirectChildrenOnly));
+				showContentLocal();
+			}
+			else
+			{
+				QMessageBox::warning(this, "Alert!", "This file already exists!\nPlease try another name.");
+
+
 			}
 		}
-		if (!found)
-		{
-			std::filesystem::rename(pathLocal/selected, pathLocal/text.toStdString());
-			qDeleteAll(ui.localWidget->findChildren<QWidget*>("", Qt::FindDirectChildrenOnly));
-			showContentLocal();
-		}
+		
+	}
+	else
+	{
+		QMessageBox::warning(this, "Alert!", "Please select a file.");
 	}
 
 	
@@ -79,6 +94,16 @@ void Account::renameFileSlot(std::string selected)
 void Account::renameLocalSendSignal()
 {
 	emit renameFileSignal(selected);
+}
+
+void Account::deleteLocalSendSignal()
+{
+	emit deleteFileSlot(selected);
+}
+
+void Account::deleteFileSlot(std::string selected)
+{
+	std::cout << "selectat";
 }
 
 void Account::checkLayout(QWidget* currentWidget)
@@ -367,7 +392,7 @@ Account::Account(const std::string& userName, QWidget* parent)
 	ui.localFolder->setWidget(ui.localWidget);
 	ui.serverFolder->setWidget(ui.serverWidget);
 	connect(this, SIGNAL(renameFileSignal(std::string)), this, SLOT(renameFileSlot(std::string)));
-	
+	connect(this, SIGNAL(deleteFileSignal(std::string)), this, SLOT(deleteFileSlot(std::string)));
 
 }
 
