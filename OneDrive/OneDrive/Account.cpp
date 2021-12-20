@@ -69,9 +69,26 @@ void Account::renameFileSlot(std::string selected)
 			}
 			if (!found)
 			{
-				std::filesystem::rename(pathLocal / selected, pathLocal / text.toStdString());
-				qDeleteAll(ui.localWidget->findChildren<QWidget*>("", Qt::FindDirectChildrenOnly));
-				showContentLocal();
+				if (std::filesystem::is_directory(pathLocal / selected))
+				{
+					std::filesystem::rename(pathLocal / selected, pathLocal / text.toStdString());
+					qDeleteAll(ui.localWidget->findChildren<QWidget*>("", Qt::FindDirectChildrenOnly));
+					showContentLocal();
+				}
+				else
+				{
+					std::string extension;
+					
+					
+					for (int position = selected.find_last_of('.'); position < selected.length(); position++)
+					{
+						extension.push_back(selected[position]);
+					}
+					std::filesystem::rename(pathLocal / selected, pathLocal/(text.toStdString()+extension));
+					qDeleteAll(ui.localWidget->findChildren<QWidget*>("", Qt::FindDirectChildrenOnly));
+					showContentLocal();
+				}
+			
 			}
 			else
 			{
@@ -139,33 +156,32 @@ void Account::showContentLocal()
 		label->setMinimumSize(QSize(50, 10));
 		label->setVisible(true);
 		label->setStyleSheet("QPushButton { background-color: rgba(10, 0, 0, 0); }");
+		connect(label, &QPushButton::released, this, [=]()
+			{
+				if (selected == file.path().filename().string() && std::filesystem::is_directory(file))
+				{
+					selected = "";
+					delete gridLocal;
+					pathLocal += "/" + file.path().filename().string();
+					qDeleteAll(ui.localWidget->findChildren<QWidget*>("", Qt::FindDirectChildrenOnly));
+					showContentLocal();
+				}
+				else
+				{
+					if (labelToBeDeselected != nullptr)
+					{
+						labelToBeDeselected->setStyleSheet("QPushButton { background-color: rgba(10, 0, 0, 0);color:black; }");
+					}
+					labelToBeDeselected = label;
+					selected = file.path().filename().string();
+					label->setStyleSheet("QPushButton { background-color: rgba(10, 0, 0, 0);color:blue; }");
+				}
+
+
+			});
 
 		if (std::filesystem::is_directory(file)) {
 			QString filename = "./Assets/FolderIcon.png";
-
-			connect(label, &QPushButton::released, this, [=]()
-				{ 
-					if (selected==file.path().filename().string())
-					{
-						selected = "";
-						delete gridLocal;
-						pathLocal += "/" + file.path().filename().string();
-						qDeleteAll(ui.localWidget->findChildren<QWidget*>("", Qt::FindDirectChildrenOnly));
-						showContentLocal();
-					}
-					else
-					{
-						if (labelToBeDeselected != nullptr)
-						{
-							labelToBeDeselected->setStyleSheet("QPushButton { background-color: rgba(10, 0, 0, 0);color:black; }");
-						}
-						labelToBeDeselected = label;
-						selected  = file.path().filename().string();
-						label->setStyleSheet("QPushButton { background-color: rgba(10, 0, 0, 0);color:blue; }");
-					}
-						
-			
-				});
 
 			if (pix.load(filename)) {
 
