@@ -9,12 +9,16 @@ class Account : public QWidget
 {
 	Q_OBJECT
 
-public:
-	Account(const std::string& userName, QWidget* parent = 0);
+
+ signals:
+	void renameFileSignal(std::string selected);
 
 private slots:
 	void back_folder_local();
 	void back_folder_server();
+	void renameFileSlot(std::string selected);
+	void renameLocalSendSignal();
+
 
 private:
 	QPushButton* labelToBeDeselected;
@@ -27,4 +31,7 @@ private:
 	void checkLayout(QWidget* currentWidget);
 	void showContentLocal();
 	void showContentServer();
+
+public:
+	Account(const std::string& userName, QWidget* parent = 0);
 };

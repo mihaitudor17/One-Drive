@@ -353,71 +353,24 @@ QPushButton:hover
    <sender>rename_local</sender>
    <signal>clicked()</signal>
    <receiver>Account</receiver>
-   <slot>rename_local_folder()</slot>
+   <slot>renameLocalSendSignal()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>241</x>
+     <x>222</x>
      <y>87</y>
     </hint>
     <hint type="destinationlabel">
-     <x>175</x>
-     <y>26</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>delete_local</sender>
-   <signal>clicked()</signal>
-   <receiver>Account</receiver>
-   <slot>delete_local_folder()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>325</x>
-     <y>90</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>283</x>
-     <y>16</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>rename_server</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>Account</receiver>
-   <slot>rename_local_folder()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>777</x>
-     <y>102</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>731</x>
-     <y>7</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>delete_server</sender>
-   <signal>clicked()</signal>
-   <receiver>Account</receiver>
-   <slot>delete_server_folder()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>862</x>
-     <y>96</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>821</x>
-     <y>14</y>
+     <x>159</x>
+     <y>11</y>
     </hint>
    </hints>
   </connection>
  </connections>
  <slots>
+  <signal>signal_rename_local(int)</signal>
   <slot>back_folder_local()</slot>
   <slot>back_folder_server()</slot>
-  <slot>rename_local_folder()</slot>
+  <slot>renameLocalSendSignal()</slot>
   <slot>delete_local_folder()</slot>
   <slot>delete_server_folder()</slot>
   <slot>rename_server_folder()</slot>

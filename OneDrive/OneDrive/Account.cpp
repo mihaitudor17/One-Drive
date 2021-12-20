@@ -9,7 +9,7 @@
 
 void Account::back_folder_local()
 {
-
+	
 	std::string path_aux = pathLocal.string();
 	if (path_aux == ("./StoredFiles/" + userName))
 	{
@@ -42,6 +42,16 @@ void Account::back_folder_server()
 	qDeleteAll(ui.serverWidget->findChildren<QWidget*>("", Qt::FindDirectChildrenOnly));
 	pathGlobal = path_aux;
 	showContentServer();
+}
+
+void Account::renameFileSlot(std::string selected)
+{
+	std::cout << selected;
+}
+
+void Account::renameLocalSendSignal()
+{
+	emit renameFileSignal(selected);
 }
 
 void Account::checkLayout(QWidget* currentWidget)
@@ -320,7 +330,7 @@ void Account::showContentServer()
 Account::Account(const std::string& userName, QWidget* parent)
 	: QWidget(parent)
 {
-	selected = "";
+	selected = "assdf";
 	this->userName = userName;
 	pathLocal = "./StoredFiles/" + userName;
 	pathGlobal = "./StoredServerFiles/" + userName;
@@ -329,6 +339,7 @@ Account::Account(const std::string& userName, QWidget* parent)
 	showContentServer();
 	ui.localFolder->setWidget(ui.localWidget);
 	ui.serverFolder->setWidget(ui.serverWidget);
+	connect(this, SIGNAL(renameFileSignal(std::string)), this, SLOT(renameFileSlot(std::string)));
 	
 
 }
