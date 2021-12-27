@@ -398,7 +398,7 @@ void Account::showContentServer()
 Account::Account(const std::string& userName, QWidget* parent)
 	: QWidget(parent)
 {
-	selected = "assdf";
+	selected = "";
 	this->userName = userName;
 	pathLocal = "./StoredFiles/" + userName;
 	pathGlobal = "./StoredServerFiles/" + userName;
@@ -409,7 +409,7 @@ Account::Account(const std::string& userName, QWidget* parent)
 	ui.serverFolder->setWidget(ui.serverWidget);
 	connect(this, SIGNAL(renameFileSignal(std::string)), this, SLOT(renameFileSlot(std::string)));
 	connect(this, SIGNAL(deleteFileSignal(std::string)), this, SLOT(deleteFileSlot(std::string)));
-
+	//turc was here
 }
 
 

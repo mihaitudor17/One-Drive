@@ -12,7 +12,6 @@ class Window : public QMainWindow
 
 public:
     Window(QWidget* parent = 0);
-
     private slots:
     void LoginToAccount();
     void Signup();

@@ -35,4 +35,8 @@ private:
 
 public:
 	Account(const std::string& userName, QWidget* parent = 0);
+	std::string getUser()
+	{
+		return userName;
+	}
 };
