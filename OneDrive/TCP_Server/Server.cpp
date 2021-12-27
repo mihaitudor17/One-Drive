@@ -120,3 +120,26 @@ bool Server::sendFile(SOCKET clientSock, std::string path)
 	}
 	return 1;
 }
+bool Server::writeToFile(SOCKET clientSock, std::ofstream file, std::string fullPath, int fileRequestedsize)
+{
+	int byRecv;
+	char bufferFile[BUFFER_SIZE];
+	int fileDownloaded = 0;
+	file.open(fullPath, std::ios::binary | std::ios::trunc);
+	if (!file.is_open())
+	{
+		std::ofstream file(fullPath);
+		file.open(fullPath, std::ios::binary | std::ios::trunc);
+	}
+	do {
+		memset(bufferFile, 0, BUFFER_SIZE);
+		byRecv = recv(clientSock, bufferFile, BUFFER_SIZE, 0);
+		if (byRecv == 0 || byRecv == -1) {
+			return 0;
+		}
+		file.write(bufferFile, byRecv);
+		fileDownloaded += byRecv;
+	} while (fileDownloaded < fileRequestedsize);
+	file.close();
+	return 1;
+}
