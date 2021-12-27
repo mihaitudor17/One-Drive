@@ -79,3 +79,37 @@ bool Client::sendFile(SOCKET clientSock, std::ifstream file)
 	}
 	return 1;
 }
+bool Client::writeToFile(SOCKET clientSock, std::string fullPath, int fileRequestedsize)
+{
+	std::ofstream file;
+	int ok = 0;
+	int byRecv;
+	char bufferFile[BUFFER_SIZE];
+	int fileDownloaded = 0;
+	file.open(fullPath, std::ios::binary | std::ios::trunc);
+	if (!file.is_open())
+	{
+		std::ofstream file(fullPath);
+		file.open(fullPath, std::ios::binary | std::ios::trunc);
+	}
+	do {
+		memset(bufferFile, 0, BUFFER_SIZE);
+		byRecv = recv(clientSock, bufferFile, BUFFER_SIZE, 0);
+		if (strstr(bufferFile, "/eof"))
+			ok = 1;
+		if (byRecv == 0 || byRecv == -1) {
+			return 0;
+		}
+		if (byRecv > fileRequestedsize)
+			byRecv = fileRequestedsize - fileDownloaded;
+		/*std::string turc(bufferFile, byRecv);
+		std::cout << turc << std::endl;*/
+		file.write(bufferFile, byRecv);
+		fileDownloaded += byRecv;
+	} while (fileDownloaded < fileRequestedsize);
+	file.close();
+	if (ok == 1)
+		return 0;
+	else
+		return 1;
+}
