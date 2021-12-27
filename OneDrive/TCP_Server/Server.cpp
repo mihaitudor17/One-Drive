@@ -52,3 +52,13 @@ char* Server::recvFileName(SOCKET clientSock)
 	}
 	return fileRequested;
 }
+bool Server::sendFileName(SOCKET clientSock, char fileRequested[FILENAME_MAX])
+{
+	int byRecv = send(clientSock, fileRequested, FILENAME_MAX, 0);
+	std::cout << fileRequested << std::endl;
+	if (byRecv == 0 || byRecv == -1) {
+		return 0;
+	}
+	else
+		return 1;
+}
