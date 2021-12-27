@@ -42,3 +42,40 @@ bool Client::sendFileSize(SOCKET clientSock, long fileRequestedsize)
 	}
 	return 1;
 }
+bool Client::sendFile(SOCKET clientSock, std::ifstream file)
+{
+	char bufferFile[BUFFER_SIZE];
+	const int fileAvailable = 200;
+	const int fileNotfound = 404;
+	if (file.is_open()) {
+
+		int bySendinfo = send(clientSock, (char*)&fileAvailable, sizeof(int), 0);
+		if (bySendinfo == 0 || bySendinfo == -1) {
+
+			return 0;
+		}
+		file.seekg(0, std::ios::end);
+		long fileSize = file.tellg();
+		if (!sendFileSize(clientSock, fileSize))
+			return 0;
+		file.seekg(0, std::ios::beg);
+		do {
+
+			file.read(bufferFile, BUFFER_SIZE);
+			if (file.gcount() > 0)
+				bySendinfo = send(clientSock, bufferFile, file.gcount(), 0);
+
+			if (bySendinfo == 0 || bySendinfo == -1) {
+
+				return 0;
+			}
+		} while (file.gcount() > 0);
+		file.close();
+	}
+	else {
+		int bySendCode = send(clientSock, (char*)&fileNotfound, sizeof(int), 0);
+		if (bySendCode == 0 || bySendCode == -1)
+			return 0;
+	}
+	return 1;
+}
