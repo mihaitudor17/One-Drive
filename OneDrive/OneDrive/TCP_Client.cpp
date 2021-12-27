@@ -33,3 +33,12 @@ long Client::recvFileSize(SOCKET clientSock)
 		return -1;
 	return fileRequestedsize;
 }
+bool Client::sendFileSize(SOCKET clientSock, long fileRequestedsize)
+{
+	int byRecv = send(clientSock, (char*)&fileRequestedsize, sizeof(int), 0);
+	if (byRecv == 0 || byRecv == -1) {
+
+		return 0;
+	}
+	return 1;
+}
