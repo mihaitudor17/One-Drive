@@ -14,3 +14,13 @@ bool Client::sendFileName(SOCKET clientSock, char fileRequested[FILENAME_MAX])
 	else
 		return 1;
 }
+char* Client::recvFileName(SOCKET clientSock)
+{
+	char fileRequested[FILENAME_MAX];
+	memset(fileRequested, 0, FILENAME_MAX);
+	int byRecv = recv(clientSock, fileRequested, FILENAME_MAX, 0);
+	if (byRecv == 0 || byRecv == -1) {
+		return NULL;
+	}
+	return fileRequested;
+}
