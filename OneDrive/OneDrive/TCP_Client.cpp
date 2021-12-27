@@ -147,3 +147,15 @@ bool Client::connectServer() {
 	}
 	return 1;
 }
+Client::Client()
+{
+}
+bool Client::sendUser(SOCKET clientSock, char username[FILENAME_MAX])
+{
+	int byRecv = send(clientSock, username, FILENAME_MAX, 0);
+	if (byRecv == 0 || byRecv == -1) {
+		return 0;
+	}
+	else
+		return 1;
+}
