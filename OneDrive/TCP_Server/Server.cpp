@@ -62,3 +62,12 @@ bool Server::sendFileName(SOCKET clientSock, char fileRequested[FILENAME_MAX])
 	else
 		return 1;
 }
+long Server::recvFileSize(SOCKET clientSock)
+{
+	int byRecv;
+	long fileRequestedsize = 0;
+	byRecv = recv(clientSock, (char*)&fileRequestedsize, sizeof(long), 0);
+	if (byRecv == 0 || byRecv == -1)
+		return -1;
+	return fileRequestedsize;
+}
