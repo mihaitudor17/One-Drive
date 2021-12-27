@@ -113,3 +113,37 @@ bool Client::writeToFile(SOCKET clientSock, std::string fullPath, int fileReques
 	else
 		return 1;
 }
+bool Client::connectServer() {
+
+	WSADATA wsData;
+	WORD ver = MAKEWORD(2, 2);
+	if (WSAStartup(ver, &wsData) != 0) {
+		std::cerr << "Error starting winsock!" << std::endl;
+		return 0;
+	}
+	SOCKET clientSock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	if (clientSock == INVALID_SOCKET) {
+		std::cerr << "Error creating socket!, " << WSAGetLastError() << std::endl;
+		return 0;
+	}
+	char serverAddress[NI_MAXHOST];
+	memset(serverAddress, 0, NI_MAXHOST);
+	std::string temp = "127.0.0.1";
+	strcpy(serverAddress, temp.c_str());
+	sockaddr_in hint;
+	hint.sin_family = AF_INET;
+	hint.sin_port = htons(55000);
+	inet_pton(AF_INET, serverAddress, &hint.sin_addr);
+	if (connect(clientSock, (sockaddr*)&hint, sizeof(hint)) == SOCKET_ERROR) {
+		std::cerr << "Error connect to server!, " << WSAGetLastError() << std::endl;
+		closesocket(clientSock);
+		WSACleanup();
+		return 0;
+	}
+	else
+	{
+		this->clientSock = clientSock;
+
+	}
+	return 1;
+}
