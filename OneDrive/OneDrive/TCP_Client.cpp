@@ -14,7 +14,7 @@ bool Client::sendFileName(SOCKET clientSock, char fileRequested[FILENAME_MAX])
 	else
 		return 1;
 }
-char* Client::recvFileName(SOCKET clientSock)
+char* Client::recvFileName(SOCKET clientSock )
 {
 	char fileRequested[FILENAME_MAX];
 	memset(fileRequested, 0, FILENAME_MAX);
@@ -95,7 +95,7 @@ bool Client::writeToFile(SOCKET clientSock, std::string fullPath, int fileReques
 	do {
 		memset(bufferFile, 0, BUFFER_SIZE);
 		byRecv = recv(clientSock, bufferFile, BUFFER_SIZE, 0);
-		if (strstr(bufferFile, "/eof"))
+		if(strstr(bufferFile, "/eof"))
 			ok = 1;
 		if (byRecv == 0 || byRecv == -1) {
 			return 0;
@@ -114,7 +114,7 @@ bool Client::writeToFile(SOCKET clientSock, std::string fullPath, int fileReques
 		return 1;
 }
 bool Client::connectServer() {
-
+	
 	WSADATA wsData;
 	WORD ver = MAKEWORD(2, 2);
 	if (WSAStartup(ver, &wsData) != 0) {
@@ -128,7 +128,7 @@ bool Client::connectServer() {
 	}
 	char serverAddress[NI_MAXHOST];
 	memset(serverAddress, 0, NI_MAXHOST);
-	std::string temp = "127.0.0.1";
+	std::string temp="127.0.0.1";
 	strcpy(serverAddress, temp.c_str());
 	sockaddr_in hint;
 	hint.sin_family = AF_INET;
@@ -143,7 +143,7 @@ bool Client::connectServer() {
 	else
 	{
 		this->clientSock = clientSock;
-
+		
 	}
 	return 1;
 }

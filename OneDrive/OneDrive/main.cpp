@@ -65,7 +65,7 @@ int main(int argc, char* argv[])
 				file.open(fileName);
 			}
 		}
-	} while (ok != 1);
+	} while (ok!=1);
 	w.show();
 	//initialise folder path
 	/*Folder folder1("Synchronized Folder 1", "./Synchronized Folder");

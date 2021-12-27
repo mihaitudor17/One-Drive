@@ -18,7 +18,7 @@ public:
 	bool sendFile(SOCKET clientSock, std::string path);
 	bool writeToFile(SOCKET clientSock, std::ofstream file, std::string fullPath, int fileRequestedsize);
 	char* recvUser(SOCKET clientSock);
-	Server() {}
+	Server(){}
 	SOCKET getSock()
 	{
 		return clientSock;
@@ -28,3 +28,5 @@ public:
 		this->clientSock = clientSock;
 	}
 };
+
+

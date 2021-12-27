@@ -1,44 +1,52 @@
 #include "Server.h"
 bool Server::connectClient()
 {
-	WSADATA wsData;
-	WORD ver = MAKEWORD(2, 2);
-	if (WSAStartup(ver, &wsData) != 0) {
-		std::cerr << "Error starting winsock!" << std::endl;
-		return -1;
-	}
-	sockaddr_in listenerHint;
-	listenerHint.sin_family = AF_INET;
-	listenerHint.sin_port = htons(55000);
-	listenerHint.sin_addr.S_un.S_addr = INADDR_ANY;
+WSADATA wsData;
+WORD ver = MAKEWORD(2, 2);
+if (WSAStartup(ver, &wsData) != 0) {
+	std::cerr << "Error starting winsock!" << std::endl;
+	return -1;
+}
+SOCKET listenerSock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
-	bind(listenerSock, (sockaddr*)&listenerHint, sizeof(listenerHint));
-	listen(listenerSock, SOMAXCONN);
+if (listenerSock == INVALID_SOCKET) {
+	std::cerr << "Error creating listener socket! " << WSAGetLastError() << std::endl;
+	WSACleanup();
+	return -1;
+}
 
-	sockaddr_in clientHint;
-	int clientSize = sizeof(clientHint);
+sockaddr_in listenerHint;
+listenerHint.sin_family = AF_INET;
+listenerHint.sin_port = htons(55000);
+listenerHint.sin_addr.S_un.S_addr = INADDR_ANY;
 
-	SOCKET clientSock = accept(listenerSock, (sockaddr*)&clientHint, &clientSize);
+bind(listenerSock, (sockaddr*)&listenerHint, sizeof(listenerHint));
+listen(listenerSock, SOMAXCONN);
 
-	if (clientSock == SOCKET_ERROR) {
-		std::cerr << "Error accept socket! " << WSAGetLastError() << std::endl;
-		closesocket(listenerSock);
-		WSACleanup();
-		return -1;
-	}
+sockaddr_in clientHint;
+int clientSize = sizeof(clientHint);
 
-	char host[NI_MAXHOST];
-	char serv[NI_MAXSERV];
+SOCKET clientSock = accept(listenerSock, (sockaddr*)&clientHint, &clientSize);
 
-	if (getnameinfo((sockaddr*)&clientHint, sizeof(clientHint), host, NI_MAXHOST, serv, NI_MAXSERV, 0) == 0) {
-		std::cout << "Host: " << host << " connected on port: " << serv << std::endl;
-	}
-	else {
-		inet_ntop(AF_INET, &clientHint.sin_addr, host, NI_MAXHOST);
-		std::cout << "Host: " << host << " connected on port: " << ntohs(clientHint.sin_port) << std::endl;
-	}
+if (clientSock == SOCKET_ERROR) {
+	std::cerr << "Error accept socket! " << WSAGetLastError() << std::endl;
 	closesocket(listenerSock);
-	this->clientSock = clientSock;
+	WSACleanup();
+	return -1;
+}
+
+char host[NI_MAXHOST];
+char serv[NI_MAXSERV];
+
+if (getnameinfo((sockaddr*)&clientHint, sizeof(clientHint), host, NI_MAXHOST, serv, NI_MAXSERV, 0) == 0) {
+	std::cout << "Host: " << host << " connected on port: " << serv << std::endl;
+}
+else {
+	inet_ntop(AF_INET, &clientHint.sin_addr, host, NI_MAXHOST);
+	std::cout << "Host: " << host << " connected on port: " << ntohs(clientHint.sin_port) << std::endl;
+}
+closesocket(listenerSock);
+this->clientSock = clientSock;
 }
 char* Server::recvFileName(SOCKET clientSock)
 {
@@ -80,16 +88,16 @@ bool Server::sendFileSize(SOCKET clientSock, long fileSize)
 	}
 	return 1;
 }
-bool Server::sendFile(SOCKET clientSock, std::string path)
+bool Server::sendFile(SOCKET clientSock,std::string path)
 {
 	std::ifstream file;
 	file.open(path, std::ios::binary);
 	char bufferFile[BUFFER_SIZE];
 	const int fileAvailable = 200;
 	const int fileNotfound = 404;
-	int bySendinfo = 1;
+	int bySendinfo=1;
 	if (file.is_open()) {
-
+		
 		/*int bySendinfo = send(clientSock, (char*)&fileAvailable, sizeof(int), 0);
 		if (bySendinfo == 0 || bySendinfo == -1) {
 
@@ -116,9 +124,9 @@ bool Server::sendFile(SOCKET clientSock, std::string path)
 	else {
 		/*int bySendCode = send(clientSock, (char*)&fileNotfound, sizeof(int), 0);
 		if (bySendCode == 0 || bySendCode == -1) */
-		return 0;
+			return 0;
 	}
-	return 1;
+		return 1;
 }
 bool Server::writeToFile(SOCKET clientSock, std::ofstream file, std::string fullPath, int fileRequestedsize)
 {
