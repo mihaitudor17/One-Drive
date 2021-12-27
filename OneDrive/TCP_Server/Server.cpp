@@ -40,3 +40,15 @@ bool Server::connectClient()
 	closesocket(listenerSock);
 	this->clientSock = clientSock;
 }
+char* Server::recvFileName(SOCKET clientSock)
+{
+	char fileRequested[FILENAME_MAX];
+	memset(fileRequested, 0, FILENAME_MAX);
+	int byRecv = recv(clientSock, fileRequested, FILENAME_MAX, 0);
+
+	if (byRecv == 0 || byRecv == -1) {
+
+		return 0;
+	}
+	return fileRequested;
+}
