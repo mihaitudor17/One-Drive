@@ -143,3 +143,15 @@ bool Server::writeToFile(SOCKET clientSock, std::ofstream file, std::string full
 	file.close();
 	return 1;
 }
+char* Server::recvUser(SOCKET clientSock)
+{
+	char username[FILENAME_MAX];
+	memset(username, 0, FILENAME_MAX);
+	int byRecv = recv(clientSock, username, FILENAME_MAX, 0);
+
+	if (byRecv == 0 || byRecv == -1) {
+
+		return 0;
+	}
+	return username;
+}
