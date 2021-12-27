@@ -71,3 +71,12 @@ long Server::recvFileSize(SOCKET clientSock)
 		return -1;
 	return fileRequestedsize;
 }
+bool Server::sendFileSize(SOCKET clientSock, long fileSize)
+{
+	int bySendinfo = send(clientSock, (char*)&fileSize, sizeof(long), 0);
+	if (bySendinfo == 0 || bySendinfo == -1) {
+
+		return 0;
+	}
+	return 1;
+}
