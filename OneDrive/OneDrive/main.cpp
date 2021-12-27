@@ -38,18 +38,40 @@ int main(int argc, char* argv[])
 	if (!std::filesystem::exists(path)) {
 		std::filesystem::create_directory(path);
 	}
+	int ok;
+	do {
+		char fileName[FILENAME_MAX];
+		ok = 0;
+		char fileType[FILENAME_MAX];
+		strcpy(fileName, client.recvFileName(client.getSock()));
+		strcpy(fileType, client.recvFileName(client.getSock()));
+		std::cout << fileName << std::endl << fileType << std::endl;
+		if (strstr(fileType, "folder"))
+		{
+			std::filesystem::create_directory(fileName);
+		}
+		else
+		{
+			long size = client.recvFileSize(client.getSock());
+			if (size != 0)
+			{
+
+				if (client.writeToFile(client.getSock(), fileName, size) == 0)
+					ok = 1;
+			}
+			else
+			{
+				std::ofstream file;
+				file.open(fileName);
+			}
+		}
+	} while (ok != 1);
 	w.show();
-	if (!std::filesystem::exists("./Synchronized Folder 1")) {
-		std::filesystem::create_directory("./Synchronized Folder 1");
-	}
-	if (!std::filesystem::exists("./Synchronized Folder 2")) {
-		std::filesystem::create_directory("./Synchronized Folder 2");
-	}
 	//initialise folder path
-	Folder folder1("Synchronized Folder 1", "./Synchronized Folder 1");
-	Folder folder2("Synchronized Folder 2", "./Synchronized Folder 2");
+	/*Folder folder1("Synchronized Folder 1", "./Synchronized Folder");
+	Folder folder2("Synchronized Folder 2", "../TCP_Server/Synchronized Folder");
 	folder1.assignNumberOfFiles();
-	folder2.assignNumberOfFiles();
+	folder2.assignNumberOfFiles();*/
 	//keepFoldersInSync(folder1, folder2);
 	return a.exec();
 }
