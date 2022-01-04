@@ -6,9 +6,15 @@
 #include <QInputDialog>
 #include <QDir>
 #include <QMessageBox>
+#include <QFileDialog>
 #include "TCP_Client.h"
 
 
+
+void Account::download()
+{
+	downloadServer();
+}
 
 void Account::back_folder_local()
 {
@@ -107,6 +113,11 @@ void Account::renameFileSlot(std::string selected)
 	
 	
 }
+void Account::addFolder()
+{
+	QDialog* fileName = new QFileDialog;
+	fileName->show();
+}
 
 void Account::renameLocalSendSignal()
 {
@@ -120,7 +131,12 @@ void Account::deleteLocalSendSignal()
 
 void Account::deleteFileSlot(std::string selected)
 {
-	std::cout << "selectat";
+	if (selected != "")
+		std::filesystem::remove_all((pathLocal / selected));
+	else
+		QMessageBox::warning(this, "Alert!", "Please select a file to delete!");
+	qDeleteAll(ui.localWidget->findChildren<QWidget*>("", Qt::FindDirectChildrenOnly));
+	showContentLocal();
 }
 
 void Account::checkLayout(QWidget* currentWidget)
@@ -393,9 +409,9 @@ void Account::showContentServer()
 	ui.serverFolder->setWidgetResizable(true);
 
 }
-void downloadServer() {
+void Account::downloadServer() {
 	Client client;
-	char* username = "Tinel";//De obtinut userul
+	char* username = "Tinel";//De obtinut userul  //crapa pt ca nu gaseste calea
 	std::string path = "./Stored Files";
 	if (!std::filesystem::exists(path)) {
 		std::filesystem::create_directory(path);
@@ -452,6 +468,13 @@ Account::Account(const std::string& userName, QWidget* parent)
 	connect(this, SIGNAL(renameFileSignal(std::string)), this, SLOT(renameFileSlot(std::string)));
 	connect(this, SIGNAL(deleteFileSignal(std::string)), this, SLOT(deleteFileSlot(std::string)));
 	//turc was here
+}
+
+std::string Account::getUser()
+{
+	
+		return userName;
+	
 }
 
 

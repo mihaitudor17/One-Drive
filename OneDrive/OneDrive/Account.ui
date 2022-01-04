@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1234</width>
+    <width>1229</width>
     <height>604</height>
    </rect>
   </property>
@@ -313,6 +313,32 @@ QPushButton:hover
     </property>
    </widget>
   </widget>
+  <widget class="QPushButton" name="downloadButton">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>460</y>
+     <width>75</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>PushButton</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="AddFolder">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>500</y>
+     <width>75</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>PushButton</string>
+   </property>
+  </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
@@ -381,6 +407,38 @@ QPushButton:hover
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>downloadButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Account</receiver>
+   <slot>download()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>122</x>
+     <y>471</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>44</x>
+     <y>363</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>AddFolder</sender>
+   <signal>clicked()</signal>
+   <receiver>Account</receiver>
+   <slot>addFolder()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>136</x>
+     <y>513</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>13</x>
+     <y>441</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <signal>signal_rename_local(int)</signal>
@@ -390,5 +448,7 @@ QPushButton:hover
   <slot>deleteLocalSendSignal()</slot>
   <slot>delete_server_folder()</slot>
   <slot>rename_server_folder()</slot>
+  <slot>addFolder()</slot>
+  <slot>download()</slot>
  </slots>
 </ui>

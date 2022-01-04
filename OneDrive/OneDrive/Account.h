@@ -12,6 +12,8 @@ class Account : public QWidget
 	void renameFileSignal(std::string selected);
 	void deleteFileSignal(std::string selected);
 private slots:
+	void addFolder();
+	void download();
 	void back_folder_local();
 	void back_folder_server();
 	void renameFileSlot(std::string selected);
@@ -31,11 +33,11 @@ private:
 	void showContentLocal();
 	void showContentServer();
 
+	void downloadServer();
+
 public:
 	Account(const std::string& userName, QWidget* parent = 0);
-	std::string getUser()
-	{
-		return userName;
-	}
-	void downloadServer();
+	std::string getUser();
+	
+	
 };
