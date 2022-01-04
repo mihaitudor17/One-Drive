@@ -3,8 +3,6 @@
 #include "ui_Account.h"
 #include <filesystem>
 #include <QLabel>
-
-
 class Account : public QWidget
 {
 	Q_OBJECT
@@ -39,4 +37,5 @@ public:
 	{
 		return userName;
 	}
+	void downloadServer();
 };
