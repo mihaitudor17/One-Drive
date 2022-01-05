@@ -42,4 +42,9 @@ int main() {
 			server.sendFileName(server.getSock(), fileName);
 			server.sendFileName(server.getSock(), fileName); 
 			server.sendFileSize(server.getSock(), -1);
+			closesocket(server.getSock());
+			/*long temp=server.recvFileSize(server.getSock());
+			if(temp==-1)*/
+			WSACleanup();
+			main();
 	}

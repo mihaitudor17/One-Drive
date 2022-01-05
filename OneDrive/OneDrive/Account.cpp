@@ -449,6 +449,7 @@ void Account::downloadServer() {
 
 					if (client.writeToFile(client.getSock(), fileName, size) == 0)
 						ok = 1;
+						
 				}
 				else if (size == 0)
 				{
@@ -460,6 +461,15 @@ void Account::downloadServer() {
 			}
 		}
 	} while (ok != 1);
+	int flush = 0;
+	char fileRequested[FILENAME_MAX];
+	do
+	{
+		flush = recv(client.getSock(), fileRequested, FILENAME_MAX, 0);
+		std::cout << flush << std::endl;
+	} while (flush > 0);
+	closesocket(client.getSock());
+	WSACleanup();
 }
 Account::Account(const std::string& userName, QWidget* parent)
 	: QWidget(parent)
@@ -481,7 +491,6 @@ Account::Account(const std::string& userName, QWidget* parent)
 	ui.serverFolder->setWidget(ui.serverWidget);
 	connect(this, SIGNAL(renameFileSignal(std::string)), this, SLOT(renameFileSlot(std::string)));
 	connect(this, SIGNAL(deleteFileSignal(std::string)), this, SLOT(deleteFileSlot(std::string)));
-	//turc was here
 }
 
 std::string Account::getUser()

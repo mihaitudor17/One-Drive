@@ -102,8 +102,9 @@ bool Client::writeToFile(SOCKET clientSock, std::string fullPath, int fileReques
 		}
 		if (byRecv > fileRequestedsize)
 			byRecv = fileRequestedsize - fileDownloaded;
-		/*std::string turc(bufferFile, byRecv);
+		/*std::string turc(bufferfile, byrecv);
 		std::cout << turc << std::endl;*/
+		std::cout << bufferFile << std::endl;
 		file.write(bufferFile, byRecv);
 		fileDownloaded += byRecv;
 	} while (fileDownloaded < fileRequestedsize);
