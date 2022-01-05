@@ -252,66 +252,6 @@ QPushButton:hover
      <string>&lt;- Back</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="rename_server">
-    <property name="geometry">
-     <rect>
-      <x>90</x>
-      <y>0</y>
-      <width>75</width>
-      <height>24</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QPushButton
-{
-font-weight:bold ;
-font-style : normal;
-border: 0.1px solid black;
-border-radius:15px;
-background:rgb(71, 61, 124);
-color:white;
-font-size:16px;
-}
-
-QPushButton:hover
-{
-   background-color:rgb(170, 149, 255);
-}</string>
-    </property>
-    <property name="text">
-     <string>Rename</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="delete_server">
-    <property name="geometry">
-     <rect>
-      <x>180</x>
-      <y>0</y>
-      <width>75</width>
-      <height>24</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QPushButton
-{
-font-weight:bold ;
-font-style : normal;
-border: 0.1px solid black;
-border-radius:15px;
-background:rgb(71, 61, 124);
-color:white;
-font-size:16px;
-}
-
-QPushButton:hover
-{
-   background-color:rgb(170, 149, 255);
-}</string>
-    </property>
-    <property name="text">
-     <string>Delete</string>
-    </property>
-   </widget>
   </widget>
   <widget class="QPushButton" name="downloadButton">
    <property name="geometry">
@@ -323,20 +263,7 @@ QPushButton:hover
     </rect>
    </property>
    <property name="text">
-    <string>PushButton</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="AddFolder">
-   <property name="geometry">
-    <rect>
-     <x>100</x>
-     <y>500</y>
-     <width>75</width>
-     <height>24</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>PushButton</string>
+    <string>Download</string>
    </property>
   </widget>
  </widget>
@@ -420,22 +347,6 @@ QPushButton:hover
     <hint type="destinationlabel">
      <x>44</x>
      <y>363</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>AddFolder</sender>
-   <signal>clicked()</signal>
-   <receiver>Account</receiver>
-   <slot>addFolder()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>136</x>
-     <y>513</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>13</x>
-     <y>441</y>
     </hint>
    </hints>
   </connection>

@@ -411,8 +411,9 @@ void Account::showContentServer()
 }
 void Account::downloadServer() {
 	Client client;
-	char* username = "Tinel";//De obtinut userul  //crapa pt ca nu gaseste calea
-	std::string path = "./Stored Files";
+	std::string temp = getUser();
+	char* username = &temp[0];
+	std::string path = "./StoredServerFiles";
 	if (!std::filesystem::exists(path)) {
 		std::filesystem::create_directory(path);
 	}
@@ -430,25 +431,32 @@ void Account::downloadServer() {
 		ok = 0;
 		char fileType[FILENAME_MAX];
 		strcpy(fileName, client.recvFileName(client.getSock()));
-		strcpy(fileType, client.recvFileName(client.getSock()));
-		std::cout << fileName << std::endl << fileType << std::endl;
-		if (strstr(fileType, "folder"))
+		if (fileName == "/eof" || fileType == "eof")
+			ok = 1;
+		if (ok != 1)
 		{
-			std::filesystem::create_directory(fileName);
-		}
-		else
-		{
-			long size = client.recvFileSize(client.getSock());
-			if (size != 0)
+			strcpy(fileType, client.recvFileName(client.getSock()));
+			std::cout << fileName << std::endl << fileType << std::endl;
+			if (strstr(fileType, "folder"))
 			{
-
-				if (client.writeToFile(client.getSock(), fileName, size) == 0)
-					ok = 1;
+				std::filesystem::create_directory(fileName);
 			}
 			else
 			{
-				std::ofstream file;
-				file.open(fileName);
+				long size = client.recvFileSize(client.getSock());
+				if (size > 0)
+				{
+
+					if (client.writeToFile(client.getSock(), fileName, size) == 0)
+						ok = 1;
+				}
+				else if (size == 0)
+				{
+					std::ofstream file;
+					file.open(fileName);
+				}
+				else if (size == -1)
+					ok = 1;
 			}
 		}
 	} while (ok != 1);
@@ -460,6 +468,12 @@ Account::Account(const std::string& userName, QWidget* parent)
 	this->userName = userName;
 	pathLocal = "./StoredFiles/" + userName;
 	pathGlobal = "./StoredServerFiles/" + userName;
+	if (!std::filesystem::exists(pathLocal)) {
+		std::filesystem::create_directory(pathLocal);
+	}
+	if (!std::filesystem::exists(pathGlobal)) {
+		std::filesystem::create_directory(pathGlobal);
+	}
 	ui.setupUi(this);
 	showContentLocal();
 	showContentServer();

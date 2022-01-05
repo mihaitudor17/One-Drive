@@ -5,7 +5,7 @@ int main() {
 		char username[FILENAME_MAX];
 		server.connectClient();
 			strcpy(username, server.recvUser(server.getSock()));
-			std::string path = "./Stored Files/";
+			std::string path = "./StoredServerFiles/";
 			path += username;
 			if (std::filesystem::exists(path))
 			{
@@ -41,4 +41,5 @@ int main() {
 			strcpy(fileName, "/eof");
 			server.sendFileName(server.getSock(), fileName);
 			server.sendFileName(server.getSock(), fileName); 
+			server.sendFileSize(server.getSock(), -1);
 	}
