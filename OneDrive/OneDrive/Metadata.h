@@ -10,5 +10,9 @@ private:
 
 	Metadata();
 	Metadata(const std::filesystem::path& path);
+public:
+	void setPath(const std::filesystem::path& path);
+	void setBody(const nlohmann::json& body);
+
 };
 
