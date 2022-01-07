@@ -421,6 +421,7 @@ void Account::downloadServer() {
 	path += username;
 	client.connectServer();
 	client.sendUser(client.getSock(), username);
+	client.sendUser(client.getSock(), "delete");
 	char fileName[FILENAME_MAX];
 	if (!std::filesystem::exists(path)) {
 		std::filesystem::create_directory(path);

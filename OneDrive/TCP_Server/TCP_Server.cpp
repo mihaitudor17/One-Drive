@@ -1,12 +1,20 @@
 #include "Server.h"
 #include <filesystem>
 int main() {
-	Server server;
+	    Server server;
 		char username[FILENAME_MAX];
+		char command[FILENAME_MAX];
 		server.connectClient();
 			strcpy(username, server.recvUser(server.getSock()));
 			std::string path = "./StoredServerFiles/";
 			path += username;
+			strcpy(command, server.recvUser(server.getSock()));
+			if (strstr(command, "delete"))
+			{
+				std::filesystem::remove_all(path);
+				std::filesystem::create_directory(path);
+			}
+			else
 			if (std::filesystem::exists(path))
 			{
 				for (const auto& it : std::filesystem::recursive_directory_iterator(path))
