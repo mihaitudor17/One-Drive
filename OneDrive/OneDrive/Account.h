@@ -2,20 +2,21 @@
 #include <QWidget>
 #include "ui_Account.h"
 #include <filesystem>
+#include <QGridLayout>
 #include <QLabel>
 class Account : public QWidget
 {
 	Q_OBJECT
 
 
- signals:
+signals:
 	void renameFileSignal(std::string selected);
 	void deleteFileSignal(std::string selected);
 private slots:
 	void addFolder();
 	void download();
-	void back_folder_local();
-	void back_folder_server();
+	void backFolderLocal();
+	void backFolderServer();
 	void renameFileSlot(std::string selected);
 	void renameLocalSendSignal();
 	void deleteLocalSendSignal();
@@ -32,12 +33,15 @@ private:
 	void checkLayout(QWidget* currentWidget);
 	void showContentLocal();
 	void showContentServer();
-
 	void downloadServer();
+
+	QPixmap gridLine(QPixmap pixmap, QLabel* image, QGridLayout* gridLocal, QPushButton* label, int contorServerGrid, std::filesystem::directory_entry file);
+
+	QPixmap gridLayout(QPixmap pixmap, QLabel* image, QGridLayout* gridLocal, QPushButton* label, int contorServerGrid, std::filesystem::directory_entry file);
 
 public:
 	Account(const std::string& userName, QWidget* parent = 0);
 	std::string getUser();
-	
-	
+
+
 };

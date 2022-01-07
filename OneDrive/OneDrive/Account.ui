@@ -274,7 +274,7 @@ QPushButton:hover
    <sender>back_local</sender>
    <signal>clicked()</signal>
    <receiver>Account</receiver>
-   <slot>back_folder_local()</slot>
+   <slot>backFolderLocal()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>132</x>
@@ -290,7 +290,7 @@ QPushButton:hover
    <sender>back_server</sender>
    <signal>clicked()</signal>
    <receiver>Account</receiver>
-   <slot>back_folder_server()</slot>
+   <slot>backFolderServer()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>689</x>
@@ -353,8 +353,8 @@ QPushButton:hover
  </connections>
  <slots>
   <signal>signal_rename_local(int)</signal>
-  <slot>back_folder_local()</slot>
-  <slot>back_folder_server()</slot>
+  <slot>backFolderLocal()</slot>
+  <slot>backFolderServer()</slot>
   <slot>renameLocalSendSignal()</slot>
   <slot>deleteLocalSendSignal()</slot>
   <slot>delete_server_folder()</slot>

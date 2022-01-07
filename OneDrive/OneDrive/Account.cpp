@@ -16,9 +16,9 @@ void Account::download()
 	downloadServer();
 }
 
-void Account::back_folder_local()
+void Account::backFolderLocal()
 {
-	
+
 	std::string path_aux = pathLocal.string();
 	if (path_aux == ("./StoredFiles/" + userName))
 	{
@@ -35,7 +35,7 @@ void Account::back_folder_local()
 	showContentLocal();
 }
 
-void Account::back_folder_server()
+void Account::backFolderServer()
 {
 	std::string path_aux = pathGlobal.string();
 	if (path_aux == ("./StoredServerFiles/" + userName))
@@ -84,17 +84,17 @@ void Account::renameFileSlot(std::string selected)
 				else
 				{
 					std::string extension;
-					
-					
+
+
 					for (int position = selected.find_last_of('.'); position < selected.length(); position++)
 					{
 						extension.push_back(selected[position]);
 					}
-					std::filesystem::rename(pathLocal / selected, pathLocal/(text.toStdString()+extension));
+					std::filesystem::rename(pathLocal / selected, pathLocal / (text.toStdString() + extension));
 					qDeleteAll(ui.localWidget->findChildren<QWidget*>("", Qt::FindDirectChildrenOnly));
 					showContentLocal();
 				}
-			
+
 			}
 			else
 			{
@@ -103,16 +103,17 @@ void Account::renameFileSlot(std::string selected)
 
 			}
 		}
-		
+
 	}
 	else
 	{
 		QMessageBox::warning(this, "Alert!", "Please select a file.");
 	}
 
-	
-	
+
+
 }
+
 void Account::addFolder()
 {
 	QDialog* fileName = new QFileDialog;
@@ -151,6 +152,32 @@ void Account::checkLayout(QWidget* currentWidget)
 	}
 }
 
+QPixmap Account::gridLine(QPixmap pixmap, QLabel* image, QGridLayout* grid, QPushButton* label, int contorServerGrid, std::filesystem::directory_entry file)
+{
+	pixmap = pixmap.scaled(image->size(), Qt::KeepAspectRatio);
+	image->setPixmap(pixmap);
+	QString labelText = QString::fromStdString(file.path().filename().string());
+	label->setText(labelText);
+	image->setVisible(true);
+	grid->addWidget(image, contorServerGrid, 0);
+	grid->addWidget(label, contorServerGrid, 1);
+
+	return pixmap;
+}
+
+QPixmap Account::gridLayout(QPixmap pixmap, QLabel* image, QGridLayout* grid, QPushButton* label, int contorServerGrid, std::filesystem::directory_entry file)
+{
+	pixmap = pixmap.scaled(image->size(), Qt::KeepAspectRatio);
+	image->setPixmap(pixmap);
+	image->setVisible(true);
+	grid->addWidget(image, contorServerGrid, 0);
+	QString labelText = QString::fromStdString(file.path().filename().string());
+	label->setText(labelText);
+	grid->addWidget(label, contorServerGrid, 1);
+
+	return pixmap;
+}
+
 void Account::showContentLocal()
 {
 	labelToBeDeselected = nullptr;
@@ -162,7 +189,6 @@ void Account::showContentLocal()
 
 	for (auto& file : std::filesystem::directory_iterator(pathLocal))
 	{
-
 		contorServerGrid++;
 
 		QLabel* image = new QLabel(ui.localWidget);
@@ -192,97 +218,70 @@ void Account::showContentLocal()
 					selected = file.path().filename().string();
 					label->setStyleSheet("QPushButton { background-color: rgba(10, 0, 0, 0);color:blue; }");
 				}
-
-
 			});
 
-		if (std::filesystem::is_directory(file)) {
+		if (std::filesystem::is_directory(file))
+		{
 			QString filename = "./Assets/FolderIcon.png";
 
-			if (pix.load(filename)) {
-
-				pix = pix.scaled(image->size(), Qt::KeepAspectRatio);
-				image->setPixmap(pix);
-				image->setVisible(true);
-				gridLocal->addWidget(image, contorServerGrid, 0);
-				QString labelText = QString::fromStdString(file.path().filename().string());
-				label->setText(labelText);
-				gridLocal->addWidget(label, contorServerGrid, 1);
-
+			if (pix.load(filename))
+			{
+				pix = gridLayout(pix, image, gridLocal, label, contorServerGrid, file);
 			}
 		}
-		else {
-			if (file.path().filename().string().find(".txt") != std::string::npos) {
+		else
+		{
+			if (file.path().filename().string().find(".txt") != std::string::npos)
+			{
 				QString filename = "./Assets/FileIcon.png";
 
 
-				if (pix.load(filename)) {
-					pix = pix.scaled(image->size(), Qt::KeepAspectRatio);
-					image->setPixmap(pix);
-					QString labelText = QString::fromStdString(file.path().filename().string());
-					label->setText(labelText);
-					image->setVisible(true);
-					gridLocal->addWidget(image, contorServerGrid, 0);
-					gridLocal->addWidget(label, contorServerGrid, 1);
-
+				if (pix.load(filename))
+				{
+					pix = gridLine(pix, image, gridLocal, label, contorServerGrid, file);
 				}
 			}
-			else if (file.path().filename().string().find(".jpg") != std::string::npos || file.path().filename().string().find(".png") != std::string::npos) {
-				QString filename = "./Assets/ImageIcon.jpg";
-				if (pix.load(filename)) {
-					pix = pix.scaled(image->size(), Qt::KeepAspectRatio);
-					image->setPixmap(pix);
-					QString labelText = QString::fromStdString(file.path().filename().string());
-					label->setText(labelText);
-					image->setVisible(true);
-					gridLocal->addWidget(image, contorServerGrid, 0);
-					gridLocal->addWidget(label, contorServerGrid, 1);
+			else
+				if (file.path().filename().string().find(".jpg") != std::string::npos || file.path().filename().string().find(".png") != std::string::npos)
+				{
+					QString filename = "./Assets/ImageIcon.jpg";
+					if (pix.load(filename))
+					{
+						pix = gridLine(pix, image, gridLocal, label, contorServerGrid, file);
+					}
 
 				}
-
-			}
-			else if (file.path().filename().string().find(".mp4") != std::string::npos) {
-				QString filename = "./Assets/MovieIcon.png";
-				if (pix.load(filename)) {
-					pix = pix.scaled(image->size(), Qt::KeepAspectRatio);
-					image->setPixmap(pix);
-					QString labelText = QString::fromStdString(file.path().filename().string());
-					label->setText(labelText);
-					image->setVisible(true);
-					gridLocal->addWidget(image, contorServerGrid, 0);
-					gridLocal->addWidget(label, contorServerGrid, 1);
-
-				}
-			}
-			else {
-				QString filename = "./Assets/UndefinedIcon.jpg";
-				if (pix.load(filename)) {
-					pix = pix.scaled(image->size(), Qt::KeepAspectRatio);
-					image->setPixmap(pix);
-					QString labelText = QString::fromStdString(file.path().filename().string());
-					label->setText(labelText);
-					image->setVisible(true);
-					gridLocal->addWidget(image, contorServerGrid, 0);
-					gridLocal->addWidget(label, contorServerGrid, 1);
-
-				}
-			}
+				else
+					if (file.path().filename().string().find(".mp4") != std::string::npos)
+					{
+						QString filename = "./Assets/MovieIcon.png";
+						if (pix.load(filename))
+						{
+							pix = gridLine(pix, image, gridLocal, label, contorServerGrid, file);
+						}
+					}
+					else
+					{
+						QString filename = "./Assets/UndefinedIcon.jpg";
+						if (pix.load(filename))
+						{
+							pix = gridLine(pix, image, gridLocal, label, contorServerGrid, file);
+						}
+					}
 		}
 
 	}
-	if (contorServerGrid < 3)
+	if (contorServerGrid < 7)
 
 	{
-		if (contorServerGrid == -1)
-			contorServerGrid++;
 		QWidget* spaceExpand = new QWidget();
 		spaceExpand->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-		gridLocal->addWidget(spaceExpand, contorServerGrid, 0);
-		gridLocal->addWidget(spaceExpand, contorServerGrid, 1);
-		gridLocal->addWidget(spaceExpand, contorServerGrid + 1, 0);
-		gridLocal->addWidget(spaceExpand, contorServerGrid + 1, 1);
-		gridLocal->addWidget(spaceExpand, contorServerGrid + 2, 0);
-		gridLocal->addWidget(spaceExpand, contorServerGrid + 2, 1);
+
+		for (int index = 0; index < 7; index++)
+		{
+			gridLocal->addWidget(spaceExpand, index, 0);
+			gridLocal->addWidget(spaceExpand, index, 1);
+		}
 	}
 	ui.localWidget->setVisible(true);
 	ui.localFolder->setWidgetResizable(true);
@@ -320,95 +319,65 @@ void Account::showContentServer()
 			qDeleteAll(ui.serverWidget->findChildren<QWidget*>("", Qt::FindDirectChildrenOnly));
 			showContentServer(); });
 
-			if (pix.load(filename)) {
-
-				pix = pix.scaled(image->size(), Qt::KeepAspectRatio);
-				image->setPixmap(pix);
-				image->setVisible(true);
-				gridServer->addWidget(image, contorServerGrid, 0);
-				QString labelText = QString::fromStdString(file.path().filename().string());
-				label->setText(labelText);
-				gridServer->addWidget(label, contorServerGrid, 1);
-
+			if (pix.load(filename))
+			{
+				pix = gridLayout(pix, image, gridServer, label, contorServerGrid, file);
 			}
 		}
-		else {
+		else
+		{
 			if (file.path().filename().string().find(".txt") != std::string::npos) {
 				QString filename = "./Assets/FileIcon.png";
 
-
-				if (pix.load(filename)) {
-					pix = pix.scaled(image->size(), Qt::KeepAspectRatio);
-					image->setPixmap(pix);
-					QString labelText = QString::fromStdString(file.path().filename().string());
-					label->setText(labelText);
-					image->setVisible(true);
-					gridServer->addWidget(image, contorServerGrid, 0);
-					gridServer->addWidget(label, contorServerGrid, 1);
-
+				if (pix.load(filename))
+				{
+					pix = gridLine(pix, image, gridServer, label, contorServerGrid, file);
 				}
 			}
-			else if (file.path().filename().string().find(".jpg") != std::string::npos || file.path().filename().string().find(".png") != std::string::npos) {
-				QString filename = "./Assets/ImageIcon.jpg";
-				if (pix.load(filename)) {
-					pix = pix.scaled(image->size(), Qt::KeepAspectRatio);
-					image->setPixmap(pix);
-					QString labelText = QString::fromStdString(file.path().filename().string());
-					label->setText(labelText);
-					image->setVisible(true);
-					gridServer->addWidget(image, contorServerGrid, 0);
-					gridServer->addWidget(label, contorServerGrid, 1);
+			else
+				if (file.path().filename().string().find(".jpg") != std::string::npos || file.path().filename().string().find(".png") != std::string::npos) {
+					QString filename = "./Assets/ImageIcon.jpg";
+					if (pix.load(filename))
+					{
+						pix = gridLine(pix, image, gridServer, label, contorServerGrid, file);
+					}
 
 				}
+				else
+					if (file.path().filename().string().find(".mp4") != std::string::npos) {
+						QString filename = "./Assets/MovieIcon.png";
+						if (pix.load(filename))
+						{
+							pix = gridLine(pix, image, gridServer, label, contorServerGrid, file);
+						}
+					}
+					else
+					{
+						QString filename = "./Assets/UndefinedIcon.jpg";
+						if (pix.load(filename))
+						{
+							pix = gridLine(pix, image, gridServer, label, contorServerGrid, file);
 
-			}
-			else if (file.path().filename().string().find(".mp4") != std::string::npos) {
-				QString filename = "./Assets/MovieIcon.png";
-				if (pix.load(filename)) {
-					pix = pix.scaled(image->size(), Qt::KeepAspectRatio);
-					image->setPixmap(pix);
-					QString labelText = QString::fromStdString(file.path().filename().string());
-					label->setText(labelText);
-					image->setVisible(true);
-					gridServer->addWidget(image, contorServerGrid, 0);
-					gridServer->addWidget(label, contorServerGrid, 1);
-
-				}
-			}
-			else {
-				QString filename = "./Assets/UndefinedIcon.jpg";
-				if (pix.load(filename)) {
-					pix = pix.scaled(image->size(), Qt::KeepAspectRatio);
-					image->setPixmap(pix);
-					QString labelText = QString::fromStdString(file.path().filename().string());
-					label->setText(labelText);
-					image->setVisible(true);
-					gridServer->addWidget(image, contorServerGrid, 0);
-					gridServer->addWidget(label, contorServerGrid, 1);
-
-				}
-			}
+						}
+					}
 		}
 
 	}
-	if (contorServerGrid < 3)
-
+	if (contorServerGrid < 7)
 	{
-		if (contorServerGrid == -1)
-			contorServerGrid++;
 		QWidget* spaceExpand = new QWidget();
 		spaceExpand->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-		gridServer->addWidget(spaceExpand, contorServerGrid, 0);
-		gridServer->addWidget(spaceExpand, contorServerGrid, 1);
-		gridServer->addWidget(spaceExpand, contorServerGrid + 1, 0);
-		gridServer->addWidget(spaceExpand, contorServerGrid + 1, 1);
-		gridServer->addWidget(spaceExpand, contorServerGrid + 2, 0);
-		gridServer->addWidget(spaceExpand, contorServerGrid + 2, 1);
+
+		for (int index = 0; index < 7; index++)
+		{
+			gridServer->addWidget(spaceExpand, index, 0);
+			gridServer->addWidget(spaceExpand, index, 1);
+		}
 	}
 	ui.serverWidget->setVisible(true);
 	ui.serverFolder->setWidgetResizable(true);
-
 }
+
 void Account::downloadServer() {
 	Client client;
 	std::string temp = getUser();
@@ -421,7 +390,6 @@ void Account::downloadServer() {
 	path += username;
 	client.connectServer();
 	client.sendUser(client.getSock(), username);
-	client.sendUser(client.getSock(), "delete");
 	char fileName[FILENAME_MAX];
 	if (!std::filesystem::exists(path)) {
 		std::filesystem::create_directory(path);
@@ -450,7 +418,7 @@ void Account::downloadServer() {
 
 					if (client.writeToFile(client.getSock(), fileName, size) == 0)
 						ok = 1;
-						
+
 				}
 				else if (size == 0)
 				{
@@ -472,6 +440,7 @@ void Account::downloadServer() {
 	closesocket(client.getSock());
 	WSACleanup();
 }
+
 Account::Account(const std::string& userName, QWidget* parent)
 	: QWidget(parent)
 {
@@ -496,9 +465,9 @@ Account::Account(const std::string& userName, QWidget* parent)
 
 std::string Account::getUser()
 {
-	
-		return userName;
-	
+
+	return userName;
+
 }
 
 
