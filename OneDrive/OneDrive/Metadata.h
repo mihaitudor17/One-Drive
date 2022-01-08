@@ -3,6 +3,7 @@
 #include <filesystem>
 #include <string>
 #include <fstream>
+#include "FowlerNollVo.h"
 class Metadata
 {
 private:
@@ -10,6 +11,7 @@ private:
 	nlohmann::json m_body;
 
 public:
+	std::vector<nlohmann::json> m_files;
 	Metadata();
 	Metadata(const std::string& path);
 
@@ -21,5 +23,6 @@ public:
 
 	void inputJson(const std::string& path);
 	void outputJson(const std::string& path);
+	void folderMetadata(const std::string& path);
 };
 

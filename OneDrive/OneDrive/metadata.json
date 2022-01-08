@@ -1,0 +1,176 @@
+[
+ {
+  "./Account.cpp": {
+   "hash": 0,
+   "lastWriteTime": 13286108108760
+  }
+ },
+ {
+  "./Account.h": {
+   "hash": 0,
+   "lastWriteTime": 13286108108761
+  }
+ },
+ {
+  "./Account.ui": {
+   "hash": 0,
+   "lastWriteTime": 13286108108762
+  }
+ },
+ {
+  "./Assets": {
+   "hash": 0,
+   "lastWriteTime": 13286019145010
+  }
+ },
+ {
+  "./Folder.cpp": {
+   "hash": 0,
+   "lastWriteTime": 13285762418801
+  }
+ },
+ {
+  "./Folder.h": {
+   "hash": 0,
+   "lastWriteTime": 13285762418801
+  }
+ },
+ {
+  "./FowlerNollVo.cpp": {
+   "hash": 0,
+   "lastWriteTime": 13286023971896
+  }
+ },
+ {
+  "./FowlerNollVo.h": {
+   "hash": 0,
+   "lastWriteTime": 13286023971898
+  }
+ },
+ {
+  "./heroes.json": {
+   "hash": 0,
+   "lastWriteTime": 13285762418813
+  }
+ },
+ {
+  "./JSON.cpp": {
+   "hash": 0,
+   "lastWriteTime": 13285762418803
+  }
+ },
+ {
+  "./JSON.h": {
+   "hash": 0,
+   "lastWriteTime": 13285762418803
+  }
+ },
+ {
+  "./json.hpp": {
+   "hash": 0,
+   "lastWriteTime": 13285762418819
+  }
+ },
+ {
+  "./main.cpp": {
+   "hash": 0,
+   "lastWriteTime": 13286113838292
+  }
+ },
+ {
+  "./Metadata.cpp": {
+   "hash": 0,
+   "lastWriteTime": 13286113819966
+  }
+ },
+ {
+  "./Metadata.h": {
+   "hash": 0,
+   "lastWriteTime": 13286113520773
+  }
+ },
+ {
+  "./metadata.json": {
+   "hash": 0,
+   "lastWriteTime": 13286113827377
+  }
+ },
+ {
+  "./OneDrive.qrc": {
+   "hash": 0,
+   "lastWriteTime": 13285762418804
+  }
+ },
+ {
+  "./OneDrive.ui": {
+   "hash": 0,
+   "lastWriteTime": 13286113427041
+  }
+ },
+ {
+  "./OneDrive.vcxproj": {
+   "hash": 0,
+   "lastWriteTime": 13286113523970
+  }
+ },
+ {
+  "./OneDrive.vcxproj.filters": {
+   "hash": 0,
+   "lastWriteTime": 13286113523955
+  }
+ },
+ {
+  "./OneDrive.vcxproj.user": {
+   "hash": 0,
+   "lastWriteTime": 13286113427042
+  }
+ },
+ {
+  "./StoredFiles": {
+   "hash": 0,
+   "lastWriteTime": 13286019911611
+  }
+ },
+ {
+  "./StoredServerFiles": {
+   "hash": 0,
+   "lastWriteTime": 13286019911612
+  }
+ },
+ {
+  "./TCP_Client.cpp": {
+   "hash": 0,
+   "lastWriteTime": 13286019145021
+  }
+ },
+ {
+  "./TCP_Client.h": {
+   "hash": 0,
+   "lastWriteTime": 13285762418810
+  }
+ },
+ {
+  "./Usernames.json": {
+   "hash": 0,
+   "lastWriteTime": 13285762418811
+  }
+ },
+ {
+  "./Window.cpp": {
+   "hash": 0,
+   "lastWriteTime": 13286113427043
+  }
+ },
+ {
+  "./Window.h": {
+   "hash": 0,
+   "lastWriteTime": 13286113427044
+  }
+ },
+ {
+  "./x64": {
+   "hash": 0,
+   "lastWriteTime": 13285762607898
+  }
+ }
+]

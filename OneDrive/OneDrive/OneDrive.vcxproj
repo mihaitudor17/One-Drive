@@ -79,6 +79,7 @@
     <ClCompile Include="FowlerNollVo.cpp" />
     <ClCompile Include="JSON.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Metadata.cpp" />
     <ClCompile Include="TCP_Client.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>

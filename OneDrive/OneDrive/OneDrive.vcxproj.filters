@@ -78,6 +78,9 @@
     <ClCompile Include="TCP_Client.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Metadata.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FowlerNollVo.h">
