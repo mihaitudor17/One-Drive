@@ -6,6 +6,7 @@
 #include <QString>
 #include "Folder.h"
 #include <thread>
+#include "Metadata.h"
 void keepFoldersInSync(Folder& folder1, Folder& folder2) {
 	while (true) {
 		folder1.assignLastWrittenTime(folder1.m_path);
@@ -32,5 +33,6 @@ int main(int argc, char* argv[])
 	folder1.assignNumberOfFiles();
 	folder2.assignNumberOfFiles();*/
 	//keepFoldersInSync(folder1, folder2);
+	Metadata metadata("/metadata.json");
 	return a.exec();
 }

@@ -28,3 +28,19 @@ nlohmann::json Metadata::getBody() const
 {
 	return m_body;
 }
+void Metadata::inputJson(const std::string& path)
+{
+	nlohmann::json inputJson;
+
+	std::ifstream input(path, std::ifstream::binary);
+	input >> inputJson;
+
+	m_body = inputJson;
+}
+
+void Metadata::outputJson(const std::string& path)
+{
+	std::ofstream output(path);
+	output << std::setw(1) << m_body;
+}
+
