@@ -4,12 +4,12 @@ Metadata::Metadata()
 {
 }
 
-void Metadata::setPath(const std::filesystem::path& path)
+void Metadata::setPath(const std::string& path)
 {
 	m_path = path;
 }
 
-Metadata::Metadata(const std::filesystem::path& path):m_path{path}
+Metadata::Metadata(const std::string& path):m_path{path}
 {
 
 }
