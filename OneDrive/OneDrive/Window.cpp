@@ -3,18 +3,64 @@
 #include <QLineEdit>
 #include <fstream>
 #include <iostream>
+#include <QFileDialog>
 
 
+int Window::confirmationDownload()
+{
+	QMessageBox::StandardButton resBtn =
+		QMessageBox::question(this, "Download", tr("Do you want to download a folder?\n"),
+			QMessageBox::Cancel | QMessageBox::No | QMessageBox::Yes,
+			QMessageBox::Yes);
+	if (resBtn == QMessageBox::Yes)
+	{
+		return 1;
+	}
+	else
+		if (resBtn == QMessageBox::No)
+		{
+			return 0;
+		}
+		else
+		{
+			return -1;
+		}
+}
+
+std::string Window::selectFolder()
+{
+	QString folder;
+	folder = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
+		"/home",
+		QFileDialog::ShowDirsOnly
+		| QFileDialog::DontResolveSymlinks);
+	std::string path = folder.toStdString();
+	return path;
+}
 
 void Window::LoginToAccount()
 {
 	userName = ui.Username->text().toStdString();
 	if (userName != "")
 	{
-
+		std::string path;
 		std::unordered_set<std::string> verifySet = databaseUsername.getUniqueUserNames();
 		if (verifySet.find(userName) != verifySet.end())
 		{
+			switch (confirmationDownload())		 //function return 1 for true, 0 for false and -1 for cancel
+			{
+			case 0:
+				break;
+			case 1:
+
+				path = selectFolder();
+				std::cout << path;
+				break;
+
+			default:
+				return;
+				break;
+			}
 
 			Account* back = new Account(userName);
 			back->setFixedSize(1200, 700);
@@ -36,7 +82,7 @@ void Window::LoginToAccount()
 		ui.userTakenIcon->setVisible(true);
 		ui.UserTaken->setText("Please enter a valid name!");
 	}
-		
+
 }
 
 
@@ -45,16 +91,16 @@ void Window::LoginToAccount()
 void Window::Signup()
 {
 	userName = ui.Username->text().toStdString();
-	if (userName!= "")
+	if (userName != "")
 	{
-		
-		std::unordered_set<std::string> updateSet= databaseUsername.getUniqueUserNames();
+
+		std::unordered_set<std::string> updateSet = databaseUsername.getUniqueUserNames();
 		if (updateSet.find(userName) == updateSet.end())
 		{
 			ui.userTakenIcon->clear();
-			if(ui.UserTaken->isVisible()==false)
+			if (ui.UserTaken->isVisible() == false)
 				ui.UserTaken->setVisible(true);
-			std::string message = "You have succesfully registered, " + userName+" !";
+			std::string message = "You have succesfully registered, " + userName + " !";
 			ui.UserTaken->setText(QString::fromStdString(message));
 			ui.userSucces->setVisible(true);
 			databaseUsername.addNewUser(userName);
@@ -98,7 +144,7 @@ void Window::initializeJson()
 	databaseUsername.setUserNames(temp);
 	databaseUsername.setUniqueUsernames(aux);
 
-	
+
 }
 
 
@@ -110,8 +156,8 @@ Window::Window(QWidget* parent)
 	ui.UserTaken->setVisible(false);
 	ui.userSucces->setVisible(false);
 	QObject::connect(ui.Username, SIGNAL(returnPressed()), SLOT(LoginToAccount()));
-	
-	
+
+
 
 
 

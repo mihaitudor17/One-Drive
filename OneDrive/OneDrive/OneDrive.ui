@@ -25,21 +25,7 @@
   <property name="styleSheet">
    <string notr="true">
 
-QPushButton
-{
-font-weight:bold ;
-font-style : normal;
-border: 0.1px solid black;
-border-radius:15px;
-background:rgb(71, 61, 124);
-color:white;
-font-size:16px;
-}
 
-QPushButton:hover
-{
-   background-color:rgb(170, 149, 255);
-}
 QMainWindow{
 background: rgb(206, 195, 247);
 }
@@ -75,7 +61,21 @@ background: rgb(206, 195, 247);
      <enum>Qt::RightToLeft</enum>
     </property>
     <property name="styleSheet">
-     <string notr="true"/>
+     <string notr="true">QPushButton
+{
+font-weight:bold ;
+font-style : normal;
+border: 0.1px solid black;
+border-radius:15px;
+background:rgb(71, 61, 124);
+color:white;
+font-size:16px;
+}
+
+QPushButton:hover
+{
+   background-color:rgb(170, 149, 255);
+}</string>
     </property>
     <property name="text">
      <string>Login</string>
@@ -107,7 +107,21 @@ background: rgb(206, 195, 247);
      <enum>Qt::LeftToRight</enum>
     </property>
     <property name="styleSheet">
-     <string notr="true"/>
+     <string notr="true">QPushButton
+{
+font-weight:bold ;
+font-style : normal;
+border: 0.1px solid black;
+border-radius:15px;
+background:rgb(71, 61, 124);
+color:white;
+font-size:16px;
+}
+
+QPushButton:hover
+{
+   background-color:rgb(170, 149, 255);
+}</string>
     </property>
     <property name="text">
      <string>Register</string>

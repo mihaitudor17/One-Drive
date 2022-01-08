@@ -14,6 +14,8 @@ public:
     Window(QWidget* parent = 0);
     private slots:
     void LoginToAccount();
+    int confirmationDownload();
+    std::string selectFolder();
     void Signup();
     
 
