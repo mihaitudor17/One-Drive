@@ -92,7 +92,7 @@
  {
   "./metadata.json": {
    "hash": 0,
-   "lastWriteTime": 13286212387959
+   "lastWriteTime": 13286214187932
   }
  },
  {
@@ -128,25 +128,25 @@
  {
   "./StoredFiles": {
    "hash": 0,
-   "lastWriteTime": 13286212162754
+   "lastWriteTime": 13286214203532
   }
  },
  {
   "./StoredServerFiles": {
    "hash": 0,
-   "lastWriteTime": 13286212391651
+   "lastWriteTime": 13286214191572
   }
  },
  {
   "./TCP_Client.cpp": {
    "hash": 0,
-   "lastWriteTime": 13285861814481
+   "lastWriteTime": 13286214157492
   }
  },
  {
   "./TCP_Client.h": {
    "hash": 0,
-   "lastWriteTime": 13284780894938
+   "lastWriteTime": 13286213502766
   }
  },
  {
@@ -158,7 +158,7 @@
  {
   "./Window.cpp": {
    "hash": 0,
-   "lastWriteTime": 13286212447690
+   "lastWriteTime": 13286213896294
   }
  },
  {

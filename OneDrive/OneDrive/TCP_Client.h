@@ -28,7 +28,7 @@ public:
 	long recvFileSize(SOCKET clientSock);
 	bool sendFileSize(SOCKET clientSock, long fileRequestedsize);
 	bool writeToFile(SOCKET clientSock, std::string fullPath, int fileRequestedsize);
-	bool sendFile(SOCKET clientSock, std::ifstream file);
+	bool sendFile(SOCKET clientSock, std::string path);
 	bool sendUser(SOCKET clientSock, char username[FILENAME_MAX]);
 	bool connectServer();
 private:

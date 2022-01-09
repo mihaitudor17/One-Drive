@@ -55,48 +55,89 @@ void Window::Server(std::string command) {
 		std::filesystem::create_directory(path);
 	}
 	int ok;
-	do {
-		char fileName[FILENAME_MAX];
-		ok = 0;
-		char fileType[FILENAME_MAX];
-		strcpy(fileName, client.recvFileName(client.getSock()));
-		if (fileName == "/eof" || fileType == "eof")
-			ok = 1;
-		if (ok != 1)
-		{
-			strcpy(fileType, client.recvFileName(client.getSock()));
-			std::cout << fileName << std::endl << fileType << std::endl;
-			if (strstr(fileType, "folder"))
-			{
-				std::filesystem::create_directory(fileName);
-			}
-			else
-			{
-				long size = client.recvFileSize(client.getSock());
-				if (size > 0)
-				{
-
-					if (client.writeToFile(client.getSock(), fileName, size) == 0)
-						ok = 1;
-
-				}
-				else if (size == 0)
-				{
-					std::ofstream file;
-					file.open(fileName);
-				}
-				else if (size == -1)
-					ok = 1;
-			}
-		}
-	} while (ok != 1);
-	int flush = 0;
-	char fileRequested[FILENAME_MAX];
-	do
+	if (command == "download")
 	{
-		flush = recv(client.getSock(), fileRequested, FILENAME_MAX, 0);
-		std::cout << flush << std::endl;
-	} while (flush > 0);
+		do {
+			char fileName[FILENAME_MAX];
+			ok = 0;
+			char fileType[FILENAME_MAX];
+			strcpy(fileName, client.recvFileName(client.getSock()));
+			strcpy(fileType, client.recvFileName(client.getSock()));
+			if (fileName == "/eof" || fileType == "/eof")
+				ok = 1;
+			if (ok != 1)
+			{
+				std::cout << fileName << std::endl << fileType << std::endl;
+				if (strstr(fileType, "folder"))
+				{
+					std::filesystem::create_directory(fileName);
+				}
+				else
+				{
+					long size = client.recvFileSize(client.getSock());
+					if (size > 0)
+					{
+
+						if (client.writeToFile(client.getSock(), fileName, size) == 0)
+							ok = 1;
+
+					}
+					else if (size == 0)
+					{
+						std::ofstream file;
+						file.open(fileName);
+					}
+					else if (size == -1)
+						ok = 1;
+				}
+			}
+		} while (ok != 1);
+		int flush = 0;
+		char fileRequested[FILENAME_MAX];
+		do
+		{
+			flush = recv(client.getSock(), fileRequested, FILENAME_MAX, 0);
+			std::cout << flush << std::endl;
+		} while (flush > 0);
+	}
+	else if (command == "upload")
+	{
+		if (std::filesystem::exists(path))
+		{
+			for (const auto& it : std::filesystem::recursive_directory_iterator(path))
+			{
+				if (it.is_directory())
+				{
+					char fileName[FILENAME_MAX];
+					strcpy(fileName, it.path().string().c_str());
+					client.sendFileName(client.getSock(), fileName);
+					char fileType[FILENAME_MAX];
+					strcpy(fileType, "folder");
+					client.sendFileName(client.getSock(), fileType);
+				}
+				else
+				{
+					char fileName[FILENAME_MAX];
+					strcpy(fileName, it.path().string().c_str());
+					client.sendFileName(client.getSock(), fileName);
+					char fileType[FILENAME_MAX];
+					strcpy(fileType, "file");
+					client.sendFileName(client.getSock(), fileType);
+					client.sendFile(client.getSock(), it.path().string());
+				}
+
+			}
+			char fileName[FILENAME_MAX];
+			strcpy(fileName, "/eof");
+			client.sendFileName(client.getSock(), fileName);
+			client.sendFileName(client.getSock(), fileName);
+			client.sendFileSize(client.getSock(), -1);
+		}
+		else
+		{
+			std::filesystem::create_directory(path);
+		}
+	}
 	closesocket(client.getSock());
 	WSACleanup();
 }
@@ -122,7 +163,6 @@ void Window::LoginToAccount()
 				pathGlobal += userName;
 				std::filesystem::remove_all(pathGlobal);
 				std::filesystem::create_directory(pathGlobal);
-				Server("delete");
 				path = selectFolder();
 				copyDirectoryContents(path, pathGlobal);
 				pathGlobal = "./StoredFiles/";
@@ -130,7 +170,7 @@ void Window::LoginToAccount()
 				std::filesystem::remove_all(pathGlobal);
 				std::filesystem::create_directory(pathGlobal);
 				copyDirectoryContents(path, pathGlobal);
-				/*Server("upload");*/
+				Server("upload");
 				break;
 
 			default:

@@ -42,18 +42,22 @@ bool Client::sendFileSize(SOCKET clientSock, long fileRequestedsize)
 	}
 	return 1;
 }
-bool Client::sendFile(SOCKET clientSock, std::ifstream file)
+bool Client::sendFile(SOCKET clientSock, std::string path)
 {
+
+	std::ifstream file;
+	file.open(path, std::ios::binary);
 	char bufferFile[BUFFER_SIZE];
 	const int fileAvailable = 200;
 	const int fileNotfound = 404;
+	int bySendinfo = 1;
 	if (file.is_open()) {
 
-		int bySendinfo = send(clientSock, (char*)&fileAvailable, sizeof(int), 0);
+		/*int bySendinfo = send(clientSock, (char*)&fileAvailable, sizeof(int), 0);
 		if (bySendinfo == 0 || bySendinfo == -1) {
 
 			return 0;
-		}
+		}*/
 		file.seekg(0, std::ios::end);
 		long fileSize = file.tellg();
 		if (!sendFileSize(clientSock, fileSize))
@@ -64,7 +68,7 @@ bool Client::sendFile(SOCKET clientSock, std::ifstream file)
 			file.read(bufferFile, BUFFER_SIZE);
 			if (file.gcount() > 0)
 				bySendinfo = send(clientSock, bufferFile, file.gcount(), 0);
-
+			std::cout << bufferFile << std::endl;
 			if (bySendinfo == 0 || bySendinfo == -1) {
 
 				return 0;
@@ -73,9 +77,9 @@ bool Client::sendFile(SOCKET clientSock, std::ifstream file)
 		file.close();
 	}
 	else {
-		int bySendCode = send(clientSock, (char*)&fileNotfound, sizeof(int), 0);
-		if (bySendCode == 0 || bySendCode == -1)
-			return 0;
+		/*int bySendCode = send(clientSock, (char*)&fileNotfound, sizeof(int), 0);
+		if (bySendCode == 0 || bySendCode == -1) */
+		return 0;
 	}
 	return 1;
 }

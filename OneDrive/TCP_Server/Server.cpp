@@ -128,8 +128,9 @@ bool Server::sendFile(SOCKET clientSock,std::string path)
 	}
 		return 1;
 }
-bool Server::writeToFile(SOCKET clientSock, std::ofstream file, std::string fullPath, int fileRequestedsize)
+bool Server::writeToFile(SOCKET clientSock, std::string fullPath, int fileRequestedsize)
 {
+	std::ofstream file;
 	int byRecv;
 	char bufferFile[BUFFER_SIZE];
 	int fileDownloaded = 0;
