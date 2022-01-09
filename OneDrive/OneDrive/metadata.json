@@ -2,175 +2,175 @@
  {
   "./Account.cpp": {
    "hash": 0,
-   "lastWriteTime": 13286108108760
+   "lastWriteTime": 13286209938553
   }
  },
  {
   "./Account.h": {
    "hash": 0,
-   "lastWriteTime": 13286108108761
+   "lastWriteTime": 13286209886246
   }
  },
  {
   "./Account.ui": {
    "hash": 0,
-   "lastWriteTime": 13286108108762
+   "lastWriteTime": 13286211040790
   }
  },
  {
   "./Assets": {
    "hash": 0,
-   "lastWriteTime": 13286019145010
+   "lastWriteTime": 13285980070853
   }
  },
  {
   "./Folder.cpp": {
    "hash": 0,
-   "lastWriteTime": 13285762418801
+   "lastWriteTime": 13284682988229
   }
  },
  {
   "./Folder.h": {
    "hash": 0,
-   "lastWriteTime": 13285762418801
+   "lastWriteTime": 13284212502341
   }
  },
  {
   "./FowlerNollVo.cpp": {
    "hash": 0,
-   "lastWriteTime": 13286023971896
+   "lastWriteTime": 13286023212165
   }
  },
  {
   "./FowlerNollVo.h": {
    "hash": 0,
-   "lastWriteTime": 13286023971898
+   "lastWriteTime": 13286023212170
   }
  },
  {
   "./heroes.json": {
    "hash": 0,
-   "lastWriteTime": 13285762418813
+   "lastWriteTime": 13283462965883
   }
  },
  {
   "./JSON.cpp": {
    "hash": 0,
-   "lastWriteTime": 13285762418803
+   "lastWriteTime": 13283462965873
   }
  },
  {
   "./JSON.h": {
    "hash": 0,
-   "lastWriteTime": 13285762418803
+   "lastWriteTime": 13283462965873
   }
  },
  {
   "./json.hpp": {
    "hash": 0,
-   "lastWriteTime": 13285762418819
+   "lastWriteTime": 13283462965888
   }
  },
  {
   "./main.cpp": {
    "hash": 0,
-   "lastWriteTime": 13286113838292
+   "lastWriteTime": 13286207591373
   }
  },
  {
   "./Metadata.cpp": {
    "hash": 0,
-   "lastWriteTime": 13286113819966
+   "lastWriteTime": 13286207591342
   }
  },
  {
   "./Metadata.h": {
    "hash": 0,
-   "lastWriteTime": 13286113520773
+   "lastWriteTime": 13286207591342
   }
  },
  {
   "./metadata.json": {
    "hash": 0,
-   "lastWriteTime": 13286113827377
+   "lastWriteTime": 13286212387959
   }
  },
  {
   "./OneDrive.qrc": {
    "hash": 0,
-   "lastWriteTime": 13285762418804
+   "lastWriteTime": 13283462965874
   }
  },
  {
   "./OneDrive.ui": {
    "hash": 0,
-   "lastWriteTime": 13286113427041
+   "lastWriteTime": 13286207591347
   }
  },
  {
   "./OneDrive.vcxproj": {
    "hash": 0,
-   "lastWriteTime": 13286113523970
+   "lastWriteTime": 13286208876269
   }
  },
  {
   "./OneDrive.vcxproj.filters": {
    "hash": 0,
-   "lastWriteTime": 13286113523955
+   "lastWriteTime": 13286207591357
   }
  },
  {
   "./OneDrive.vcxproj.user": {
    "hash": 0,
-   "lastWriteTime": 13286113427042
+   "lastWriteTime": 13286207591362
   }
  },
  {
   "./StoredFiles": {
    "hash": 0,
-   "lastWriteTime": 13286019911611
+   "lastWriteTime": 13286212162754
   }
  },
  {
   "./StoredServerFiles": {
    "hash": 0,
-   "lastWriteTime": 13286019911612
+   "lastWriteTime": 13286212391651
   }
  },
  {
   "./TCP_Client.cpp": {
    "hash": 0,
-   "lastWriteTime": 13286019145021
+   "lastWriteTime": 13285861814481
   }
  },
  {
   "./TCP_Client.h": {
    "hash": 0,
-   "lastWriteTime": 13285762418810
+   "lastWriteTime": 13284780894938
   }
  },
  {
   "./Usernames.json": {
    "hash": 0,
-   "lastWriteTime": 13285762418811
+   "lastWriteTime": 13284752732893
   }
  },
  {
   "./Window.cpp": {
    "hash": 0,
-   "lastWriteTime": 13286113427043
+   "lastWriteTime": 13286212447690
   }
  },
  {
   "./Window.h": {
    "hash": 0,
-   "lastWriteTime": 13286113427044
+   "lastWriteTime": 13286209886264
   }
  },
  {
   "./x64": {
    "hash": 0,
-   "lastWriteTime": 13285762607898
+   "lastWriteTime": 13285980070929
   }
  }
 ]

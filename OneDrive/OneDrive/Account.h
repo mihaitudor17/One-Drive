@@ -33,7 +33,7 @@ private:
 	void checkLayout(QWidget* currentWidget);
 	void showContentLocal();
 	void showContentServer();
-	void downloadServer();
+	void Server(std::string);
 
 	QPixmap gridLine(QPixmap pixmap, QLabel* image, QGridLayout* gridLocal, QPushButton* label, int contorServerGrid, std::filesystem::directory_entry file);
 

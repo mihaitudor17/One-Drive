@@ -253,19 +253,6 @@ QPushButton:hover
     </property>
    </widget>
   </widget>
-  <widget class="QPushButton" name="downloadButton">
-   <property name="geometry">
-    <rect>
-     <x>100</x>
-     <y>460</y>
-     <width>75</width>
-     <height>24</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Download</string>
-   </property>
-  </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
@@ -331,22 +318,6 @@ QPushButton:hover
     <hint type="destinationlabel">
      <x>284</x>
      <y>16</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>downloadButton</sender>
-   <signal>clicked()</signal>
-   <receiver>Account</receiver>
-   <slot>download()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>122</x>
-     <y>471</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>44</x>
-     <y>363</y>
     </hint>
    </hints>
   </connection>

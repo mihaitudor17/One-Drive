@@ -15,6 +15,7 @@ int main() {
 				std::filesystem::create_directory(path);
 			}
 			else
+				if(strstr(command,"download"))
 			if (std::filesystem::exists(path))
 			{
 				for (const auto& it : std::filesystem::recursive_directory_iterator(path))

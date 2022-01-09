@@ -6,6 +6,7 @@
 #include <QLabel>
 #include <unordered_set>
 #include "Account.h"
+#include "TCP_Client.h"
 class Window : public QMainWindow
 {
     Q_OBJECT
@@ -17,8 +18,11 @@ public:
     int confirmationDownload();
     std::string selectFolder();
     void Signup();
-    
-
+    void Server(std::string);
+    std::string getUser()
+    {
+        return userName;
+    }
    
 
 private:

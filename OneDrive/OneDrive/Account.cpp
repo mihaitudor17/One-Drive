@@ -13,7 +13,7 @@
 
 void Account::download()
 {
-	downloadServer();
+	Server("download");
 }
 
 void Account::backFolderLocal()
@@ -378,7 +378,7 @@ void Account::showContentServer()
 	ui.serverFolder->setWidgetResizable(true);
 }
 
-void Account::downloadServer() {
+void Account::Server(std::string command) {
 	Client client;
 	std::string temp = getUser();
 	char* username = &temp[0];
@@ -390,6 +390,7 @@ void Account::downloadServer() {
 	path += username;
 	client.connectServer();
 	client.sendUser(client.getSock(), username);
+	client.sendUser(client.getSock(), &command[0]);
 	char fileName[FILENAME_MAX];
 	if (!std::filesystem::exists(path)) {
 		std::filesystem::create_directory(path);
