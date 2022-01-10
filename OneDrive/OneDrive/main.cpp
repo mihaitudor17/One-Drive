@@ -33,10 +33,6 @@ int main(int argc, char* argv[])
 	folder1.assignNumberOfFiles();
 	folder2.assignNumberOfFiles();*/
 	//keepFoldersInSync(folder1, folder2);
-	std::string metadataPath = "./metadata.json";
-	Metadata metadata(metadataPath);
-	metadata.folderMetadata("./");
-	//std::cout << metadata.getBody()[0]["./StoredFiles\\Sorin34"]["lastWriteTime"];
-	metadata.outputJson("./metadata.json");
+	
 	return a.exec();
 }

@@ -5,7 +5,7 @@
 #include <iostream>
 #include <QFileDialog>
 #include "Folder.h"
-
+#include "Metadata.h"
 int Window::confirmationDownload()
 {
 	QMessageBox::StandardButton resBtn =
@@ -148,9 +148,11 @@ void Window::LoginToAccount()
 	{
 		std::string path;
 		std::unordered_set<std::string> verifySet = databaseUsername.getUniqueUserNames();
+		Metadata metadata;
 		if (verifySet.find(userName) != verifySet.end())
 		{
 			std::string pathGlobal = "./StoredServerFiles/";
+			std::string pathLocal = "./StoredFiles/";
 			switch (confirmationDownload())		 //function return 1 for true, 0 for false and -1 for cancel
 			{
 			case 1:
@@ -158,18 +160,23 @@ void Window::LoginToAccount()
 				std::filesystem::remove_all(pathGlobal);
 				std::filesystem::create_directory(pathGlobal);
 				Server("download");
+				pathLocal += userName;
+				copyDirectoryContents(pathGlobal, pathLocal);
 				break;
 			case 0:
 				pathGlobal += userName;
 				std::filesystem::remove_all(pathGlobal);
 				std::filesystem::create_directory(pathGlobal);
 				path = selectFolder();
+				metadata.folderMetadata(path);
 				copyDirectoryContents(path, pathGlobal);
+				metadata.outputJson(pathGlobal);
 				pathGlobal = "./StoredFiles/";
 				pathGlobal += userName;
 				std::filesystem::remove_all(pathGlobal);
 				std::filesystem::create_directory(pathGlobal);
 				copyDirectoryContents(path, pathGlobal);
+				metadata.outputJson(pathGlobal);
 				Server("upload");
 				break;
 			default:
