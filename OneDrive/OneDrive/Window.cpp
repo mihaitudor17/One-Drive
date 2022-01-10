@@ -172,7 +172,6 @@ void Window::LoginToAccount()
 				copyDirectoryContents(path, pathGlobal);
 				Server("upload");
 				break;
-
 			default:
 				return;
 				break;
