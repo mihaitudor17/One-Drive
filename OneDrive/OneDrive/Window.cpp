@@ -161,6 +161,9 @@ void Window::LoginToAccount()
 				std::filesystem::create_directory(pathGlobal);
 				Server("download");
 				pathLocal += userName;
+				std::filesystem::remove_all(pathLocal);
+				std::filesystem::create_directory(pathLocal);
+				metadata.outputJson(pathGlobal+"/metadata.json");
 				copyDirectoryContents(pathGlobal, pathLocal);
 				break;
 			case 0:
@@ -170,13 +173,13 @@ void Window::LoginToAccount()
 				path = selectFolder();
 				metadata.folderMetadata(path);
 				copyDirectoryContents(path, pathGlobal);
-				metadata.outputJson(pathGlobal);
+				metadata.outputJson(pathGlobal + "/metadata.json");
 				pathGlobal = "./StoredFiles/";
 				pathGlobal += userName;
 				std::filesystem::remove_all(pathGlobal);
 				std::filesystem::create_directory(pathGlobal);
 				copyDirectoryContents(path, pathGlobal);
-				metadata.outputJson(pathGlobal);
+				metadata.outputJson(pathGlobal + "/metadata.json");
 				Server("upload");
 				break;
 			default:

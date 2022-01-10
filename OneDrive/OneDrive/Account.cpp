@@ -262,7 +262,7 @@ void Account::showContentLocal()
 					}
 					else
 					{
-						QString filename = "./Assets/UndefinedIcon.jpg";
+						QString filename = "./Assets/UndefinedIcon.png";
 						if (pix.load(filename))
 						{
 							pix = gridLine(pix, image, gridLocal, label, contorServerGrid, file);
@@ -353,7 +353,7 @@ void Account::showContentServer()
 					}
 					else
 					{
-						QString filename = "./Assets/UndefinedIcon.jpg";
+						QString filename = "./Assets/UndefinedIcon.png";
 						if (pix.load(filename))
 						{
 							pix = gridLine(pix, image, gridServer, label, contorServerGrid, file);
