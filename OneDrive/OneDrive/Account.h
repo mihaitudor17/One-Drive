@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <QGridLayout>
 #include <QLabel>
+#include "Window.h"
 class Account : public QWidget
 {
 	Q_OBJECT
@@ -20,7 +21,11 @@ private slots:
 	void renameFileSlot(std::string selected);
 	void renameLocalSendSignal();
 	void deleteLocalSendSignal();
+	void refreshLocal();
+	void refreshServer();
 	void deleteFileSlot(std::string selected);
+	void refresh();
+
 
 private:
 	QPushButton* labelToBeDeselected;
@@ -30,6 +35,8 @@ private:
 	std::string fileNameGlobal;
 	Ui::Account ui;
 	std::string userName;
+	
+
 	void checkLayout(QWidget* currentWidget);
 	void showContentLocal();
 	void showContentServer();

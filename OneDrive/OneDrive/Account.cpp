@@ -30,9 +30,9 @@ void Account::backFolderLocal()
 		path_aux.erase(path_aux.begin() + path_aux.length() - 1);
 	}
 	path_aux.erase(path_aux.begin() + path_aux.length() - 1);
-	qDeleteAll(ui.localWidget->findChildren<QWidget*>("", Qt::FindDirectChildrenOnly));
+	
 	pathLocal = path_aux;
-	showContentLocal();
+	refreshLocal();
 }
 
 void Account::backFolderServer()
@@ -48,9 +48,8 @@ void Account::backFolderServer()
 		path_aux.erase(path_aux.begin() + path_aux.length() - 1);
 	}
 	path_aux.erase(path_aux.begin() + path_aux.length() - 1);
-	qDeleteAll(ui.serverWidget->findChildren<QWidget*>("", Qt::FindDirectChildrenOnly));
 	pathGlobal = path_aux;
-	showContentServer();
+	refreshServer();
 }
 
 void Account::renameFileSlot(std::string selected)
@@ -78,8 +77,7 @@ void Account::renameFileSlot(std::string selected)
 				if (std::filesystem::is_directory(pathLocal / selected))
 				{
 					std::filesystem::rename(pathLocal / selected, pathLocal / text.toStdString());
-					qDeleteAll(ui.localWidget->findChildren<QWidget*>("", Qt::FindDirectChildrenOnly));
-					showContentLocal();
+					refreshLocal();
 				}
 				else
 				{
@@ -91,8 +89,7 @@ void Account::renameFileSlot(std::string selected)
 						extension.push_back(selected[position]);
 					}
 					std::filesystem::rename(pathLocal / selected, pathLocal / (text.toStdString() + extension));
-					qDeleteAll(ui.localWidget->findChildren<QWidget*>("", Qt::FindDirectChildrenOnly));
-					showContentLocal();
+					refreshLocal();
 				}
 
 			}
@@ -130,15 +127,35 @@ void Account::deleteLocalSendSignal()
 	emit deleteFileSlot(selected);
 }
 
+
+void  Account::refreshLocal()
+{
+	qDeleteAll(ui.localWidget->findChildren<QWidget*>("", Qt::FindDirectChildrenOnly));
+	showContentLocal();
+}
+
+void  Account::refreshServer()
+{
+	qDeleteAll(ui.serverWidget->findChildren<QWidget*>("", Qt::FindDirectChildrenOnly));
+	showContentServer();
+}
+
 void Account::deleteFileSlot(std::string selected)
 {
 	if (selected != "")
 		std::filesystem::remove_all((pathLocal / selected));
 	else
 		QMessageBox::warning(this, "Alert!", "Please select a file to delete!");
-	qDeleteAll(ui.localWidget->findChildren<QWidget*>("", Qt::FindDirectChildrenOnly));
-	showContentLocal();
+	refreshLocal();
 }
+
+void Account::refresh()
+{
+	refreshLocal();
+	refreshServer();
+}
+
+
 
 void Account::checkLayout(QWidget* currentWidget)
 {
@@ -205,8 +222,7 @@ void Account::showContentLocal()
 					selected = "";
 					delete gridLocal;
 					pathLocal += "/" + file.path().filename().string();
-					qDeleteAll(ui.localWidget->findChildren<QWidget*>("", Qt::FindDirectChildrenOnly));
-					showContentLocal();
+					refreshLocal();
 				}
 				else
 				{
@@ -316,8 +332,7 @@ void Account::showContentServer()
 			connect(label, &QPushButton::released, this, [=]()
 				{ delete gridServer;
 			pathGlobal += "/" + file.path().filename().string();
-			qDeleteAll(ui.serverWidget->findChildren<QWidget*>("", Qt::FindDirectChildrenOnly));
-			showContentServer(); });
+			refreshServer(); });
 
 			if (pix.load(filename))
 			{

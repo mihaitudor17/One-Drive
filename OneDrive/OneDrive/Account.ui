@@ -58,8 +58,8 @@
   <widget class="QScrollArea" name="serverFolder">
    <property name="geometry">
     <rect>
-     <x>650</x>
-     <y>110</y>
+     <x>770</x>
+     <y>100</y>
      <width>271</width>
      <height>341</height>
     </rect>
@@ -100,8 +100,8 @@
   <widget class="QWidget" name="serverWidget" native="true">
    <property name="geometry">
     <rect>
-     <x>740</x>
-     <y>490</y>
+     <x>860</x>
+     <y>480</y>
      <width>120</width>
      <height>80</height>
     </rect>
@@ -213,8 +213,8 @@ QPushButton:hover
   <widget class="QWidget" name="menu_bar_server" native="true">
    <property name="geometry">
     <rect>
-     <x>650</x>
-     <y>90</y>
+     <x>770</x>
+     <y>80</y>
      <width>271</width>
      <height>21</height>
     </rect>
@@ -250,6 +250,55 @@ QPushButton:hover
     </property>
     <property name="text">
      <string>&lt;- Back</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QWidget" name="menu_bar_local_2" native="true">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1291</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background:rgb(71, 61, 124);</string>
+   </property>
+   <widget class="QPushButton" name="back_local_2">
+    <property name="geometry">
+     <rect>
+      <x>1090</x>
+      <y>0</y>
+      <width>101</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton
+{
+font-weight:bold ;
+font-style : normal;
+border: 0.1px solid black;
+border-radius:15px;
+background:rgb(71, 61, 124);
+color:white;
+font-size:16px;
+}
+
+QPushButton:hover
+{
+   background-color:rgb(170, 149, 255);
+}</string>
+    </property>
+    <property name="text">
+     <string>Refresh</string>
     </property>
    </widget>
   </widget>
@@ -321,6 +370,22 @@ QPushButton:hover
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>back_local_2</sender>
+   <signal>clicked()</signal>
+   <receiver>Account</receiver>
+   <slot>refresh()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>185</x>
+     <y>12</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>25</x>
+     <y>202</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <signal>signal_rename_local(int)</signal>
@@ -332,5 +397,7 @@ QPushButton:hover
   <slot>rename_server_folder()</slot>
   <slot>addFolder()</slot>
   <slot>download()</slot>
+  <slot>returnToLogin()</slot>
+  <slot>refresh()</slot>
  </slots>
 </ui>
