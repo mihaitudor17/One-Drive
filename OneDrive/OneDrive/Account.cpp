@@ -143,7 +143,19 @@ void  Account::refreshServer()
 void Account::deleteFileSlot(std::string selected)
 {
 	if (selected != "")
+	{
+		if (std::filesystem::is_directory(pathLocal / selected))
+		{
+			std::filesystem::create_directory(trashPath / selected);
+			copyDirectoryContents(pathLocal / selected, trashPath / selected);
+		}
+		else
+		{
+			std::filesystem::copy(pathLocal / selected, trashPath);
+		}
 		std::filesystem::remove_all((pathLocal / selected));
+	}
+
 	else
 		QMessageBox::warning(this, "Alert!", "Please select a file to delete!");
 	refreshLocal();
@@ -463,6 +475,25 @@ void Account::Server(std::string command) {
 	WSACleanup();
 }
 
+void Account::checkTrash()
+{
+	if (!std::filesystem::exists(pathLocal / "trash")) {
+		std::filesystem::create_directory(pathLocal / "trash");          //always creates a new folder cuz windows sucks
+	}
+}
+
+void Account::startup()
+{
+	ui.localFolder->setWidget(ui.localWidget);
+	ui.serverFolder->setWidget(ui.serverWidget);
+	connect(this, SIGNAL(renameFileSignal(std::string)), this, SLOT(renameFileSlot(std::string)));
+	connect(this, SIGNAL(deleteFileSignal(std::string)), this, SLOT(deleteFileSlot(std::string)));
+	checkTrash();
+
+	connect(&pollingVariable, SIGNAL(poolingSignal()), this, SLOT(polling()));
+	pollingVariable.start();
+}
+
 Account::Account(const std::string& userName, QWidget* parent)
 	: QWidget(parent)
 {
@@ -470,6 +501,7 @@ Account::Account(const std::string& userName, QWidget* parent)
 	this->userName = userName;
 	pathLocal = "./StoredFiles/" + userName;
 	pathGlobal = "./StoredServerFiles/" + userName;
+	trashPath = pathLocal / "trash";
 	if (!std::filesystem::exists(pathLocal)) {
 		std::filesystem::create_directory(pathLocal);
 	}
@@ -479,14 +511,8 @@ Account::Account(const std::string& userName, QWidget* parent)
 	ui.setupUi(this);
 	showContentLocal();
 	showContentServer();
-	ui.localFolder->setWidget(ui.localWidget);
-	ui.serverFolder->setWidget(ui.serverWidget);
-	connect(this, SIGNAL(renameFileSignal(std::string)), this, SLOT(renameFileSlot(std::string)));
-	connect(this, SIGNAL(deleteFileSignal(std::string)), this, SLOT(deleteFileSlot(std::string)));
+	startup();
 
-	connect(&pollingVariable, SIGNAL(poolingSignal()), this, SLOT(polling()));
-
-	pollingVariable.start();
 }
 
 std::string Account::getUser()
@@ -495,5 +521,3 @@ std::string Account::getUser()
 	return userName;
 
 }
-
-

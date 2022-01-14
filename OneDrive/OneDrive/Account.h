@@ -6,6 +6,7 @@
 #include <QLabel>
 #include "Window.h"
 #include "Polling.h"
+#include "Folder.h"
 class Account : public QWidget
 {
 	Q_OBJECT
@@ -33,6 +34,7 @@ private:
 	std::string selected;
 	std::filesystem::path pathLocal;
 	std::filesystem::path pathGlobal;
+	std::filesystem::path trashPath;
 	std::string fileNameGlobal;
 	Ui::Account ui;
 	std::string userName;
@@ -44,11 +46,14 @@ private:
 	void showContentServer();
 	void Server(std::string);
 
+	void checkTrash();
+
 	QPixmap gridLine(QPixmap pixmap, QLabel* image, QGridLayout* gridLocal, QPushButton* label, int contorServerGrid, std::filesystem::directory_entry file);
 
 	QPixmap gridLayout(QPixmap pixmap, QLabel* image, QGridLayout* gridLocal, QPushButton* label, int contorServerGrid, std::filesystem::directory_entry file);
 
 public:
+	void startup();
 	Account(const std::string& userName, QWidget* parent = 0);
 	std::string getUser();
 
