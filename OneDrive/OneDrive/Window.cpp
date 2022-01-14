@@ -37,6 +37,87 @@ std::string Window::selectFolder()
 	std::string path = folder.toStdString();
 	return path;
 }
+bool Window::downloadServer(Client client) {
+
+	while (true)
+	{
+		char fileName[FILENAME_MAX];
+		char fileType[FILENAME_MAX];
+		strcpy(fileName, client.recvFileName(client.getSock()));
+		strcpy(fileType, client.recvFileName(client.getSock()));
+		if (strstr(fileType, "NULL") || strstr(fileType, "NULL"))
+			return 0;
+		if (strstr(fileType, "/eof") || strstr(fileType, "/eof"))
+			return 1;
+		if (strstr(fileType, "folder"))
+		{
+			std::filesystem::create_directory(fileName);
+		}
+		else if (strstr(fileType, "file"))
+		{
+			long size = client.recvFileSize(client.getSock());
+			if (size > 0)
+			{
+
+				if (client.writeToFile(client.getSock(), fileName, size) == 0)
+					return 0;
+
+			}
+			else if (size == 0)
+			{
+				std::ofstream file;
+				file.open(fileName);
+			}
+			else if (size == -1)
+				return 0;
+		}
+	}
+}
+bool Window::uploadServer(Client client, std::string path) {
+	if (std::filesystem::exists(path))
+	{
+		for (const auto& it : std::filesystem::recursive_directory_iterator(path))
+		{
+			if (it.is_directory())
+			{
+				char fileName[FILENAME_MAX];
+				strcpy(fileName, it.path().string().c_str());
+				if (client.sendFileName(client.getSock(), fileName) == 0)
+					return 0;
+				char fileType[FILENAME_MAX];
+				strcpy(fileType, "folder");
+				if (client.sendFileName(client.getSock(), fileType) == 0)
+					return 0;
+			}
+			else
+			{
+				char fileName[FILENAME_MAX];
+				strcpy(fileName, it.path().string().c_str());
+				if (client.sendFileName(client.getSock(), fileName) == 0)
+					return 0;
+				char fileType[FILENAME_MAX];
+				strcpy(fileType, "file");
+				if (client.sendFileName(client.getSock(), fileType) == 0)
+					return 0;
+				if (client.sendFile(client.getSock(), it.path().string()) == 0)
+					return 0;
+			}
+
+		}
+		char fileName[FILENAME_MAX];
+		strcpy(fileName, "/eof");
+		if (client.sendFileName(client.getSock(), fileName) == 0)
+			return 0;
+		if (client.sendFileName(client.getSock(), fileName) == 0)
+			return 0;
+		return 1;
+	}
+	else
+	{
+		std::filesystem::create_directory(path);
+		return 1;
+	}
+}
 void Window::Server(std::string command) {
 	Client client;
 	std::string temp = getUser();
@@ -55,88 +136,24 @@ void Window::Server(std::string command) {
 		std::filesystem::create_directory(path);
 	}
 	int ok;
-	if (command == "download")
-	{
-		do {
-			char fileName[FILENAME_MAX];
-			ok = 0;
-			char fileType[FILENAME_MAX];
-			strcpy(fileName, client.recvFileName(client.getSock()));
-			strcpy(fileType, client.recvFileName(client.getSock()));
-			if (fileName == "/eof" || fileType == "/eof")
-				ok = 1;
-			if (ok != 1)
-			{
-				std::cout << fileName << std::endl << fileType << std::endl;
-				if (strstr(fileType, "folder"))
-				{
-					std::filesystem::create_directory(fileName);
-				}
-				else
-				{
-					long size = client.recvFileSize(client.getSock());
-					if (size > 0)
-					{
-
-						if (client.writeToFile(client.getSock(), fileName, size) == 0)
-							ok = 1;
-
-					}
-					else if (size == 0)
-					{
-						std::ofstream file;
-						file.open(fileName);
-					}
-					else if (size == -1)
-						ok = 1;
-				}
-			}
-		} while (ok != 1);
-		int flush = 0;
-		char fileRequested[FILENAME_MAX];
-		do
-		{
-			flush = recv(client.getSock(), fileRequested, FILENAME_MAX, 0);
-			std::cout << flush << std::endl;
-		} while (flush > 0);
-	}
+	int cases;
+	if (command == "delete")
+		cases = 0;
+	else if (command == "download")
+		cases = 1;
 	else if (command == "upload")
+		cases = 2;
+	switch (cases)
 	{
-		if (std::filesystem::exists(path))
-		{
-			for (const auto& it : std::filesystem::recursive_directory_iterator(path))
-			{
-				if (it.is_directory())
-				{
-					char fileName[FILENAME_MAX];
-					strcpy(fileName, it.path().string().c_str());
-					client.sendFileName(client.getSock(), fileName);
-					char fileType[FILENAME_MAX];
-					strcpy(fileType, "folder");
-					client.sendFileName(client.getSock(), fileType);
-				}
-				else
-				{
-					char fileName[FILENAME_MAX];
-					strcpy(fileName, it.path().string().c_str());
-					client.sendFileName(client.getSock(), fileName);
-					char fileType[FILENAME_MAX];
-					strcpy(fileType, "file");
-					client.sendFileName(client.getSock(), fileType);
-					client.sendFile(client.getSock(), it.path().string());
-				}
-
-			}
-			char fileName[FILENAME_MAX];
-			strcpy(fileName, "/eof");
-			client.sendFileName(client.getSock(), fileName);
-			client.sendFileName(client.getSock(), fileName);
-			client.sendFileSize(client.getSock(), -1);
-		}
-		else
-		{
-			std::filesystem::create_directory(path);
-		}
+	case 0:
+		//deleteServer();
+		break;
+	case 1:
+		downloadServer(client);
+		break;
+	case 2:
+		uploadServer(client, path);
+		break;
 	}
 	closesocket(client.getSock());
 	WSACleanup();
@@ -156,17 +173,6 @@ void Window::LoginToAccount()
 			std::string pathLocal = "./StoredFiles/";
 			switch (confirmationDownload())		 //function return 1 for true, 0 for false and -1 for cancel
 			{
-			case 1:
-				pathGlobal += userName;
-				std::filesystem::remove_all(pathGlobal);
-				std::filesystem::create_directory(pathGlobal);
-				Server("download");
-				pathLocal += userName;
-				std::filesystem::remove_all(pathLocal);
-				std::filesystem::create_directory(pathLocal);
-				metadata.outputJson(pathGlobal+"/metadata.json");
-				copyDirectoryContents(pathGlobal, pathLocal);
-				break;
 			case 0:
 				pathGlobal += userName;
 				std::filesystem::remove_all(pathGlobal);
@@ -182,6 +188,17 @@ void Window::LoginToAccount()
 				copyDirectoryContents(path, pathGlobal);
 				metadata.outputJson(pathGlobal + "/metadata.json");
 				Server("upload");
+				break;
+			case 1:
+				pathGlobal += userName;
+				std::filesystem::remove_all(pathGlobal);
+				std::filesystem::create_directory(pathGlobal);
+				Server("download");
+				pathLocal += userName;
+				std::filesystem::remove_all(pathLocal);
+				std::filesystem::create_directory(pathLocal);
+				metadata.outputJson(pathGlobal + "/metadata.json");
+				copyDirectoryContents(pathGlobal, pathLocal);
 				break;
 			default:
 				return;

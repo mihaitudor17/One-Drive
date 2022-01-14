@@ -31,6 +31,7 @@ public:
 	bool sendFile(SOCKET clientSock, std::string path);
 	bool sendUser(SOCKET clientSock, char username[FILENAME_MAX]);
 	bool connectServer();
+	bool clientClose = false;
 private:
 	SOCKET clientSock;
 };

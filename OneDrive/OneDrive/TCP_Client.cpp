@@ -4,7 +4,18 @@
 #include <fstream>
 #include <filesystem>
 #include "TCP_Client.h"
+#include <chrono>
+#include <thread>
 #pragma comment(lib, "ws2_32.lib")
+bool Client::sendUser(SOCKET clientSock, char username[FILENAME_MAX])
+{
+	int byRecv = send(clientSock, username, FILENAME_MAX, 0);
+	if (byRecv == 0 || byRecv == -1) {
+		return 0;
+	}
+	else
+		return 1;
+}
 bool Client::sendFileName(SOCKET clientSock, char fileRequested[FILENAME_MAX])
 {
 	int byRecv = send(clientSock, fileRequested, FILENAME_MAX, 0);
@@ -14,13 +25,15 @@ bool Client::sendFileName(SOCKET clientSock, char fileRequested[FILENAME_MAX])
 	else
 		return 1;
 }
-char* Client::recvFileName(SOCKET clientSock )
+char* Client::recvFileName(SOCKET clientSock)
 {
 	char fileRequested[FILENAME_MAX];
 	memset(fileRequested, 0, FILENAME_MAX);
 	int byRecv = recv(clientSock, fileRequested, FILENAME_MAX, 0);
+	//std::cout << fileRequested << std::endl;
+	std::string temp = "NULL";
 	if (byRecv == 0 || byRecv == -1) {
-		return NULL;
+		return &temp[0];
 	}
 	return fileRequested;
 }
@@ -29,6 +42,7 @@ long Client::recvFileSize(SOCKET clientSock)
 	int byRecv;
 	long fileRequestedsize = 0;
 	byRecv = recv(clientSock, (char*)&fileRequestedsize, sizeof(long), 0);
+	//std::cout << fileRequestedsize << std::endl;
 	if (byRecv == 0 || byRecv == -1)
 		return -1;
 	return fileRequestedsize;
@@ -44,41 +58,45 @@ bool Client::sendFileSize(SOCKET clientSock, long fileRequestedsize)
 }
 bool Client::sendFile(SOCKET clientSock, std::string path)
 {
-
 	std::ifstream file;
 	file.open(path, std::ios::binary);
 	char bufferFile[BUFFER_SIZE];
-	const int fileAvailable = 200;
-	const int fileNotfound = 404;
+	std::string temp;
 	int bySendinfo = 1;
 	if (file.is_open()) {
 
-		/*int bySendinfo = send(clientSock, (char*)&fileAvailable, sizeof(int), 0);
-		if (bySendinfo == 0 || bySendinfo == -1) {
-
-			return 0;
-		}*/
 		file.seekg(0, std::ios::end);
 		long fileSize = file.tellg();
-		if (!sendFileSize(clientSock, fileSize))
+		if (sendFileSize(clientSock, fileSize) == -1)
 			return 0;
 		file.seekg(0, std::ios::beg);
-		do {
+		if (fileSize > 0)
+		{
+			do {
 
-			file.read(bufferFile, BUFFER_SIZE);
-			if (file.gcount() > 0)
-				bySendinfo = send(clientSock, bufferFile, file.gcount(), 0);
-			std::cout << bufferFile << std::endl;
-			if (bySendinfo == 0 || bySendinfo == -1) {
-
-				return 0;
-			}
-		} while (file.gcount() > 0);
+				file.read(bufferFile, BUFFER_SIZE);
+				if (file.gcount() > 0 || temp != bufferFile)
+				{
+					bySendinfo = send(clientSock, bufferFile, file.gcount(), 0);
+					std::this_thread::sleep_for(std::chrono::milliseconds(10));// fara sleep se vor concatena buffer-ele alta solutie ar fi trimiterea in acelasi buffer a mesajelor
+					std::string temporary(bufferFile, bySendinfo);
+					std::cout << temporary << std::endl;
+				}
+				temp = bufferFile;
+				if (bySendinfo == 0 || bySendinfo == -1) {
+					return 0;
+				}
+			} while (file.gcount() > 0);
+		}
+		else
+		{
+			std::this_thread::sleep_for(std::chrono::milliseconds(10));
+		}
 		file.close();
+		file.close();
+
 	}
 	else {
-		/*int bySendCode = send(clientSock, (char*)&fileNotfound, sizeof(int), 0);
-		if (bySendCode == 0 || bySendCode == -1) */
 		return 0;
 	}
 	return 1;
@@ -86,7 +104,6 @@ bool Client::sendFile(SOCKET clientSock, std::string path)
 bool Client::writeToFile(SOCKET clientSock, std::string fullPath, int fileRequestedsize)
 {
 	std::ofstream file;
-	int ok = 0;
 	int byRecv;
 	char bufferFile[BUFFER_SIZE];
 	int fileDownloaded = 0;
@@ -99,27 +116,18 @@ bool Client::writeToFile(SOCKET clientSock, std::string fullPath, int fileReques
 	do {
 		memset(bufferFile, 0, BUFFER_SIZE);
 		byRecv = recv(clientSock, bufferFile, BUFFER_SIZE, 0);
-		if(strstr(bufferFile, "/eof"))
-			ok = 1;
+		std::cout << bufferFile << std::endl;
 		if (byRecv == 0 || byRecv == -1) {
 			return 0;
 		}
-		if (byRecv > fileRequestedsize)
-			byRecv = fileRequestedsize - fileDownloaded;
-		/*std::string turc(bufferfile, byrecv);
-		std::cout << turc << std::endl;*/
-		std::cout << bufferFile << std::endl;
 		file.write(bufferFile, byRecv);
 		fileDownloaded += byRecv;
 	} while (fileDownloaded < fileRequestedsize);
 	file.close();
-	if (ok == 1)
-		return 0;
-	else
-		return 1;
+	return 1;
 }
 bool Client::connectServer() {
-	
+
 	WSADATA wsData;
 	WORD ver = MAKEWORD(2, 2);
 	if (WSAStartup(ver, &wsData) != 0) {
@@ -133,7 +141,7 @@ bool Client::connectServer() {
 	}
 	char serverAddress[NI_MAXHOST];
 	memset(serverAddress, 0, NI_MAXHOST);
-	std::string temp="127.0.0.1";
+	std::string temp = "127.0.0.1";
 	strcpy(serverAddress, temp.c_str());
 	sockaddr_in hint;
 	hint.sin_family = AF_INET;
@@ -148,19 +156,10 @@ bool Client::connectServer() {
 	else
 	{
 		this->clientSock = clientSock;
-		
+
 	}
 	return 1;
 }
 Client::Client()
 {
-}
-bool Client::sendUser(SOCKET clientSock, char username[FILENAME_MAX])
-{
-	int byRecv = send(clientSock, username, FILENAME_MAX, 0);
-	if (byRecv == 0 || byRecv == -1) {
-		return 0;
-	}
-	else
-		return 1;
 }

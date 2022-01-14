@@ -17,6 +17,8 @@ public:
     private slots:
     void LoginToAccount();
     int confirmationDownload();
+    bool downloadServer(Client client);
+    bool uploadServer(Client client, std::string path);
     std::string selectFolder();
     void Signup();
     void Server(std::string);

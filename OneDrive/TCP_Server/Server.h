@@ -16,9 +16,9 @@ public:
 	long recvFileSize(SOCKET clientSock);
 	bool sendFileSize(SOCKET clientSock, long fileSize);
 	bool sendFile(SOCKET clientSock, std::string path);
-	bool writeToFile(SOCKET clientSock,  std::string fullPath, int fileRequestedsize);
+	bool writeToFile(SOCKET clientSock, std::string fullPath, int fileRequestedsize);
 	char* recvUser(SOCKET clientSock);
-	Server(){}
+	Server() {}
 	SOCKET getSock()
 	{
 		return clientSock;
@@ -28,5 +28,3 @@ public:
 		this->clientSock = clientSock;
 	}
 };
-
-
