@@ -8,6 +8,7 @@
 #include "Account.h"
 #include "TCP_Client.h"
 #include <algorithm>
+#include <regex>
 class Window : public QMainWindow
 {
     Q_OBJECT
@@ -17,6 +18,7 @@ public:
     private slots:
     void LoginToAccount();
     int confirmationDownload();
+    bool checkUsername(std::string user);
     bool downloadServer(Client client);
     bool uploadServer(Client client, std::string path);
     std::string selectFolder();

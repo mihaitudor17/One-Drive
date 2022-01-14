@@ -27,6 +27,15 @@ int Window::confirmationDownload()
 		}
 }
 
+bool Window::checkUsername(std::string user)
+{
+	const std::regex txt_regex("[a-z]+[a-z0-9]*");
+	if (std::regex_match(user, txt_regex))
+		return true;
+	return false;
+
+}
+
 std::string Window::selectFolder()
 {
 	QString folder;
@@ -233,6 +242,13 @@ void Window::LoginToAccount()
 void Window::Signup()
 {
 	userName = ui.Username->text().toStdString();
+	if (!checkUsername(userName))
+	{
+		ui.userSucces->setVisible(false);
+		ui.userTakenIcon->setVisible(true);
+		ui.UserTaken->setText("Please enter a valid name!");
+		return;
+	}
 	if (userName != "")
 	{
 

@@ -474,13 +474,13 @@ void Account::showContentLocal()
 			}
 
 	}
-	if (contorServerGrid < 7)
+	if (contorServerGrid < iconsOnPage)
 
 	{
 		QWidget* spaceExpand = new QWidget();
 		spaceExpand->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-		for (int index = 0; index < 7; index++)
+		for (int index = 0; index < iconsOnPage; index++)
 		{
 			gridLocal->addWidget(spaceExpand, index, 0);
 			gridLocal->addWidget(spaceExpand, index, 1);
@@ -567,12 +567,12 @@ void Account::showContentServer()
 			}
 
 	}
-	if (contorServerGrid < 7)
+	if (contorServerGrid < iconsOnPage)
 	{
 		QWidget* spaceExpand = new QWidget();
 		spaceExpand->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-		for (int index = 0; index < 7; index++)
+		for (int index = 0; index < iconsOnPage; index++)
 		{
 			gridServer->addWidget(spaceExpand, index, 0);
 			gridServer->addWidget(spaceExpand, index, 1);
@@ -604,29 +604,30 @@ void Account::showContentTrash()
 		label->setVisible(true);
 		label->setStyleSheet("QPushButton { background-color: rgba(10, 0, 0, 0); }");
 
+		connect(label, &QPushButton::released, this, [=]()
+			{
+
+				if (selectedTrash == file.path().filename().string() && std::filesystem::is_directory(file))
+				{
+					selectedTrash = "";
+					delete gridServer;
+					trashPath += "/" + file.path().filename().string();
+					refreshTrash();
+				}
+				else
+				{
+					if (labelToBeDeselectedTrash != nullptr)
+					{
+						labelToBeDeselectedTrash->setStyleSheet("QPushButton { background-color: rgba(10, 0, 0, 0);color:black; }");
+					}
+					labelToBeDeselectedTrash = label;
+					selectedTrash = file.path().filename().string();
+					label->setStyleSheet("QPushButton { background-color: rgba(10, 0, 0, 0);color:blue; }");
+				}});
 		if (std::filesystem::is_directory(file)) {
 			QString filename = "./Assets/FolderIcon.png";
 
-			connect(label, &QPushButton::released, this, [=]()
-				{ 
-					std::cout << "in";
-					if (selectedTrash == file.path().filename().string() && std::filesystem::is_directory(file))
-			{
-				selectedTrash = "";
-				delete gridServer;
-				trashPath += "/" + file.path().filename().string();
-				refreshTrash();
-			}
-				else
-			{
-				if (labelToBeDeselectedTrash != nullptr)
-				{
-					labelToBeDeselectedTrash->setStyleSheet("QPushButton { background-color: rgba(10, 0, 0, 0);color:black; }");
-				}
-				labelToBeDeselectedTrash = label;
-				selectedTrash = file.path().filename().string();
-				label->setStyleSheet("QPushButton { background-color: rgba(10, 0, 0, 0);color:blue; }");
-			}});
+			
 
 			if (pix.load(filename))
 			{
@@ -672,12 +673,12 @@ void Account::showContentTrash()
 		}
 
 	}
-	if (contorServerGrid < 7)
+	if (contorServerGrid < iconsOnPage)
 	{
 		QWidget* spaceExpand = new QWidget();
 		spaceExpand->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-		for (int index = 0; index < 7; index++)
+		for (int index = 0; index < iconsOnPage; index++)
 		{
 			gridServer->addWidget(spaceExpand, index, 0);
 			gridServer->addWidget(spaceExpand, index, 1);

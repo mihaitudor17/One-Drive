@@ -46,6 +46,8 @@ private:
 	Polling pollingVariable;
 	bool serverOrTrash;
 
+	const int iconsOnPage = 9;
+
 	void checkLayout(QWidget* currentWidget);
 	void showContentLocal();
 	void showContentServer();
