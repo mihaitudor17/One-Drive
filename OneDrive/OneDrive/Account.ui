@@ -13,6 +13,12 @@
   <property name="windowTitle">
    <string>Account</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">.QScrollArea
+{
+border:1px solid rgb(112, 6, 141);
+}</string>
+  </property>
   <widget class="QScrollArea" name="localFolder">
    <property name="geometry">
     <rect>
@@ -21,6 +27,9 @@
      <width>271</width>
      <height>341</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
    </property>
    <property name="verticalScrollBarPolicy">
     <enum>Qt::ScrollBarAsNeeded</enum>
@@ -65,7 +74,11 @@
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background:transparent;</string>
+    <string notr="true">scrollArea
+{
+background:transparent;
+border:1px solid rgb(97, 8, 176);
+}</string>
    </property>
    <property name="verticalScrollBarPolicy">
     <enum>Qt::ScrollBarAsNeeded</enum>
@@ -290,7 +303,7 @@ QPushButton:hover
      <rect>
       <x>180</x>
       <y>0</y>
-      <width>81</width>
+      <width>91</width>
       <height>24</height>
      </rect>
     </property>
@@ -359,6 +372,36 @@ QPushButton:hover
     </property>
     <property name="text">
      <string>Refresh</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="back_local_3">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>101</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton
+{
+font-weight:bold ;
+font-style : normal;
+border: 0.1px solid black;
+border-radius:15px;
+background:rgb(71, 61, 124);
+color:white;
+font-size:16px;
+}
+
+QPushButton:hover
+{
+   background-color:rgb(170, 149, 255);
+}</string>
+    </property>
+    <property name="text">
+     <string>Add Folder</string>
     </property>
    </widget>
   </widget>
@@ -501,6 +544,22 @@ QPushButton:hover
     <hint type="destinationlabel">
      <x>737</x>
      <y>63</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>back_local_3</sender>
+   <signal>clicked()</signal>
+   <receiver>Account</receiver>
+   <slot>addFolder()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>32</x>
+     <y>14</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>51</x>
+     <y>290</y>
     </hint>
    </hints>
   </connection>

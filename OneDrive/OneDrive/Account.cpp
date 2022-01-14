@@ -37,19 +37,39 @@ void Account::backFolderLocal()
 
 void Account::backFolderServer()
 {
-	std::string path_aux = pathGlobal.string();
-	if (path_aux == ("./StoredServerFiles/" + userName))
+	
+	if (!serverOrTrash)
 	{
-		//throw "Back out of the restricted area";
-		return;
+		std::string pathAux = pathGlobal.string();
+		if (pathAux == ("./StoredServerFiles/" + userName))
+		{
+			return;
+		}
+		while (pathAux[pathAux.length() - 1] != '/')
+		{
+			pathAux.erase(pathAux.begin() + pathAux.length() - 1);
+		}
+		pathAux.erase(pathAux.begin() + pathAux.length() - 1);
+		pathGlobal = pathAux;
+		refreshServer();
 	}
-	while (path_aux[path_aux.length() - 1] != '/')
+	else
 	{
-		path_aux.erase(path_aux.begin() + path_aux.length() - 1);
+		std::string pathAuxTrash = trashPath.string();
+		if (pathAuxTrash == ("./StoredFiles/"+userName+"/Recycle Bin"))
+		{
+			
+			return;
+		}
+		while (pathAuxTrash[pathAuxTrash.length() - 1] != '/')
+		{
+			pathAuxTrash.erase(pathAuxTrash.begin() + pathAuxTrash.length() - 1);
+		}
+		pathAuxTrash.erase(pathAuxTrash.begin() + pathAuxTrash.length() - 1);
+		trashPath = pathAuxTrash;
+		refreshTrash();
 	}
-	path_aux.erase(path_aux.begin() + path_aux.length() - 1);
-	pathGlobal = path_aux;
-	refreshServer();
+	
 }
 
 void Account::renameFileSlot(std::string selected)
@@ -107,14 +127,24 @@ void Account::renameFileSlot(std::string selected)
 		QMessageBox::warning(this, "Alert!", "Please select a file.");
 	}
 
-
+	selected = "";
 
 }
 
 void Account::addFolder()
 {
-	QDialog* fileName = new QFileDialog;
-	fileName->show();
+	QString folder;
+	folder = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
+		"/home",
+		QFileDialog::ShowDirsOnly
+		| QFileDialog::DontResolveSymlinks);
+	std::filesystem::path filePath = folder.toStdString();
+
+	std::filesystem::create_directory("./StoredFiles/" + userName + "/" + filePath.filename().string());
+	copyDirectoryContents(filePath , "./StoredFiles/" + userName + "/" + filePath.filename().string());
+	
+
+	
 }
 
 void Account::renameLocalSendSignal()
@@ -140,6 +170,12 @@ void  Account::refreshServer()
 	showContentServer();
 }
 
+void Account::refreshTrash()
+{
+	qDeleteAll(ui.serverWidget->findChildren<QWidget*>("", Qt::FindDirectChildrenOnly));
+	showContentTrash();
+}
+
 void Account::deleteFileSlot(std::string selected)
 {
 	if (selected != "")
@@ -159,12 +195,17 @@ void Account::deleteFileSlot(std::string selected)
 	else
 		QMessageBox::warning(this, "Alert!", "Please select a file to delete!");
 	refreshLocal();
+	selected = "";
 }
 
 void Account::refresh()
 {
+	
 	refreshLocal();
-	refreshServer();
+	if (!serverOrTrash)
+		refreshServer();
+	else
+		refreshTrash();
 }
 
 void Account::polling()
@@ -192,6 +233,25 @@ void Account::showTrash()
 		serverOrTrash = false;
 		showContentServer();
 	}
+}
+
+void Account::restore()
+{
+	if (selectedTrash != "")
+	{
+		if (std::filesystem::is_directory(trashPath / selectedTrash))
+		{
+			std::filesystem::create_directory("./StoredFiles/" + userName+"/"+ selectedTrash);
+			copyDirectoryContents(trashPath / selectedTrash, "./StoredFiles/" + userName+ "/" + selectedTrash);
+			
+		}
+		else
+		{
+			std::filesystem::copy(trashPath / selectedTrash, "./StoredFiles/" + userName);
+		}
+		std::filesystem::remove_all((trashPath / selectedTrash));
+	}
+	refresh();
 }
 
 
@@ -236,7 +296,7 @@ QPixmap Account::gridLayout(QPixmap pixmap, QLabel* image, QGridLayout* grid, QP
 bool Account::checkRezervedFiles(std::filesystem::directory_entry file)
 {
 	if (std::filesystem::is_directory(file))
-		if (file.path().filename().string() == "trash")
+		if (file.path().filename().string() == "Recycle Bin")
 			return true;
 	if (file.path().filename().string() == "metadata.json")
 		return true;
@@ -447,7 +507,7 @@ void Account::showContentServer()
 void Account::showContentTrash()
 {
 	checkLayout(ui.serverWidget);
-
+	labelToBeDeselectedTrash = nullptr;
 	QPixmap pix;
 	QGridLayout* gridServer = new QGridLayout();
 	ui.serverWidget->setLayout(gridServer);
@@ -470,9 +530,25 @@ void Account::showContentTrash()
 			QString filename = "./Assets/FolderIcon.png";
 
 			connect(label, &QPushButton::released, this, [=]()
-				{ delete gridServer;
-			trashPath += "/" + file.path().filename().string();
-			refreshServer(); });
+				{ 
+					std::cout << "in";
+					if (selectedTrash == file.path().filename().string() && std::filesystem::is_directory(file))
+			{
+				selectedTrash = "";
+				delete gridServer;
+				trashPath += "/" + file.path().filename().string();
+				refreshTrash();
+			}
+				else
+			{
+				if (labelToBeDeselectedTrash != nullptr)
+				{
+					labelToBeDeselectedTrash->setStyleSheet("QPushButton { background-color: rgba(10, 0, 0, 0);color:black; }");
+				}
+				labelToBeDeselectedTrash = label;
+				selectedTrash = file.path().filename().string();
+				label->setStyleSheet("QPushButton { background-color: rgba(10, 0, 0, 0);color:blue; }");
+			}});
 
 			if (pix.load(filename))
 			{
@@ -598,8 +674,8 @@ void Account::Server(std::string command) {
 
 void Account::checkTrash()
 {
-	if (!std::filesystem::exists(pathLocal / "trash")) {
-		std::filesystem::create_directory(pathLocal / "trash");          //always creates a new folder cuz windows sucks
+	if (!std::filesystem::exists(pathLocal / "Recycle Bin")) {
+		std::filesystem::create_directory(pathLocal / "Recycle Bin");          
 	}
 }
 
@@ -620,11 +696,12 @@ void Account::startup()
 Account::Account(const std::string& userName, QWidget* parent)
 	: QWidget(parent)
 {
+	selectedTrash = "";
 	selected = "";
 	this->userName = userName;
 	pathLocal = "./StoredFiles/" + userName;
 	pathGlobal = "./StoredServerFiles/" + userName;
-	trashPath = pathLocal / "trash";
+	trashPath = "./StoredFiles/" + userName + "/Recycle Bin";
 	serverOrTrash = false;
 	if (!std::filesystem::exists(pathLocal)) {
 		std::filesystem::create_directory(pathLocal);

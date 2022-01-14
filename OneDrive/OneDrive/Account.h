@@ -25,14 +25,18 @@ private slots:
 	void deleteLocalSendSignal();
 	void refreshLocal();
 	void refreshServer();
+	void refreshTrash();
 	void deleteFileSlot(std::string selected);
 	void refresh();
 	void polling();
 	void showTrash();
+	void restore();
 
 private:
 	QPushButton* labelToBeDeselected;
 	std::string selected;
+	QPushButton* labelToBeDeselectedTrash;
+	std::string selectedTrash;
 	std::filesystem::path pathLocal;
 	std::filesystem::path pathGlobal;
 	std::filesystem::path trashPath;
