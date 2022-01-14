@@ -7,6 +7,7 @@
 #include <unordered_set>
 #include "Account.h"
 #include "TCP_Client.h"
+#include <algorithm>
 class Window : public QMainWindow
 {
     Q_OBJECT

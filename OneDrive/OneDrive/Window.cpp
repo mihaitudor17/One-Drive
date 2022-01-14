@@ -144,6 +144,7 @@ void Window::Server(std::string command) {
 void Window::LoginToAccount()
 {
 	userName = ui.Username->text().toStdString();
+	std::transform(userName.begin(), userName.end(), userName.begin(), ::tolower);
 	if (userName != "")
 	{
 		std::string path;
