@@ -33,6 +33,10 @@ int main(int argc, char* argv[])
 	folder1.assignNumberOfFiles();
 	folder2.assignNumberOfFiles();*/
 	//keepFoldersInSync(folder1, folder2);
-	
+
+	FowlerNollVo fowler;
+
+	fowler.getHashOfFolder("./StoredFiles");
+
 	return a.exec();
 }

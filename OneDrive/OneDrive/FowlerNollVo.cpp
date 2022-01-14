@@ -59,3 +59,22 @@ size_t FowlerNollVo::hashingImageFileAndVideoFile(const std::string& imagePath)
 	return result;
 }
 
+size_t FowlerNollVo::getHashOfFolder(const std::string& folderPath)
+{
+	size_t initialHash = InitialFNV;
+
+	for (const auto& iterator : std::filesystem::recursive_directory_iterator(folderPath))
+	{
+		if (!std::filesystem::is_directory(iterator))
+		{
+			if (iterator.path().filename().string().find(".txt") != std::string::npos)
+			{
+				initialHash = initialHash ^ hashingTextFile(iterator.path().string());
+			}
+		}
+	}
+	std::cout << initialHash << '\n';
+	//8355428258239817008
+	return 1;
+}
+
