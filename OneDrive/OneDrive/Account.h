@@ -28,6 +28,7 @@ private slots:
 	void deleteFileSlot(std::string selected);
 	void refresh();
 	void polling();
+	void showTrash();
 
 private:
 	QPushButton* labelToBeDeselected;
@@ -38,12 +39,13 @@ private:
 	std::string fileNameGlobal;
 	Ui::Account ui;
 	std::string userName;
-
 	Polling pollingVariable;
+	bool serverOrTrash;
 
 	void checkLayout(QWidget* currentWidget);
 	void showContentLocal();
 	void showContentServer();
+	void showContentTrash();
 	void Server(std::string);
 
 	void checkTrash();
@@ -51,6 +53,8 @@ private:
 	QPixmap gridLine(QPixmap pixmap, QLabel* image, QGridLayout* gridLocal, QPushButton* label, int contorServerGrid, std::filesystem::directory_entry file);
 
 	QPixmap gridLayout(QPixmap pixmap, QLabel* image, QGridLayout* gridLocal, QPushButton* label, int contorServerGrid, std::filesystem::directory_entry file);
+
+	bool checkRezervedFiles(std::filesystem::directory_entry file);
 
 public:
 	void startup();

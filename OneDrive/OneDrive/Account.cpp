@@ -174,6 +174,26 @@ void Account::polling()
 	}
 }
 
+void Account::showTrash()
+{
+
+	qDeleteAll(ui.serverWidget->findChildren<QWidget*>("", Qt::FindDirectChildrenOnly));
+	if (!serverOrTrash)
+	{
+		ui.serverTrash->setText("Recycle Bin");
+		ui.restore->show();
+		serverOrTrash = true;
+		showContentTrash();
+	}
+	else
+	{
+		ui.serverTrash->setText("       Server");
+		ui.restore->hide();
+		serverOrTrash = false;
+		showContentServer();
+	}
+}
+
 
 void Account::checkLayout(QWidget* currentWidget)
 {
@@ -211,6 +231,16 @@ QPixmap Account::gridLayout(QPixmap pixmap, QLabel* image, QGridLayout* grid, QP
 	grid->addWidget(label, contorServerGrid, 1);
 
 	return pixmap;
+}
+
+bool Account::checkRezervedFiles(std::filesystem::directory_entry file)
+{
+	if (std::filesystem::is_directory(file))
+		if (file.path().filename().string() == "trash")
+			return true;
+	if (file.path().filename().string() == "metadata.json")
+		return true;
+	return false;
 }
 
 void Account::showContentLocal()
@@ -254,55 +284,56 @@ void Account::showContentLocal()
 				}
 			});
 
-		if (std::filesystem::is_directory(file))
-		{
-			QString filename = "./Assets/FolderIcon.png";
-
-			if (pix.load(filename))
+		if (!checkRezervedFiles(file))
+			if (std::filesystem::is_directory(file))
 			{
-				pix = gridLayout(pix, image, gridLocal, label, contorServerGrid, file);
-			}
-		}
-		else
-		{
-			if (file.path().filename().string().find(".txt") != std::string::npos)
-			{
-				QString filename = "./Assets/FileIcon.png";
-
+				QString filename = "./Assets/FolderIcon.png";
 
 				if (pix.load(filename))
 				{
-					pix = gridLine(pix, image, gridLocal, label, contorServerGrid, file);
+					pix = gridLayout(pix, image, gridLocal, label, contorServerGrid, file);
 				}
 			}
 			else
-				if (file.path().filename().string().find(".jpg") != std::string::npos || file.path().filename().string().find(".png") != std::string::npos)
+			{
+				if (file.path().filename().string().find(".txt") != std::string::npos)
 				{
-					QString filename = "./Assets/ImageIcon.jpg";
+					QString filename = "./Assets/FileIcon.png";
+
+
 					if (pix.load(filename))
 					{
 						pix = gridLine(pix, image, gridLocal, label, contorServerGrid, file);
 					}
-
 				}
 				else
-					if (file.path().filename().string().find(".mp4") != std::string::npos)
+					if (file.path().filename().string().find(".jpg") != std::string::npos || file.path().filename().string().find(".png") != std::string::npos)
 					{
-						QString filename = "./Assets/MovieIcon.png";
+						QString filename = "./Assets/ImageIcon.jpg";
 						if (pix.load(filename))
 						{
 							pix = gridLine(pix, image, gridLocal, label, contorServerGrid, file);
 						}
+
 					}
 					else
-					{
-						QString filename = "./Assets/UndefinedIcon.png";
-						if (pix.load(filename))
+						if (file.path().filename().string().find(".mp4") != std::string::npos)
 						{
-							pix = gridLine(pix, image, gridLocal, label, contorServerGrid, file);
+							QString filename = "./Assets/MovieIcon.png";
+							if (pix.load(filename))
+							{
+								pix = gridLine(pix, image, gridLocal, label, contorServerGrid, file);
+							}
 						}
-					}
-		}
+						else
+						{
+							QString filename = "./Assets/UndefinedIcon.png";
+							if (pix.load(filename))
+							{
+								pix = gridLine(pix, image, gridLocal, label, contorServerGrid, file);
+							}
+						}
+			}
 
 	}
 	if (contorServerGrid < 7)
@@ -344,12 +375,103 @@ void Account::showContentServer()
 		label->setVisible(true);
 		label->setStyleSheet("QPushButton { background-color: rgba(10, 0, 0, 0); }");
 
+
+		if (!checkRezervedFiles(file))
+			if (std::filesystem::is_directory(file)) {
+				QString filename = "./Assets/FolderIcon.png";
+
+				connect(label, &QPushButton::released, this, [=]()
+					{ delete gridServer;
+				pathGlobal += "/" + file.path().filename().string();
+				refreshServer(); });
+
+				if (pix.load(filename))
+				{
+					pix = gridLayout(pix, image, gridServer, label, contorServerGrid, file);
+				}
+			}
+			else
+			{
+				if (file.path().filename().string().find(".txt") != std::string::npos) {
+					QString filename = "./Assets/FileIcon.png";
+
+					if (pix.load(filename))
+					{
+						pix = gridLine(pix, image, gridServer, label, contorServerGrid, file);
+					}
+				}
+				else
+					if (file.path().filename().string().find(".jpg") != std::string::npos || file.path().filename().string().find(".png") != std::string::npos) {
+						QString filename = "./Assets/ImageIcon.jpg";
+						if (pix.load(filename))
+						{
+							pix = gridLine(pix, image, gridServer, label, contorServerGrid, file);
+						}
+
+					}
+					else
+						if (file.path().filename().string().find(".mp4") != std::string::npos) {
+							QString filename = "./Assets/MovieIcon.png";
+							if (pix.load(filename))
+							{
+								pix = gridLine(pix, image, gridServer, label, contorServerGrid, file);
+							}
+						}
+						else
+						{
+							QString filename = "./Assets/UndefinedIcon.png";
+							if (pix.load(filename))
+							{
+								pix = gridLine(pix, image, gridServer, label, contorServerGrid, file);
+
+							}
+						}
+			}
+
+	}
+	if (contorServerGrid < 7)
+	{
+		QWidget* spaceExpand = new QWidget();
+		spaceExpand->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+		for (int index = 0; index < 7; index++)
+		{
+			gridServer->addWidget(spaceExpand, index, 0);
+			gridServer->addWidget(spaceExpand, index, 1);
+		}
+	}
+	ui.serverWidget->setVisible(true);
+	ui.serverFolder->setWidgetResizable(true);
+}
+
+void Account::showContentTrash()
+{
+	checkLayout(ui.serverWidget);
+
+	QPixmap pix;
+	QGridLayout* gridServer = new QGridLayout();
+	ui.serverWidget->setLayout(gridServer);
+	int contorServerGrid = -1;
+
+	for (auto& file : std::filesystem::directory_iterator(trashPath))
+	{
+
+		contorServerGrid++;
+
+		QLabel* image = new QLabel(ui.serverWidget);
+		image->setMinimumSize(QSize(40, 40));
+
+		QPushButton* label = new QPushButton(ui.serverWidget);
+		label->setMinimumSize(QSize(10, 10));
+		label->setVisible(true);
+		label->setStyleSheet("QPushButton { background-color: rgba(10, 0, 0, 0); }");
+
 		if (std::filesystem::is_directory(file)) {
 			QString filename = "./Assets/FolderIcon.png";
 
 			connect(label, &QPushButton::released, this, [=]()
 				{ delete gridServer;
-			pathGlobal += "/" + file.path().filename().string();
+			trashPath += "/" + file.path().filename().string();
 			refreshServer(); });
 
 			if (pix.load(filename))
@@ -410,7 +532,6 @@ void Account::showContentServer()
 	ui.serverWidget->setVisible(true);
 	ui.serverFolder->setWidgetResizable(true);
 }
-
 void Account::Server(std::string command) {
 	Client client;
 	std::string temp = getUser();
@@ -486,6 +607,8 @@ void Account::startup()
 {
 	ui.localFolder->setWidget(ui.localWidget);
 	ui.serverFolder->setWidget(ui.serverWidget);
+	ui.restore->hide();
+	ui.serverTrash->setText("       Server");
 	connect(this, SIGNAL(renameFileSignal(std::string)), this, SLOT(renameFileSlot(std::string)));
 	connect(this, SIGNAL(deleteFileSignal(std::string)), this, SLOT(deleteFileSlot(std::string)));
 	checkTrash();
@@ -502,6 +625,7 @@ Account::Account(const std::string& userName, QWidget* parent)
 	pathLocal = "./StoredFiles/" + userName;
 	pathGlobal = "./StoredServerFiles/" + userName;
 	trashPath = pathLocal / "trash";
+	serverOrTrash = false;
 	if (!std::filesystem::exists(pathLocal)) {
 		std::filesystem::create_directory(pathLocal);
 	}

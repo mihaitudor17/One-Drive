@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1229</width>
-    <height>604</height>
+    <height>685</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -63,6 +63,9 @@
      <width>271</width>
      <height>341</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background:transparent;</string>
    </property>
    <property name="verticalScrollBarPolicy">
     <enum>Qt::ScrollBarAsNeeded</enum>
@@ -252,6 +255,63 @@ QPushButton:hover
      <string>&lt;- Back</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="restore">
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>0</y>
+      <width>81</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton
+{
+font-weight:bold ;
+font-style : normal;
+border: 0.1px solid black;
+border-radius:15px;
+background:rgb(71, 61, 124);
+color:white;
+font-size:16px;
+}
+
+QPushButton:hover
+{
+   background-color:rgb(170, 149, 255);
+}</string>
+    </property>
+    <property name="text">
+     <string>Restore</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="serverTrash">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>0</y>
+      <width>81</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton
+{
+font-weight:bold ;
+font-style : normal;
+border: 0.1px solid black;
+border-radius:15px;
+background:rgb(71, 61, 124);
+color:white;
+font-size:16px;
+}
+
+</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
   </widget>
   <widget class="QWidget" name="menu_bar_local_2" native="true">
    <property name="geometry">
@@ -305,11 +365,14 @@ QPushButton:hover
   <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>1070</x>
-     <y>490</y>
+     <x>1090</x>
+     <y>570</y>
      <width>71</width>
      <height>71</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background:transparent;</string>
    </property>
    <property name="text">
     <string/>
@@ -409,6 +472,38 @@ QPushButton:hover
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Account</receiver>
+   <slot>showTrash()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1121</x>
+     <y>528</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>659</x>
+     <y>362</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>restore</sender>
+   <signal>clicked()</signal>
+   <receiver>Account</receiver>
+   <slot>restore()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>900</x>
+     <y>88</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>737</x>
+     <y>63</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <signal>signal_rename_local(int)</signal>
@@ -422,5 +517,7 @@ QPushButton:hover
   <slot>download()</slot>
   <slot>returnToLogin()</slot>
   <slot>refresh()</slot>
+  <slot>showTrash()</slot>
+  <slot>restore()</slot>
  </slots>
 </ui>
