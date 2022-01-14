@@ -80,11 +80,13 @@
     <ClCompile Include="JSON.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Metadata.cpp" />
+    <ClCompile Include="Polling.cpp" />
     <ClCompile Include="TCP_Client.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="JSON.h" />
+    <QtMoc Include="Polling.h" />
     <ClInclude Include="TCP_Client.h" />
     <QtMoc Include="Account.h" />
     <ClInclude Include="Folder.h" />

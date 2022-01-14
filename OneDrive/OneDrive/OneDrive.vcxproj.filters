@@ -81,6 +81,9 @@
     <ClCompile Include="Metadata.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Polling.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FowlerNollVo.h">
@@ -101,6 +104,9 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="Account.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Polling.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
