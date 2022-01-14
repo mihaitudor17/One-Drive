@@ -21,6 +21,37 @@ void keepFoldersInSync(Folder& folder1, Folder& folder2) {
 		std::this_thread::sleep_for(std::chrono::milliseconds(500));
 	}
 }
+
+
+void syncFolderWithMetadata(const std::filesystem::path& path, const Metadata& metadata) {
+	FowlerNollVo hashFunction;
+	std::unordered_set<long long> hashes;
+	for (const auto& it : std::filesystem::directory_iterator(path)) {
+		//daca exista fisierul
+		if (metadata.m_body.find(it.path().string()) != metadata.m_body.end()) {
+			long long lastWriteTime = std::chrono::duration_cast<std::chrono::milliseconds>(it.last_write_time().time_since_epoch()).count();
+			if (lastWriteTime > metadata.m_body[it.path().string()]["lastWriteTime"]) {
+				std::cout << it.path().string() << ": trebuie actualizat" << std::endl;
+			}
+		}
+		else {//cazul de redenumire
+			int rename = 0;
+			std::string renamed;
+			for (const auto& item : metadata.m_body.items()) {
+				if (std::filesystem::is_directory(it.path())) {
+					size_t hash = hashFunction.getHashOfFolder(it.path().string());
+					if (item.value()["hash"] == hash) {
+						rename = 1;
+						hashes.insert(hash);
+						renamed = item.key();
+						break;
+					}
+				}
+			}
+		}
+	}
+}
+
 int main(int argc, char* argv[])
 {
 	QApplication a(argc, argv);

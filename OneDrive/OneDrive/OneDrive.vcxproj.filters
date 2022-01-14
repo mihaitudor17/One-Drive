@@ -42,6 +42,9 @@
     <None Include="userOutput.json">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="sincronizare.json">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Output.txt">

@@ -68,6 +68,7 @@
   <ItemGroup>
     <None Include="heroes.json" />
     <None Include="out.json" />
+    <None Include="sincronizare.json" />
     <None Include="userOutput.json" />
   </ItemGroup>
   <ItemGroup>
