@@ -50,35 +50,34 @@ void Metadata::folderMetadata(const std::string& path)
 	for (auto p : std::filesystem::directory_iterator(path)) {
 		if (p.is_directory()) {
 			nlohmann::json data;
-			data[p.path().string()]["hash"] = 0;
-			long long lastWrittenTime = std::chrono::duration_cast<std::chrono::milliseconds>(p.last_write_time().time_since_epoch()).count();
-			data[p.path().string()]["lastWriteTime"] = lastWrittenTime;
-			m_body.push_back(data);
+			data["hash"] = hashFunction.getHashOfFolder(p.path().string());
+			long long lastWriteTime = std::chrono::duration_cast<std::chrono::milliseconds>(p.last_write_time().time_since_epoch()).count();
+			data["lastWriteTime"] = lastWriteTime;
+			m_body[p.path().string()] = data;
 		}
 		else if (p.path().filename().string().find(".mp4") != std::string::npos ||
 			p.path().filename().string().find(".jpg") != std::string::npos ||
 			p.path().filename().string().find(".png") != std::string::npos
 			) {
 			nlohmann::json data;
-			data[p.path().string()]["hash"] = hashFunction.hashingImageFileAndVideoFile(p.path().string());
+			data["hash"] = hashFunction.hashingImageFileAndVideoFile(p.path().string());
 			long long lastWrittenTime = std::chrono::duration_cast<std::chrono::milliseconds>(p.last_write_time().time_since_epoch()).count();
-			data[p.path().string()]["lastWriteTime"] = lastWrittenTime;
-			m_body.push_back(data);
+			data["lastWriteTime"] = lastWrittenTime;
+			m_body[p.path().string()] = data;
 		}
 		else if (p.path().filename().string().find(".txt") != std::string::npos) {
 			nlohmann::json data;
-			data[p.path().string()]["hash"] = hashFunction.hashingTextFile(p.path().string());
+			data["hash"] = hashFunction.hashingTextFile(p.path().string());
 			long long lastWrittenTime = std::chrono::duration_cast<std::chrono::milliseconds>(p.last_write_time().time_since_epoch()).count();
-			data[p.path().string()]["lastWriteTime"] = lastWrittenTime;
-			m_body.push_back(data);
+			data["lastWriteTime"] = lastWrittenTime;
+			m_body[p.path().string()] = data;
 		}
 		else {
 			nlohmann::json data;
-			data[p.path().string()]["hash"] = 0;
+			data["hash"] = 0;
 			long long lastWrittenTime = std::chrono::duration_cast<std::chrono::milliseconds>(p.last_write_time().time_since_epoch()).count();
-			data[p.path().string()]["lastWriteTime"] = lastWrittenTime;
-			m_body.push_back(data);
+			data["lastWriteTime"] = lastWrittenTime;
+			m_body[p.path().string()] = data;
 		}
 	}
 }
-
