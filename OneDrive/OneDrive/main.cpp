@@ -47,7 +47,52 @@ void syncFolderWithMetadata(const std::filesystem::path& path, const Metadata& m
 						break;
 					}
 				}
+				else if (it.path().filename().string().find(".txt") != std::string::npos)
+				{
+					size_t hash = hashFunction.hashingTextFile(it.path().string());
+					if (item.value()["hash"] == hash) {
+						rename = 1;
+						hashes.insert(hash);
+						renamed = item.key();
+						break;
+					}
+
+				}
+				else
+					if (it.path().filename().string().find(".mp4") != std::string::npos ||
+						it.path().filename().string().find(".jpg") != std::string::npos ||
+						it.path().filename().string().find(".png") != std::string::npos
+						) {
+						size_t hash = hashFunction.hashingImageFileAndVideoFile(it.path().string());
+						if (item.value()["hash"] == hash) {
+							rename = 1;
+							hashes.insert(hash);
+							renamed = item.key();
+							break;
+						}
+					}
+
 			}
+			if (rename) {
+				std::cout << renamed << " fisier redenumit in: " << it.path().string() << std::endl;
+			}
+			else {//nu exista pana acum
+				std::cout << "fisier/folder nou: " << it.path().string() << std::endl;
+
+			}
+		}
+	}
+	//cazul de stergere
+	for (const auto& item : metadata.m_body.items()) {
+		int name = 1, hash = 1;
+		if (!std::filesystem::exists(item.key())) {
+			name = 0;
+		}
+		if (hashes.find(item.value()["hash"]) == hashes.end()) {
+			hash = 0;
+		}
+		if (name == 0 && hash == 0) {
+			std::cout << item.key() << " a fost sters" << std::endl;
 		}
 	}
 }
@@ -65,9 +110,9 @@ int main(int argc, char* argv[])
 	folder2.assignNumberOfFiles();*/
 	//keepFoldersInSync(folder1, folder2);
 
-	FowlerNollVo fowler;
-
-	fowler.getHashOfFolder("./Assets");
+	Metadata metadata;
+	metadata.inputJson("./sincronizare.json");
+	syncFolderWithMetadata("./StoredFiles/tinel", metadata);
 
 	return a.exec();
 }
