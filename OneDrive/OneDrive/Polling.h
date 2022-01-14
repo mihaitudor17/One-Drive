@@ -14,4 +14,10 @@ signals:
 private slots:
 	void mTimeOut();
 
+public:
+	Polling();
+protected:
+
+	void run() override;
+
 };

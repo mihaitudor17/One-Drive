@@ -30,7 +30,7 @@ void Account::backFolderLocal()
 		path_aux.erase(path_aux.begin() + path_aux.length() - 1);
 	}
 	path_aux.erase(path_aux.begin() + path_aux.length() - 1);
-	
+
 	pathLocal = path_aux;
 	refreshLocal();
 }
@@ -155,6 +155,12 @@ void Account::refresh()
 	refreshServer();
 }
 
+void Account::polling()
+{
+	{
+		std::cout << "Thread \n";
+	}
+}
 
 
 void Account::checkLayout(QWidget* currentWidget)
@@ -477,6 +483,10 @@ Account::Account(const std::string& userName, QWidget* parent)
 	ui.serverFolder->setWidget(ui.serverWidget);
 	connect(this, SIGNAL(renameFileSignal(std::string)), this, SLOT(renameFileSlot(std::string)));
 	connect(this, SIGNAL(deleteFileSignal(std::string)), this, SLOT(deleteFileSlot(std::string)));
+
+	connect(&pollingVariable, SIGNAL(poolingSignal()), this, SLOT(polling()));
+
+	pollingVariable.start();
 }
 
 std::string Account::getUser()

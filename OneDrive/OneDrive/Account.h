@@ -5,6 +5,7 @@
 #include <QGridLayout>
 #include <QLabel>
 #include "Window.h"
+#include "Polling.h"
 class Account : public QWidget
 {
 	Q_OBJECT
@@ -25,7 +26,7 @@ private slots:
 	void refreshServer();
 	void deleteFileSlot(std::string selected);
 	void refresh();
-
+	void polling();
 
 private:
 	QPushButton* labelToBeDeselected;
@@ -35,7 +36,8 @@ private:
 	std::string fileNameGlobal;
 	Ui::Account ui;
 	std::string userName;
-	
+
+	Polling pollingVariable;
 
 	void checkLayout(QWidget* currentWidget);
 	void showContentLocal();
