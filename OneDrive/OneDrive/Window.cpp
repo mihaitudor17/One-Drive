@@ -178,8 +178,8 @@ void Window::LoginToAccount()
 				std::filesystem::remove_all(pathGlobal);
 				std::filesystem::create_directory(pathGlobal);
 				path = selectFolder();
-				metadata.folderMetadata(path);
 				copyDirectoryContents(path, pathGlobal);
+				metadata.folderMetadata(pathGlobal);
 				metadata.outputJson(pathGlobal + "/metadata.json");
 				pathGlobal = "./StoredFiles/";
 				pathGlobal += userName;
@@ -197,7 +197,6 @@ void Window::LoginToAccount()
 				pathLocal += userName;
 				std::filesystem::remove_all(pathLocal);
 				std::filesystem::create_directory(pathLocal);
-				metadata.outputJson(pathGlobal + "/metadata.json");
 				copyDirectoryContents(pathGlobal, pathLocal);
 				break;
 			default:

@@ -15,7 +15,7 @@ char* Server::recvUser(SOCKET clientSock)
 bool Server::sendFileName(SOCKET clientSock, char fileRequested[FILENAME_MAX])
 {
 	int byRecv = send(clientSock, fileRequested, FILENAME_MAX, 0);
-	std::cout << fileRequested << std::endl;
+	/*std::cout << fileRequested << std::endl;*/
 	if (byRecv == 0 || byRecv == -1) {
 		return 0;
 	}
@@ -75,7 +75,7 @@ bool Server::sendFile(SOCKET clientSock, std::string path)
 					bySendinfo = send(clientSock, bufferFile, file.gcount(), 0);
 					std::this_thread::sleep_for(std::chrono::milliseconds(10));// fara sleep se vor concatena buffer-ele alta solutie ar fi trimiterea in acelasi buffer a mesajelor
 					std::string temporary(bufferFile, bySendinfo);
-					std::cout << temporary << std::endl;
+					/*std::cout << temporary << std::endl;*/
 				}
 				temp = bufferFile;
 				if (bySendinfo == 0 || bySendinfo == -1) {
@@ -110,7 +110,7 @@ bool Server::writeToFile(SOCKET clientSock, std::string fullPath, int fileReques
 	do {
 		memset(bufferFile, 0, BUFFER_SIZE);
 		byRecv = recv(clientSock, bufferFile, BUFFER_SIZE, 0);
-		std::cout << bufferFile << std::endl;
+	/*	std::cout << bufferFile << std::endl;*/
 		if (byRecv == 0 || byRecv == -1) {
 			return 0;
 		}
