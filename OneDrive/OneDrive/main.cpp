@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
 
 	FowlerNollVo fowler;
 
-	fowler.getHashOfFolder("./StoredFiles");
+	fowler.getHashOfFolder("./Assets");
 
 	return a.exec();
 }

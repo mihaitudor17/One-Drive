@@ -1,6 +1,6 @@
 #include "FowlerNollVo.h"
 
-size_t FowlerNollVo::getHash(const std::string& text)
+size_t FowlerNollVo::hashByName(const std::string& text)
 {
 	size_t hash = InitialFNV;
 
@@ -24,7 +24,7 @@ size_t FowlerNollVo::hashingTextFile(const std::string& filePath)
 		text += aux;
 	}
 
-	const size_t rez = getHash(text);
+	const size_t rez = hashByName(text);
 
 	return rez;
 }
@@ -50,7 +50,7 @@ size_t FowlerNollVo::hashingImageFileAndVideoFile(const std::string& imagePath)
 		{
 			file.read(bufferFile, BUFFER_SIZE);
 
-			result = getHash(bufferFile);
+			result = hashByName(bufferFile);
 
 		} while (file.gcount() > 0);
 		file.close();
@@ -70,11 +70,21 @@ size_t FowlerNollVo::getHashOfFolder(const std::string& folderPath)
 			if (iterator.path().filename().string().find(".txt") != std::string::npos)
 			{
 				initialHash = initialHash ^ hashingTextFile(iterator.path().string());
+
+			}
+			else if (iterator.path().filename().string().find(".mp4") != std::string::npos ||
+				iterator.path().filename().string().find(".jpg") != std::string::npos ||
+				iterator.path().filename().string().find(".png") != std::string::npos
+				)
+			{
+				initialHash = initialHash ^ hashingImageFileAndVideoFile(iterator.path().string());
+			}
+			else
+			{
+				initialHash = initialHash ^ hashByName(iterator.path().string());
 			}
 		}
 	}
-	std::cout << initialHash << '\n';
-	//8355428258239817008
-	return 1;
+	return initialHash;
 }
 

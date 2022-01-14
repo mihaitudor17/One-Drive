@@ -13,7 +13,7 @@ private:
 	std::string m_text;
 
 public:
-	size_t getHash(const std::string& text);
+	size_t hashByName(const std::string& text);
 	size_t hashingTextFile(const std::string& filePath);
 	size_t hashingImageFileAndVideoFile(const std::string& imagePath);
 	size_t getHashOfFolder(const std::string& folderPath);
