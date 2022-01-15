@@ -34,7 +34,7 @@ private slots:
 	void restore();
 	void changeTrashLogo();
 	void addFile();
-
+	void deleteLocal();
 private:
 	QPushButton* labelToBeDeselected;
 	std::string selected;

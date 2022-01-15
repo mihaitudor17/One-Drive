@@ -80,7 +80,7 @@ void Account::renameFileSlot(std::string selected)
 		bool ok;
 		QString text = QInputDialog::getText(this, tr("New name"),
 			tr("Please insert a new name:"), QLineEdit::Normal,
-			QDir::home().dirName(), &ok);
+			QDir::home().dirName(), &ok, Qt::MSWindowsFixedSizeDialogHint);
 
 		if (ok && !text.isEmpty())
 		{
@@ -143,7 +143,7 @@ void Account::addFolder()
 		std::filesystem::create_directory("./StoredFiles/" + userName + "/" + filePath.filename().string());
 		copyDirectoryContents(filePath, "./StoredFiles/" + userName + "/" + filePath.filename().string());
 	}
-
+	refresh();
 	
 }
 
@@ -349,6 +349,18 @@ void Account::addFile()
 		std::string fileName = fileSelected.toStdString();
 		std::filesystem::copy(fileName, pathLocal);
 	}
+	refresh();
+}
+
+void Account::deleteLocal()
+{
+	if (selected != "")
+
+	{
+		std::filesystem::remove_all((pathLocal / selected));
+		//mihai redownloadeaza
+	}
+	refresh();
 }
 
 
@@ -783,7 +795,9 @@ void Account::startup()
 	ui.serverFolder->setWidget(ui.serverWidget);
 	ui.restore->hide();
 	ui.serverTrash->setText("       Server");
-	std::string helloUser = "Hello " + userName + "!";
+	std::string userCopy = userName;
+	std::transform(userCopy.begin(), userCopy.begin()+1, userCopy.begin(), ::toupper);
+	std::string helloUser = "Hello " + userCopy + "!";
 	QString helloUsername = QString::fromStdString(helloUser);
 	ui.helloUsername->setText(helloUsername);
 	connect(this, SIGNAL(renameFileSignal(std::string)), this, SLOT(renameFileSlot(std::string)));

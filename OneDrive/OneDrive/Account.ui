@@ -466,6 +466,36 @@ QPushButton:hover
      <string>Add File</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="back_local_5">
+    <property name="geometry">
+     <rect>
+      <x>220</x>
+      <y>0</y>
+      <width>101</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton
+{
+font-weight:bold ;
+font-style : normal;
+border: 0.1px solid black;
+border-radius:15px;
+background:rgb(71, 61, 124);
+color:white;
+font-size:16px;
+}
+
+QPushButton:hover
+{
+   background-color:rgb(170, 149, 255);
+}</string>
+    </property>
+    <property name="text">
+     <string>Delete Local</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QPushButton" name="trashButton">
    <property name="geometry">
@@ -863,22 +893,6 @@ border-radius:30px;</string>
    </hints>
   </connection>
   <connection>
-   <sender>trashButton</sender>
-   <signal>clicked()</signal>
-   <receiver>Account</receiver>
-   <slot>changeTrashLogo()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1179</x>
-     <y>555</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>605</x>
-     <y>385</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>back_local_4</sender>
    <signal>clicked()</signal>
    <receiver>Account</receiver>
@@ -891,6 +905,22 @@ border-radius:30px;</string>
     <hint type="destinationlabel">
      <x>46</x>
      <y>119</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>back_local_5</sender>
+   <signal>clicked()</signal>
+   <receiver>Account</receiver>
+   <slot>deleteLocal()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>299</x>
+     <y>19</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>454</x>
+     <y>106</y>
     </hint>
    </hints>
   </connection>
@@ -909,7 +939,7 @@ border-radius:30px;</string>
   <slot>refresh()</slot>
   <slot>showTrash()</slot>
   <slot>restore()</slot>
-  <slot>changeTrashLogo()</slot>
   <slot>addFile()</slot>
+  <slot>deleteLocal()</slot>
  </slots>
 </ui>
