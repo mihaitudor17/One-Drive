@@ -136,11 +136,13 @@ void Account::addFolder()
 {
 	QString folder;
 	folder = QFileDialog::getExistingDirectory(this, tr("Open Directory"),"/home",QFileDialog::ShowDirsOnly);
-	std::filesystem::path filePath = folder.toStdString();
+	if (!folder.isNull())
+	{
+		std::filesystem::path filePath = folder.toStdString();
 
-	std::filesystem::create_directory("./StoredFiles/" + userName + "/" + filePath.filename().string());
-	copyDirectoryContents(filePath , "./StoredFiles/" + userName + "/" + filePath.filename().string());
-	
+		std::filesystem::create_directory("./StoredFiles/" + userName + "/" + filePath.filename().string());
+		copyDirectoryContents(filePath, "./StoredFiles/" + userName + "/" + filePath.filename().string());
+	}
 
 	
 }
@@ -331,17 +333,22 @@ void Account::restore()
 
 void Account::changeTrashLogo()
 {
-	QIcon icon("./Assets/trashClicked.png");
-	ui.serverTrash->setIcon(icon);  //dosent work for now
+	//QIcon icon("./Assets/trashClick.png");
+	///QIcon iconOriginal("./Assets/trash.png");
+	//ui.trashButton->setIcon(icon);
+	//std::this_thread::sleep_for(std::chrono::milliseconds(200));
+	//ui.trashButton->setIcon(iconOriginal);
 }
 
 void Account::addFile()
 {
 	QFileDialog* file = new QFileDialog(this);
 	QString fileSelected = file->getOpenFileName();
-	std::string fileName = fileSelected.toStdString();
-	std::filesystem::copy(fileName, pathLocal);
-	
+	if (!fileSelected.isNull())
+	{
+		std::string fileName = fileSelected.toStdString();
+		std::filesystem::copy(fileName, pathLocal);
+	}
 }
 
 

@@ -38,12 +38,13 @@ bool Window::checkUsername(std::string user)
 
 std::string Window::selectFolder()
 {
+	std::string path = "";
 	QString folder;
-	folder = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
-		"/home",
-		QFileDialog::ShowDirsOnly
-		| QFileDialog::DontResolveSymlinks);
-	std::string path = folder.toStdString();
+	folder = QFileDialog::getExistingDirectory(this, tr("Open Directory"),"/home",QFileDialog::ShowDirsOnly);
+	if (!folder.isNull())
+	{
+		std::string path = folder.toStdString();
+	}
 	return path;
 }
 bool Window::downloadServer(Client client) {
@@ -187,6 +188,8 @@ void Window::LoginToAccount()
 				std::filesystem::remove_all(pathGlobal);
 				std::filesystem::create_directory(pathGlobal);
 				path = selectFolder();
+				if (path == "")
+					return;
 				copyDirectoryContents(path, pathGlobal);
 				metadata.folderMetadata(pathGlobal);
 				metadata.outputJson(pathGlobal + "/metadata.json");

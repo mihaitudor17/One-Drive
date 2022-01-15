@@ -467,7 +467,7 @@ QPushButton:hover
     </property>
    </widget>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="trashButton">
    <property name="geometry">
     <rect>
      <x>1130</x>
@@ -485,13 +485,14 @@ QPushButton:hover
    <property name="icon">
     <iconset>
      <normaloff>Assets/trash.png</normaloff>
-     <normalon>Assets/trashClicked.png</normalon>
-     <selectedon>Assets/trashClicked.png</selectedon>Assets/trash.png</iconset>
+     <normalon>Assets/trashClick.png</normalon>
+     <disabledon>Assets/trashClick.png</disabledon>
+     <activeon>Assets/trashClick.png</activeon>Assets/trash.png</iconset>
    </property>
    <property name="iconSize">
     <size>
-     <width>59</width>
-     <height>59</height>
+     <width>50</width>
+     <height>50</height>
     </size>
    </property>
    <property name="checkable">
@@ -727,7 +728,7 @@ border-radius:30px;</string>
   <zorder>label_6</zorder>
   <zorder>label_8</zorder>
   <zorder>label_10</zorder>
-  <zorder>pushButton</zorder>
+  <zorder>trashButton</zorder>
   <zorder>label_12</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
@@ -814,7 +815,7 @@ border-radius:30px;</string>
    </hints>
   </connection>
   <connection>
-   <sender>pushButton</sender>
+   <sender>trashButton</sender>
    <signal>clicked()</signal>
    <receiver>Account</receiver>
    <slot>showTrash()</slot>
@@ -862,7 +863,7 @@ border-radius:30px;</string>
    </hints>
   </connection>
   <connection>
-   <sender>pushButton</sender>
+   <sender>trashButton</sender>
    <signal>clicked()</signal>
    <receiver>Account</receiver>
    <slot>changeTrashLogo()</slot>
