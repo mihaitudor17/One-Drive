@@ -510,7 +510,7 @@ void Account::deleteLocal()
 		{
 			temp.insert(found, "Server");
 			std::filesystem::remove_all((pathLocal / selected));
-			//std::filesystem::remove_all((pathGlobal / selected));
+			std::filesystem::remove_all((pathGlobal / selected));
 			Server("downloadFile", temp);
 			Metadata metadata;
 			std::string pathGlobal = "./StoredServerFiles/";
