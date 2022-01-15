@@ -135,10 +135,7 @@ void Account::renameFileSlot(std::string selected)
 void Account::addFolder()
 {
 	QString folder;
-	folder = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
-		"/home",
-		QFileDialog::ShowDirsOnly
-		| QFileDialog::DontResolveSymlinks);
+	folder = QFileDialog::getExistingDirectory(this, tr("Open Directory"),"/home",QFileDialog::ShowDirsOnly);
 	std::filesystem::path filePath = folder.toStdString();
 
 	std::filesystem::create_directory("./StoredFiles/" + userName + "/" + filePath.filename().string());
@@ -330,6 +327,21 @@ void Account::restore()
 		std::filesystem::remove_all((trashPath / selectedTrash));
 	}
 	refresh();
+}
+
+void Account::changeTrashLogo()
+{
+	QIcon icon("./Assets/trashClicked.png");
+	ui.serverTrash->setIcon(icon);  //dosent work for now
+}
+
+void Account::addFile()
+{
+	QFileDialog* file = new QFileDialog(this);
+	QString fileSelected = file->getOpenFileName();
+	std::string fileName = fileSelected.toStdString();
+	std::filesystem::copy(fileName, pathLocal);
+	
 }
 
 
@@ -764,6 +776,9 @@ void Account::startup()
 	ui.serverFolder->setWidget(ui.serverWidget);
 	ui.restore->hide();
 	ui.serverTrash->setText("       Server");
+	std::string helloUser = "Hello " + userName + "!";
+	QString helloUsername = QString::fromStdString(helloUser);
+	ui.helloUsername->setText(helloUsername);
 	connect(this, SIGNAL(renameFileSignal(std::string)), this, SLOT(renameFileSlot(std::string)));
 	connect(this, SIGNAL(deleteFileSignal(std::string)), this, SLOT(deleteFileSlot(std::string)));
 	checkTrash();

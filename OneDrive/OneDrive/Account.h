@@ -31,6 +31,8 @@ private slots:
 	void polling();
 	void showTrash();
 	void restore();
+	void changeTrashLogo();
+	void addFile();
 
 private:
 	QPushButton* labelToBeDeselected;
