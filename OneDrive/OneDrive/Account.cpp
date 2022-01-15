@@ -10,13 +10,8 @@
 #include "TCP_Client.h"
 #include "FowlerNollVo.h"
 #include "Metadata.h"
-
-
-void Account::download()
-{
-	Server("download");
-}
-
+#include <QMutex>
+#include "TCP_Client.h"
 void Account::backFolderLocal()
 {
 
@@ -207,82 +202,151 @@ void Account::refresh()
 	else
 		refreshTrash();
 }
-void syncFolderWithMetadata(const std::filesystem::path& path, const Metadata& metadata) {
+bool deleteFile(Client client, std::string path)
+{
+	if (client.sendFileName(client.getSock(), &path[0]) == 0)
+		return 0;
+	return 1;
+}
+bool downloadFile(Client client, std::string path) { return 0; }
+bool updateFile(Client client, std::string path) { return 0; }
+bool renameFile(Client client, std::string path, std::string path1) { return 0; }
+void Account::Server(std::string command,std::string source="",std::string destination="")
+{
+	Client client;
+	client.connectServer();
+	client.sendUser(client.getSock(), &userName[0]);
+	client.sendUser(client.getSock(), &command[0]);
+	int cases;
+	if (command == "deleteFile")
+		cases = 0;
+	else if (command == "downloadFile")
+		cases = 1;
+	else if (command == "uploadFile")
+		cases = 2;
+	else if (command == "renameFile")
+		cases = 3;
+	switch (cases)
+	{
+	case 0:
+		deleteFile(client,source);
+		break;
+	case 1:
+		downloadFile(client,source);
+		break;
+	case 2:
+		updateFile(client,source);
+		break;
+	case 3:
+		renameFile(client, source, destination);
+		break;
+	}
+	closesocket(client.getSock());
+	WSACleanup();
+}
+void Account::syncFolderWithMetadata(const std::filesystem::path& path, const Metadata& metadata) {
 	FowlerNollVo hashFunction;
 	std::unordered_set<long long> hashes;
-	for (const auto& it : std::filesystem::directory_iterator(path)) {
-		//daca exista fisierul
-		if (metadata.m_body.find(it.path().string()) != metadata.m_body.end()) {
-			long long lastWriteTime = std::chrono::duration_cast<std::chrono::milliseconds>(it.last_write_time().time_since_epoch()).count();
-			if (lastWriteTime > metadata.m_body[it.path().string()]["lastWriteTime"]) {
-				std::cout << it.path().string() << ": trebuie actualizat" << std::endl;
-			}
-		}
-		else {//cazul de redenumire
-			int rename = 0;
-			std::string renamed;
-			for (const auto& item : metadata.m_body.items()) {
-				if (std::filesystem::is_directory(it.path())) {
-					size_t hash = hashFunction.getHashOfFolder(it.path().string());
-					if (item.value()["hash"] == hash) {
-						rename = 1;
-						hashes.insert(hash);
-						renamed = item.key();
-						break;
-					}
-				}
-				else if (it.path().filename().string().find(".txt") != std::string::npos)
-				{
-					size_t hash = hashFunction.hashingTextFile(it.path().string());
-					if (item.value()["hash"] == hash) {
-						rename = 1;
-						hashes.insert(hash);
-						renamed = item.key();
-						break;
-					}
+	for (const auto& it : std::filesystem::directory_iterator(path)) 
+	{
+		if (it.path().filename().string() != "metadata.json" && it.path().filename().string() != "Recycle Bin")
+		{
 
+			//daca exista fisierul
+			if (metadata.m_body.find(it.path().filename().string()) != metadata.m_body.end()) {
+				long long lastWriteTime = std::chrono::duration_cast<std::chrono::milliseconds>(it.last_write_time().time_since_epoch()).count();
+				//std::cout << it.path().filename().string() << " " << lastWriteTime << std::endl;
+				if (lastWriteTime > metadata.m_body[it.path().filename().string()]["lastWriteTime"]) {
+					std::cout << it.path().string() << ": trebuie actualizat" << std::endl;//ok
 				}
-				else
-					if (it.path().filename().string().find(".mp4") != std::string::npos ||
-						it.path().filename().string().find(".jpg") != std::string::npos ||
-						it.path().filename().string().find(".png") != std::string::npos
-						) {
-						size_t hash = hashFunction.hashingImageFileAndVideoFile(it.path().string());
+			}
+			else {//cazul de redenumire
+				int rename = 0;
+				std::string renamed;
+				std::string renamedPath;
+				for (const auto& item : metadata.m_body.items()) {
+					if (std::filesystem::is_directory(it.path())) {
+						size_t hash = hashFunction.getHashOfFolder(it.path().string());
 						if (item.value()["hash"] == hash) {
 							rename = 1;
 							hashes.insert(hash);
 							renamed = item.key();
+							renamedPath = it.path().string();
+							renamedPath=renamedPath.substr(0,renamedPath.find_last_of('\\'));
+							renamedPath += "/";
+							renamedPath += renamed;
 							break;
 						}
 					}
+					else if (it.path().filename().string().find(".txt") != std::string::npos)
+					{
+						size_t hash = hashFunction.hashingTextFile(it.path().string());
+						if (item.value()["hash"] == hash) {
+							rename = 1;
+							hashes.insert(hash);
+							renamed = item.key();
+							renamedPath = it.path().string();
+							renamedPath = renamedPath.substr(0, renamedPath.find_last_of('\\'));
+							renamedPath += "/";
+							renamedPath += renamed;
+							break;
+						}
 
-			}
-			if (rename) {
-				std::cout << renamed << " fisier redenumit in: " << it.path().string() << std::endl;
-			}
-			else {//nu exista pana acum
-				std::cout << "fisier/folder nou: " << it.path().string() << std::endl;
+					}
+					else
+						if (it.path().filename().string().find(".mp4") != std::string::npos ||
+							it.path().filename().string().find(".jpg") != std::string::npos ||
+							it.path().filename().string().find(".png") != std::string::npos
+							) {
+							size_t hash = hashFunction.hashingImageFileAndVideoFile(it.path().string());
+							if (item.value()["hash"] == hash) {
+								rename = 1;
+								hashes.insert(hash);
+								renamed = item.key();
+								renamedPath = it.path().string();
+								renamedPath = renamedPath.substr(0, renamedPath.find_last_of('\\'));
+								renamedPath += "/";
+								renamedPath += renamed;
+								break;
+							}
+						}
 
+				}
+				if (rename) {
+					std::cout << renamedPath << " fisier redenumit in: " << it.path().string() << std::endl;
+				}
+				else {//nu exista pana acum
+					std::cout << "fisier/folder nou: " << it.path().string() << std::endl;
+
+				}
 			}
 		}
 	}
 	//cazul de stergere
 	for (const auto& item : metadata.m_body.items()) {
 		int name = 1, hash = 1;
-		if (!std::filesystem::exists(item.key())) {
+		if (!std::filesystem::exists(path / item.key())) {
 			name = 0;
 		}
 		if (hashes.find(item.value()["hash"]) == hashes.end()) {
 			hash = 0;
 		}
 		if (name == 0 && hash == 0) {
-			std::cout << item.key() << " a fost sters" << std::endl;
+			std::cout << (path / item.key()).string() << std::endl;
+			Server("deleteFile", item.key());
+			Metadata metadata;
+			std::string pathGlobal = "./StoredServerFiles/";
+			pathGlobal += userName;
+			metadata.folderMetadata(path.string());
+			metadata.outputJson(pathGlobal+"/metadata.json");
+			/*std::this_thread::sleep_for(std::chrono::milliseconds(250));*/
 		}
 	}
 }
 
 void Account::polling()
 {
+	mutex.lock();
 	std::string pathGlobal = "./StoredServerFiles/";
 	std::string pathLocal = "./StoredFiles/";
 	pathGlobal += userName;
@@ -290,6 +354,7 @@ void Account::polling()
 	Metadata metadata;
 	metadata.inputJson(pathGlobal+ "/metadata.json");
 	syncFolderWithMetadata(pathLocal, metadata);
+	mutex.unlock();
 }
 
 void Account::showTrash()
@@ -718,77 +783,12 @@ void Account::showContentTrash()
 	ui.serverWidget->setVisible(true);
 	ui.serverFolder->setWidgetResizable(true);
 }
-void Account::Server(std::string command) {
-	Client client;
-	std::string temp = getUser();
-	char* username = &temp[0];
-	std::string path = "./StoredServerFiles";
-	if (!std::filesystem::exists(path)) {
-		std::filesystem::create_directory(path);
-	}
-	path += "/";
-	path += username;
-	client.connectServer();
-	client.sendUser(client.getSock(), username);
-	client.sendUser(client.getSock(), &command[0]);
-	char fileName[FILENAME_MAX];
-	if (!std::filesystem::exists(path)) {
-		std::filesystem::create_directory(path);
-	}
-	int ok;
-	do {
-		char fileName[FILENAME_MAX];
-		ok = 0;
-		char fileType[FILENAME_MAX];
-		strcpy(fileName, client.recvFileName(client.getSock()));
-		if (fileName == "/eof" || fileType == "eof")
-			ok = 1;
-		if (ok != 1)
-		{
-			strcpy(fileType, client.recvFileName(client.getSock()));
-			std::cout << fileName << std::endl << fileType << std::endl;
-			if (strstr(fileType, "folder"))
-			{
-				std::filesystem::create_directory(fileName);
-			}
-			else
-			{
-				long size = client.recvFileSize(client.getSock());
-				if (size > 0)
-				{
-
-					if (client.writeToFile(client.getSock(), fileName, size) == 0)
-						ok = 1;
-
-				}
-				else if (size == 0)
-				{
-					std::ofstream file;
-					file.open(fileName);
-				}
-				else if (size == -1)
-					ok = 1;
-			}
-		}
-	} while (ok != 1);
-	int flush = 0;
-	char fileRequested[FILENAME_MAX];
-	do
-	{
-		flush = recv(client.getSock(), fileRequested, FILENAME_MAX, 0);
-		std::cout << flush << std::endl;
-	} while (flush > 0);
-	closesocket(client.getSock());
-	WSACleanup();
-}
-
 void Account::checkTrash()
 {
 	if (!std::filesystem::exists(pathLocal / "Recycle Bin")) {
 		std::filesystem::create_directory(pathLocal / "Recycle Bin");          
 	}
 }
-
 void Account::startup()
 {
 	ui.localFolder->setWidget(ui.localWidget);
@@ -807,7 +807,6 @@ void Account::startup()
 	connect(&pollingVariable, SIGNAL(poolingSignal()), this, SLOT(polling()));
 	pollingVariable.start();
 }
-
 Account::Account(const std::string& userName, QWidget* parent)
 	: QWidget(parent)
 {
@@ -830,7 +829,6 @@ Account::Account(const std::string& userName, QWidget* parent)
 	startup();
 
 }
-
 std::string Account::getUser()
 {
 

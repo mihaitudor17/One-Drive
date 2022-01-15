@@ -7,6 +7,7 @@
 #include "Window.h"
 #include "Polling.h"
 #include "Folder.h"
+#include "Metadata.h"
 #include <chrono>
 class Account : public QWidget
 {
@@ -18,7 +19,6 @@ signals:
 	void deleteFileSignal(std::string selected);
 private slots:
 	void addFolder();
-	void download();
 	void backFolderLocal();
 	void backFolderServer();
 	void renameFileSlot(std::string selected);
@@ -55,7 +55,6 @@ private:
 	void showContentLocal();
 	void showContentServer();
 	void showContentTrash();
-	void Server(std::string);
 
 	void checkTrash();
 
@@ -67,8 +66,10 @@ private:
 
 public:
 	void startup();
+	void Server(std::string , std::string, std::string );
 	Account(const std::string& userName, QWidget* parent = 0);
 	std::string getUser();
-
+	QMutex mutex;
+	void syncFolderWithMetadata(const std::filesystem::path& path, const Metadata& metadata);
 
 };

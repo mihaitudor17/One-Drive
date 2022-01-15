@@ -53,7 +53,7 @@ void Metadata::folderMetadata(const std::string& path)
 			data["hash"] = hashFunction.getHashOfFolder(p.path().string());
 			long long lastWriteTime = std::chrono::duration_cast<std::chrono::milliseconds>(p.last_write_time().time_since_epoch()).count();
 			data["lastWriteTime"] = lastWriteTime;
-			m_body[p.path().string()] = data;
+			m_body[p.path().filename().string()] = data;
 		}
 		else if (p.path().filename().string().find(".mp4") != std::string::npos ||
 			p.path().filename().string().find(".jpg") != std::string::npos ||
@@ -63,21 +63,21 @@ void Metadata::folderMetadata(const std::string& path)
 			data["hash"] = hashFunction.hashingImageFileAndVideoFile(p.path().string());
 			long long lastWrittenTime = std::chrono::duration_cast<std::chrono::milliseconds>(p.last_write_time().time_since_epoch()).count();
 			data["lastWriteTime"] = lastWrittenTime;
-			m_body[p.path().string()] = data;
+			m_body[p.path().filename().string()] = data;
 		}
 		else if (p.path().filename().string().find(".txt") != std::string::npos) {
 			nlohmann::json data;
 			data["hash"] = hashFunction.hashingTextFile(p.path().string());
 			long long lastWrittenTime = std::chrono::duration_cast<std::chrono::milliseconds>(p.last_write_time().time_since_epoch()).count();
 			data["lastWriteTime"] = lastWrittenTime;
-			m_body[p.path().string()] = data;
+			m_body[p.path().filename().string()] = data;
 		}
 		else {
 			nlohmann::json data;
 			data["hash"] = 0;
 			long long lastWrittenTime = std::chrono::duration_cast<std::chrono::milliseconds>(p.last_write_time().time_since_epoch()).count();
 			data["lastWriteTime"] = lastWrittenTime;
-			m_body[p.path().string()] = data;
+			m_body[p.path().filename().string()] = data;
 		}
 	}
 }

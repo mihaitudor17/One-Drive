@@ -83,31 +83,39 @@ bool downloadServer(Server client, std::string path) {
 	}
 }
 int main() {
-	Server server;
-	char username[FILENAME_MAX];
-	char command[FILENAME_MAX];
-	server.connectClient();
-	strcpy(username, server.recvUser(server.getSock()));
-	std::string path = "./StoredServerFiles/";
-	path += username;
-	strcpy(command, server.recvUser(server.getSock()));
-	if (strstr(command, "delete"))
+	while (true)
 	{
-		std::filesystem::remove_all(path);
-		std::filesystem::create_directory(path);
-	}
-	else
-		if (strstr(command, "download"))
+		Server server;
+		char username[FILENAME_MAX];
+		char command[FILENAME_MAX];
+		server.connectClient();
+		strcpy(username, server.recvUser(server.getSock()));
+		std::string path = "./StoredServerFiles/";
+		path += username;
+		strcpy(command, server.recvUser(server.getSock()));
+		if (strstr(command, "deleteFile"))
 		{
-			downloadServer(server, path);
-
+			char fileName[FILENAME_MAX];
+			strcpy(fileName, server.recvFileName(server.getSock()));
+			if (fileName == "NULL")
+				return 0;
+			path += "/";
+			path+=fileName;
+			std::cout << path;
+			std::filesystem::remove_all(path);
 		}
 		else
-			if (strstr(command, "upload"))
+			if (strstr(command, "download"))
 			{
-				uploadServer(server, path);
+				downloadServer(server, path);
+
 			}
-	closesocket(server.getSock());
-	WSACleanup();
-	main();
+			else
+				if (strstr(command, "upload"))
+				{
+					uploadServer(server, path);
+				}
+		closesocket(server.getSock());
+		WSACleanup();
+	}
 }
