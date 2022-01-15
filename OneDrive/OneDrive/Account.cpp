@@ -394,7 +394,7 @@ void Account::syncFolderWithMetadata(const std::filesystem::path& path, const Me
 				}
 				else {//nu exista pana acum
 					std::cout << "fisier/folder nou: " << it.path().string() << std::endl;
-					Server("updateFile", it.path().string());
+					//Server("updateFile", it.path().string());
 					Metadata metadata;
 					std::string pathGlobal = "./StoredServerFiles/";
 					pathGlobal += userName;
