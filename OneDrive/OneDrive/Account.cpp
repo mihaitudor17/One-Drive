@@ -208,9 +208,74 @@ bool deleteFile(Client client, std::string path)
 		return 0;
 	return 1;
 }
-bool downloadFile(Client client, std::string path) { return 0; }
-bool updateFile(Client client, std::string path) { return 0; }
-bool renameFile(Client client, std::string path, std::string path1) { return 0; }
+bool downloadFile(Client client, std::string path) {
+	if (client.sendFileName(client.getSock(), &path[0]) == 0)
+		return 0;
+	while (true)
+	{
+		char fileName[FILENAME_MAX];
+		strcpy(fileName, client.recvFileName(client.getSock()));
+		if (strstr(fileName, "NULL"))
+			return 0;
+		if (fileName == "/eof")
+			return 1;
+		long size = client.recvFileSize(client.getSock());
+		if (size > 0)
+		{
+			if (client.writeToFile(client.getSock(), fileName, size) == 0)
+				return 0;
+		}
+		else if (size == 0)
+		{
+			std::ofstream file;
+			file.open(fileName);
+		}
+		else if (size == -1)
+			return 0;
+	}
+   }
+bool updateFile(Client client, std::filesystem::path it) { 
+	std::string temp = it.string();
+	std::size_t found = temp.find("Files");
+	temp.insert(found, "Server");
+	if (is_directory(it))
+	{
+		char fileName[FILENAME_MAX];
+		strcpy(fileName, temp.c_str());
+		if (client.sendFileName(client.getSock(), fileName) == 0)
+			return 0;
+		char fileType[FILENAME_MAX];
+		strcpy(fileType, "folder");
+		if (client.sendFileName(client.getSock(), fileType) == 0)
+			return 0;
+	}
+	else
+	{
+		char fileName[FILENAME_MAX];
+		strcpy(fileName, temp.c_str());
+		if (client.sendFileName(client.getSock(), fileName) == 0)
+			return 0;
+		char fileType[FILENAME_MAX];
+		strcpy(fileType, "file");
+		if (client.sendFileName(client.getSock(), fileType) == 0)
+			return 0;
+		if (client.sendFile(client.getSock(), it.string()) == 0)
+			return 0;
+	}
+	char fileName[FILENAME_MAX];
+	strcpy(fileName, "/eof");
+	if (client.sendFileName(client.getSock(), fileName) == 0)
+		return 0;
+	if (client.sendFileName(client.getSock(), fileName) == 0)
+		return 0;
+	return 1; }
+bool renameFile(Client client, std::string oldName, std::string newName) { 
+	if (client.sendFileName(client.getSock(), &oldName[0]) == 0)
+		return 0;
+	if (client.sendFileName(client.getSock(), &newName[0]) == 0)
+		return 0;
+	return 1; 
+}
 void Account::Server(std::string command,std::string source="",std::string destination="")
 {
 	Client client;
@@ -222,7 +287,7 @@ void Account::Server(std::string command,std::string source="",std::string desti
 		cases = 0;
 	else if (command == "downloadFile")
 		cases = 1;
-	else if (command == "uploadFile")
+	else if (command == "updateFile")
 		cases = 2;
 	else if (command == "renameFile")
 		cases = 3;
@@ -258,6 +323,12 @@ void Account::syncFolderWithMetadata(const std::filesystem::path& path, const Me
 				//std::cout << it.path().filename().string() << " " << lastWriteTime << std::endl;
 				if (lastWriteTime > metadata.m_body[it.path().filename().string()]["lastWriteTime"]) {
 					std::cout << it.path().string() << ": trebuie actualizat" << std::endl;//ok
+					//Server("updateFile", it.path().string());
+					Metadata metadata;
+					std::string pathGlobal = "./StoredServerFiles/";
+					pathGlobal += userName;
+					metadata.folderMetadata(path.string());
+					metadata.outputJson(pathGlobal + "/metadata.json");
 				}
 			}
 			else {//cazul de redenumire
@@ -313,11 +384,22 @@ void Account::syncFolderWithMetadata(const std::filesystem::path& path, const Me
 
 				}
 				if (rename) {
-					std::cout << renamedPath << " fisier redenumit in: " << it.path().string() << std::endl;
+					std::cout << renamed << " fisier redenumit in: " << it.path().filename().string() << std::endl;
+					Server("renameFile", renamed, it.path().filename().string());
+					Metadata metadata;
+					std::string pathGlobal = "./StoredServerFiles/";
+					pathGlobal += userName;
+					metadata.folderMetadata(path.string());
+					metadata.outputJson(pathGlobal + "/metadata.json");
 				}
 				else {//nu exista pana acum
 					std::cout << "fisier/folder nou: " << it.path().string() << std::endl;
-
+					Server("updateFile", it.path().string());
+					Metadata metadata;
+					std::string pathGlobal = "./StoredServerFiles/";
+					pathGlobal += userName;
+					metadata.folderMetadata(path.string());
+					metadata.outputJson(pathGlobal + "/metadata.json");
 				}
 			}
 		}
@@ -422,8 +504,23 @@ void Account::deleteLocal()
 	if (selected != "")
 
 	{
-		std::filesystem::remove_all((pathLocal / selected));
-		//mihai redownloadeaza
+		std::string temp = (pathLocal / selected).string();
+		std::size_t found = temp.find("Files");
+		if (found != std::string::npos)
+		{
+			temp.insert(found, "Server");
+			std::filesystem::remove_all((pathLocal / selected));
+			//std::filesystem::remove_all((pathGlobal / selected));
+			Server("downloadFile", temp);
+			Metadata metadata;
+			std::string pathGlobal = "./StoredServerFiles/";
+			pathGlobal += userName;
+			copyDirectoryContents(pathGlobal, pathLocal.string());
+			metadata.folderMetadata(pathLocal.string());
+			metadata.outputJson(pathGlobal + "/metadata.json");
+			metadata.outputJson(pathLocal.string() + "/metadata.json");
+
+		}
 	}
 	refresh();
 }

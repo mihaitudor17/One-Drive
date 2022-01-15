@@ -55,9 +55,9 @@ bool Window::downloadServer(Client client) {
 		char fileType[FILENAME_MAX];
 		strcpy(fileName, client.recvFileName(client.getSock()));
 		strcpy(fileType, client.recvFileName(client.getSock()));
-		if (strstr(fileType, "NULL") || strstr(fileType, "NULL"))
+		if (strstr(fileName, "NULL") || strstr(fileType, "NULL"))
 			return 0;
-		if (strstr(fileType, "/eof") || strstr(fileType, "/eof"))
+		if (strstr(fileName, "/eof") || strstr(fileType, "/eof"))
 			return 1;
 		if (strstr(fileType, "folder"))
 		{
