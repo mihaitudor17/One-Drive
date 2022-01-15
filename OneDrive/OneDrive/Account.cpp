@@ -321,7 +321,7 @@ void Account::syncFolderWithMetadata(const std::filesystem::path& path, const Me
 			if (metadata.m_body.find(it.path().filename().string()) != metadata.m_body.end()) {
 				long long lastWriteTime = std::chrono::duration_cast<std::chrono::milliseconds>(it.last_write_time().time_since_epoch()).count();
 				//std::cout << it.path().filename().string() << " " << lastWriteTime << std::endl;
-				if (lastWriteTime > metadata.m_body[it.path().filename().string()]["lastWriteTime"]) {
+				if (lastWriteTime-10 > metadata.m_body[it.path().filename().string()]["lastWriteTime"]) {
 					std::cout << it.path().string() << ": trebuie actualizat" << std::endl;//ok
 					//Server("updateFile", it.path().string());
 					Metadata metadata;

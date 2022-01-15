@@ -210,7 +210,7 @@ void Window::LoginToAccount()
 				std::filesystem::remove_all(pathLocal);
 				std::filesystem::create_directory(pathLocal);
 				copyDirectoryContents(pathGlobal, pathLocal);
-				std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+				//std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 				metadata.folderMetadata(pathLocal);
 				metadata.outputJson(pathLocal + "/metadata.json");
 				metadata.outputJson(pathGlobal + "/metadata.json");
