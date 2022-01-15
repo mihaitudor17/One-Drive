@@ -8,8 +8,7 @@
 #include "Metadata.h"
 int Window::confirmationDownload()
 {
-	QMessageBox::StandardButton resBtn =
-		QMessageBox::question(this, "Download", tr("Do you want to download a folder?\n"),
+	QMessageBox::StandardButton resBtn =QMessageBox::question(this, "Download", tr("Do you want to download a folder?\n"),
 			QMessageBox::Cancel | QMessageBox::No | QMessageBox::Yes,
 			QMessageBox::Yes);
 	if (resBtn == QMessageBox::Yes)
@@ -43,7 +42,7 @@ std::string Window::selectFolder()
 	folder = QFileDialog::getExistingDirectory(this, tr("Open Directory"),"/home",QFileDialog::ShowDirsOnly);
 	if (!folder.isNull())
 	{
-		std::string path = folder.toStdString();
+		 path = folder.toStdString();
 	}
 	return path;
 }
