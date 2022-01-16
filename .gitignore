@@ -387,6 +387,6 @@ FodyWeavers.xsd
 .idea/
 *.sln.iml
 #Foldere suplimentare
-StoredFiles
+./OneDrive/OneDrive/StoredFiles
 StoredServerFiles
 Usernames.json
