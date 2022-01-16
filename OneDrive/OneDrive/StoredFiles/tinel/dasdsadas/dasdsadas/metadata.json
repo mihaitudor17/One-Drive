@@ -1,11 +1,11 @@
 {
- "Recycle Bin": {
+ "New Text Document.txt": {
   "hash": 2166136261,
-  "lastWriteTime": 13286812469518
+  "lastWriteTime": 13286812469181
  },
  "dasdsadas": {
-  "hash": 11098342759140388481,
-  "lastWriteTime": 13286812501668
+  "hash": 8909060057092519169,
+  "lastWriteTime": 13286812504275
  },
  "efsdgdfdafsfadsdfasafds.txt": {
   "hash": 3167244809882413490,
@@ -17,7 +17,15 @@
  },
  "metadata.json": {
   "hash": 0,
-  "lastWriteTime": 13286812483105
+  "lastWriteTime": 13286812501676
+ },
+ "new file.txt": {
+  "hash": 2166136261,
+  "lastWriteTime": 13286812469166
+ },
+ "tuc.txt": {
+  "hash": 2166136261,
+  "lastWriteTime": 13286812469197
  },
  "turc.txt": {
   "hash": 5789103219395484851,
@@ -25,6 +33,6 @@
  },
  "turk": {
   "hash": 3167244809882413490,
-  "lastWriteTime": 13286812483100
+  "lastWriteTime": 13286812504288
  }
 }

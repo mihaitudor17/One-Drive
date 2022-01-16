@@ -357,7 +357,7 @@ void Account::syncFolderWithMetadata(const std::filesystem::path& path, const Me
 					std::cout << it.path().string() << ": trebuie actualizat" << std::endl;//ok
 					copyDirectoryContents("./StoredFiles/" + userName, "./StoredServerFiles/" + userName);
 					Server("updateFile", it.path().string());
-					std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+					std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 					Metadata metadata;
 					std::string pathGlobal = "./StoredServerFiles/";
 					pathGlobal += userName;
@@ -430,7 +430,7 @@ void Account::syncFolderWithMetadata(const std::filesystem::path& path, const Me
 					std::cout << "fisier/folder nou: " << it.path().string() << std::endl;
 					copyDirectoryContents("./StoredFiles/" + userName, "./StoredServerFiles/" + userName);
 					Server("updateFile", it.path().string());
-					std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+					std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 					Metadata metadata;
 					std::string pathGlobal = "./StoredServerFiles/";
 					pathGlobal += userName;
@@ -540,22 +540,25 @@ void Account::deleteLocal()
 	if (selected != "")
 
 	{
-		std::string temp = (pathLocal / selected).string();
-		std::size_t found = temp.find("Files");
-		if (found != std::string::npos)
+		if (!std::filesystem::is_directory(pathLocal / selected))
 		{
-			temp.insert(found, "Server");
-			std::filesystem::remove_all((pathLocal / selected));
-			std::filesystem::remove_all((pathGlobal / selected));
-			Server("downloadFile", temp);
-			Metadata metadata;
-			std::string pathGlobal = "./StoredServerFiles/";
-			pathGlobal += userName;
-			copyDirectoryContents(pathGlobal, pathLocal.string());
-			metadata.folderMetadata(pathLocal.string());
-			metadata.outputJson(pathGlobal + "/metadata.json");
-			metadata.outputJson(pathLocal.string() + "/metadata.json");
+			std::string temp = (pathLocal / selected).string();
+			std::size_t found = temp.find("Files");
+			if (found != std::string::npos)
+			{
+				temp.insert(found, "Server");
+				std::filesystem::remove_all((pathLocal / selected));
+				std::filesystem::remove_all((pathGlobal / selected));
+				Server("downloadFile", temp);
+				Metadata metadata;
+				std::string pathGlobal = "./StoredServerFiles/";
+				pathGlobal += userName;
+				copyDirectoryContents(pathGlobal, pathLocal.string());
+				metadata.folderMetadata(pathLocal.string());
+				metadata.outputJson(pathGlobal + "/metadata.json");
+				metadata.outputJson(pathLocal.string() + "/metadata.json");
 
+			}
 		}
 	}
 	refresh();
