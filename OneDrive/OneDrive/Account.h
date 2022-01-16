@@ -9,6 +9,15 @@
 #include "Folder.h"
 #include "Metadata.h"
 #include <chrono>
+#include <cstdint>
+
+enum class ServerCommand : uint8_t {
+	DELETE_FILE,
+	DOWNLOAD_FILE,
+	UPDATE_FILE,
+	RENAME_FILE
+};
+
 class Account : public QWidget
 {
 	Q_OBJECT
@@ -66,7 +75,7 @@ private:
 
 public:
 	void startup();
-	void Server(std::string , std::string, std::string );
+	void Server(ServerCommand, std::string, std::string);
 	Account(const std::string& userName, QWidget* parent = 0);
 	std::string getUser();
 	QMutex mutex;

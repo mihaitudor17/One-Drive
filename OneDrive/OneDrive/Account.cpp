@@ -12,6 +12,27 @@
 #include "Metadata.h"
 #include <QMutex>
 #include "TCP_Client.h"
+#include <cstdint>
+std::string ServerCommandTypeToString(ServerCommand command)
+{
+	switch (command)
+	{
+	case ServerCommand::DELETE_FILE:
+		return "deleteFile";
+		break;
+	case ServerCommand::DOWNLOAD_FILE:
+		return "downloadFile";
+		break;
+	case ServerCommand::UPDATE_FILE:
+		return "updateFile";
+		break;
+	case ServerCommand::RENAME_FILE:
+		return "renameFile";
+		break;
+	default:
+		break;
+	}
+}
 void Account::backFolderLocal()
 {
 
@@ -308,39 +329,7 @@ bool renameFile(Client client, std::string oldName, std::string newName) {
 		return 0;
 	return 1;
 }
-void Account::Server(std::string command, std::string source = "", std::string destination = "")
-{
-	Client client;
-	client.connectServer();
-	client.sendUser(client.getSock(), &userName[0]);
-	client.sendUser(client.getSock(), &command[0]);
-	int cases;
-	if (command == "deleteFile")
-		cases = 0;
-	else if (command == "downloadFile")
-		cases = 1;
-	else if (command == "updateFile")
-		cases = 2;
-	else if (command == "renameFile")
-		cases = 3;
-	switch (cases)
-	{
-	case 0:
-		deleteFile(client, source);
-		break;
-	case 1:
-		downloadFile(client, source);
-		break;
-	case 2:
-		updateFile(client, source);
-		break;
-	case 3:
-		renameFile(client, source, destination);
-		break;
-	}
-	closesocket(client.getSock());
-	WSACleanup();
-}
+
 void Account::syncFolderWithMetadata(const std::filesystem::path& path, const Metadata& metadata) {
 	FowlerNollVo hashFunction;
 	std::unordered_set<long long> hashes;
@@ -366,7 +355,7 @@ void Account::syncFolderWithMetadata(const std::filesystem::path& path, const Me
 							std::filesystem::copy(it.path(), pathGlobal);
 						}
 					}
-					Server("updateFile", it.path().string());
+					Server(ServerCommand::UPDATE_FILE, it.path().string(),"");
 					std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 					Metadata metadata;
 					std::string pathGlobal = "./StoredServerFiles/";
@@ -429,7 +418,7 @@ void Account::syncFolderWithMetadata(const std::filesystem::path& path, const Me
 				}
 				if (rename) {
 					std::cout << renamed << " fisier redenumit in: " << it.path().filename().string() << std::endl;
-					Server("renameFile", renamed, it.path().filename().string());
+					Server(ServerCommand::RENAME_FILE, renamed, it.path().filename().string());
 					std::cout << renamed << ' ' << it.path().filename().string();
 					if (std::filesystem::exists(pathGlobal / it.path().filename().string())) {
 						std::filesystem::rename(pathGlobal / renamed, pathGlobal / it.path().filename().string());
@@ -452,7 +441,7 @@ void Account::syncFolderWithMetadata(const std::filesystem::path& path, const Me
 						}
 					}
 					if (std::filesystem::exists(pathGlobal / it.path().filename())) {
-						Server("updateFile", it.path().string());
+						Server(ServerCommand::UPDATE_FILE, it.path().string(),"");
 					}
 					std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 					Metadata metadata;
@@ -476,12 +465,14 @@ void Account::syncFolderWithMetadata(const std::filesystem::path& path, const Me
 		if (name == 0 && hash == 0) {
 			std::cout << (path / item.key()).string() << std::endl;
 			if (std::filesystem::is_directory(pathGlobal / item.key())) {
+				std::cout << "Sterg: " << pathGlobal / item.key() << std::endl;
 				std::filesystem::remove_all(pathGlobal / item.key());
 			}
 			else {
+				std::cout << "Sterg: " << pathGlobal / item.key() << std::endl;
 				std::filesystem::remove(pathGlobal / item.key());
 			}
-			Server("deleteFile", item.key());
+			Server(ServerCommand::DELETE_FILE, item.key(),"");
 			Metadata metadata;
 			std::string pathGlobal = "./StoredServerFiles/";
 			pathGlobal += userName;
@@ -495,6 +486,7 @@ void Account::syncFolderWithMetadata(const std::filesystem::path& path, const Me
 void Account::polling()
 {
 	mutex.lock();
+	std::cout << "POLL\n";
 	std::string pathGlobal = "./StoredServerFiles/";
 	std::string pathLocal = "./StoredFiles/";
 	pathGlobal += userName;
@@ -580,7 +572,7 @@ void Account::deleteLocal()
 				temp.insert(found, "Server");
 				std::filesystem::remove_all((pathLocal / selected));
 				std::filesystem::remove_all((pathGlobal / selected));
-				Server("downloadFile", temp);
+				Server(ServerCommand::DOWNLOAD_FILE, temp,"");
 				Metadata metadata;
 				std::string pathGlobal = "./StoredServerFiles/";
 				pathGlobal += userName;
@@ -973,6 +965,56 @@ void Account::startup()
 
 	connect(&pollingVariable, SIGNAL(poolingSignal()), this, SLOT(polling()));
 	pollingVariable.start();
+}
+void Account::Server(ServerCommand command, std::string source="", std::string destination="")
+{
+	Client client;
+	client.connectServer();
+	client.sendUser(client.getSock(), &userName[0]);
+	client.sendUser(client.getSock(), &ServerCommandTypeToString(command)[0]);
+	/*int cases;
+	if (command == "deleteFile")
+		cases = 0;
+	else if (command == "downloadFile")
+		cases = 1;
+	else if (command == "updateFile")
+		cases = 2;
+	else if (command == "renameFile")
+		cases = 3;
+	switch (cases)
+	{
+	case 0:
+		deleteFile(client, source);
+		break;
+	case 1:
+		downloadFile(client, source);
+		break;
+	case 2:
+		updateFile(client, source);
+		break;
+	case 3:
+		renameFile(client, source, destination);
+		break;
+	}*/
+	switch (command)
+	{
+	case ServerCommand::DELETE_FILE:
+		deleteFile(client, source);
+		break;
+	case ServerCommand::DOWNLOAD_FILE:
+		downloadFile(client, source);
+		break;
+	case ServerCommand::UPDATE_FILE:
+		updateFile(client, source);
+		break;
+	case ServerCommand::RENAME_FILE:
+		renameFile(client, source, destination);
+		break;
+	default:
+		break;
+	}
+	closesocket(client.getSock());
+	WSACleanup();
 }
 Account::Account(const std::string& userName, QWidget* parent)
 	: QWidget(parent)
