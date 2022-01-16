@@ -88,7 +88,7 @@ void Account::backFolderServer()
 	}
 }
 
-void Account::renameFileSlot(const std::string& selected)
+void Account::renameFileSlot(std::string& selected)
 {
 	if (selected != "")
 	{
@@ -142,18 +142,32 @@ void Account::renameFileSlot(const std::string& selected)
 
 void Account::addFolder()
 {
+	int folderNumber = 1;
 	QString folder;
 	folder = QFileDialog::getExistingDirectory(this, tr("Open Directory"), "/home", QFileDialog::ShowDirsOnly);
-
 	if (!folder.isNull())
 	{
 		std::filesystem::path filePath = folder.toStdString();
-		std::filesystem::create_directory("./StoredFiles/" + userName + "/" + filePath.filename().string());
+		if (!std::filesystem::exists("./StoredFiles/" + userName + "/" + filePath.filename().string()))
+		{
+			std::filesystem::create_directory("./StoredFiles/" + userName + "/" + filePath.filename().string());
+			copyDirectoryContents(filePath, "./StoredFiles/" + userName + "/" + filePath.filename().string());
+		}
+		else
+		{
+			while (std::filesystem::exists("./StoredFiles/" + userName + "/" + filePath.filename().string() + "(" + std::to_string(folderNumber) + ")"))
+			{
+				folderNumber++;
+			}
+			std::filesystem::create_directory("./StoredFiles/" + userName + "/" + filePath.filename().string() + "(" + std::to_string(folderNumber) + ")");
+			copyDirectoryContents(filePath, "./StoredFiles/" + userName + "/" + filePath.filename().string() + "(" + std::to_string(folderNumber) + ")");
 
-		copyDirectoryContents(filePath, "./StoredFiles/" + userName + "/" + filePath.filename().string());
+
+		}
+
 	}
-
 	refresh();
+
 }
 
 void Account::renameLocalSendSignal()
@@ -177,33 +191,73 @@ void  Account::refreshServer()
 	qDeleteAll(ui.serverWidget->findChildren<QWidget*>("", Qt::FindDirectChildrenOnly));
 	showContentServer();
 }
-
+void Account::splitFileName(std::string fileName, std::string& extension, std::string& name)
+{
+	bool extensionStart = false;
+	for (int i = 0; i < fileName.length(); i++)
+	{
+		if (fileName[i] == '.')
+			extensionStart = true;
+		if (extensionStart)
+			extension += fileName[i];
+		else
+			name += fileName[i];
+	}
+}
 void Account::refreshTrash()
 {
 	qDeleteAll(ui.serverWidget->findChildren<QWidget*>("", Qt::FindDirectChildrenOnly));
 	showContentTrash();
 }
-
-void Account::deleteFileSlot(const std::string& selected)
+void Account::deleteFileSlot(std::string& selected)
 {
 	if (selected != "")
 	{
 		if (std::filesystem::is_directory(pathLocal / selected))
 		{
-			std::filesystem::create_directory(trashPath / selected);
-			copyDirectoryContents(pathLocal / selected, trashPath / selected);
+			if (!std::filesystem::exists(trashPath / selected))
+			{
+				std::filesystem::create_directory(trashPath / selected);      //if folder's name dosent exists
+				copyDirectoryContents(pathLocal / selected, trashPath / selected);
+				std::filesystem::remove_all((pathLocal / selected));
+			}
+			else
+			{
+				std::string newName = selected + "(1)";
+				std::filesystem::create_directory(trashPath / newName);      //if folder's name dosent exists
+				copyDirectoryContents(pathLocal / selected, trashPath / newName);
+				std::filesystem::remove_all((pathLocal / selected));
+			}
 		}
 		else
 		{
-			std::filesystem::copy(pathLocal / selected, trashPath);
-		}
-		std::filesystem::remove_all((pathLocal / selected));
-	}
-	else QMessageBox::warning(this, "Alert!", "Please select a file to delete!");
+			if (!std::filesystem::exists(trashPath / selected))
+			{
+				std::filesystem::copy(pathLocal / selected, trashPath);
+				std::filesystem::remove_all((pathLocal / selected));
+			}
 
+			else
+			{															//if 2 file with the sa me name exists
+				std::string extension, fileName, newName;
+				splitFileName(selected, extension, fileName);
+				newName = fileName + "(1)" + extension;
+				std::filesystem::rename(pathLocal / selected, pathLocal / newName);
+				std::filesystem::copy(pathLocal / newName, trashPath);
+				std::filesystem::remove_all((pathLocal / newName));
+			}
+		}
+
+	}
+
+	else
+		QMessageBox::warning(this, "Alert!", "Please select a file to delete!");
 	refreshLocal();
 	selected = "";
 }
+
+
+
 
 void Account::refresh()
 {
@@ -345,40 +399,33 @@ bool renameFile(Client client, std::string oldName, std::string newName)
 	return 1;
 }
 
-void Account::syncFolderWithMetadata(const std::filesystem::path& path, const Metadata& metadata)
-{
+void Account::syncFolderWithMetadata(const std::filesystem::path& path, const Metadata& metadata) {
 	FowlerNollVo hashFunction;
 	std::unordered_set<long long> hashes;
-	for (const auto& iterator : std::filesystem::directory_iterator(path))
+	for (const auto& it : std::filesystem::directory_iterator(path))
 	{
-		if (iterator.path().filename().string() != "metadata.json" && iterator.path().filename().string() != "Recycle Bin")
+		if (it.path().filename().string() != "metadata.json" && it.path().filename().string() != "Recycle Bin")
 		{
-			if (metadata.m_body.find(iterator.path().filename().string()) != metadata.m_body.end())
-			{
-				long long lastWriteTime = std::chrono::duration_cast<std::chrono::milliseconds>(iterator.last_write_time().time_since_epoch()).count();
 
-				if (lastWriteTime - 10 > metadata.m_body[iterator.path().filename().string()]["lastWriteTime"]) 
-				{
-					std::cout << iterator.path().string() << ": trebuie actualizat" << std::endl;
-
-					if (std::filesystem::exists(pathGlobal / iterator.path().filename())) 
-					{
-						if (std::filesystem::is_directory(iterator.path()))
-						{
-							std::cout << "Deci am sters" << pathGlobal / iterator.path().filename() << "\n";
-							std::filesystem::remove_all(pathGlobal / iterator.path().filename());
-							std::filesystem::create_directory(pathGlobal / iterator.path().filename());
-							copyDirectoryContents(iterator.path(), pathGlobal / iterator.path().filename());
+			//daca exista fisierul
+			if (metadata.m_body.find(it.path().filename().string()) != metadata.m_body.end()) {
+				long long lastWriteTime = std::chrono::duration_cast<std::chrono::milliseconds>(it.last_write_time().time_since_epoch()).count();
+				if (lastWriteTime - 10 > metadata.m_body[it.path().filename().string()]["lastWriteTime"]) {
+					std::cout << it.path().string() << ": trebuie actualizat" << std::endl;
+					if (std::filesystem::exists(pathGlobal / it.path().filename())) {
+						if (std::filesystem::is_directory(it.path())) {
+							std::cout << "Deci am sters" << pathGlobal / it.path().filename() << "\n";
+							std::filesystem::remove_all(pathGlobal / it.path().filename());
+							std::filesystem::create_directory(pathGlobal / it.path().filename());
+							copyDirectoryContents(it.path(), pathGlobal / it.path().filename());
 						}
-						else 
-						{
-							std::filesystem::remove(pathGlobal / iterator.path().filename());
-							std::filesystem::copy(iterator.path(), pathGlobal);
+						else {
+							std::filesystem::remove(pathGlobal / it.path().filename());
+							std::filesystem::copy(it.path(), pathGlobal);
 						}
 					}
-					Server(ServerCommand::UPDATE_FILE, iterator.path().string(), "");
+					Server(ServerCommand::UPDATE_FILE, it.path().string(), "");
 					std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-
 					Metadata metadata;
 					std::string pathGlobal = "./StoredServerFiles/";
 					pathGlobal += userName;
@@ -386,68 +433,86 @@ void Account::syncFolderWithMetadata(const std::filesystem::path& path, const Me
 					metadata.outputJson(pathGlobal + "/metadata.json");
 				}
 			}
-			else 
-			{
-				uint16_t rename = 0;
+			else {//cazul de redenumire
+				int rename = 0;
 				std::string renamed;
 				std::string renamedPath;
-
-				for (const auto& item : metadata.m_body.items()) 
-				{
-					size_t hash = hashFunction.hashAll(iterator.path().string());
-
-					if (item.value()["hash"] == hash&&hash!=0) 
-					{
-						rename = 1;
-						hashes.insert(hash);
-						renamed = item.key();
-						renamedPath = iterator.path().string();
-						renamedPath = renamedPath.substr(0, renamedPath.find_last_of('\\'));
-						renamedPath += "/";
-						renamedPath += renamed;
-						break;
+				for (const auto& item : metadata.m_body.items()) {
+					if (std::filesystem::is_directory(it.path())) {
+						size_t hash = hashFunction.getHashOfFolder(it.path().string());
+						if (item.value()["hash"] == hash) {
+							rename = 1;
+							hashes.insert(hash);
+							renamed = item.key();
+							renamedPath = it.path().string();
+							renamedPath = renamedPath.substr(0, renamedPath.find_last_of('\\'));
+							renamedPath += "/";
+							renamedPath += renamed;
+							break;
+						}
 					}
+					else if (it.path().filename().string().find(".txt") != std::string::npos)
+					{
+						size_t hash = hashFunction.hashingTextFile(it.path().string());
+						if (item.value()["hash"] == hash) {
+							rename = 1;
+							hashes.insert(hash);
+							renamed = item.key();
+							renamedPath = it.path().string();
+							renamedPath = renamedPath.substr(0, renamedPath.find_last_of('\\'));
+							renamedPath += "/";
+							renamedPath += renamed;
+							break;
+						}
+
+					}
+					else
+						if (it.path().filename().string().find(".mp4") != std::string::npos ||
+							it.path().filename().string().find(".jpg") != std::string::npos ||
+							it.path().filename().string().find(".png") != std::string::npos
+							) {
+							size_t hash = hashFunction.hashingImageFileAndVideoFile(it.path().string());
+							if (item.value()["hash"] == hash) {
+								rename = 1;
+								hashes.insert(hash);
+								renamed = item.key();
+								renamedPath = it.path().string();
+								renamedPath = renamedPath.substr(0, renamedPath.find_last_of('\\'));
+								renamedPath += "/";
+								renamedPath += renamed;
+								break;
+							}
+						}
+
 				}
-
-				if (rename) 
-				{
-					std::cout << renamed << " fisier redenumit in: " << iterator.path().filename().string() << std::endl;
-					Server(ServerCommand::RENAME_FILE, renamed, iterator.path().filename().string());
-					std::cout << renamed << ' ' << iterator.path().filename().string();
-
-					if (std::filesystem::exists(pathGlobal / iterator.path().filename().string())) 
-					{
-						std::filesystem::rename(pathGlobal / renamed, pathGlobal / iterator.path().filename().string());
+				if (rename) {
+					std::cout << renamed << " fisier redenumit in: " << it.path().filename().string() << std::endl;
+					Server(ServerCommand::RENAME_FILE, renamed, it.path().filename().string());
+					std::cout << renamed << ' ' << it.path().filename().string();
+					if (std::filesystem::exists(pathGlobal / it.path().filename().string())) {
+						std::filesystem::rename(pathGlobal / renamed, pathGlobal / it.path().filename().string());
 					}
-
 					Metadata metadata;
 					std::string pathGlobal = "./StoredServerFiles/";
 					pathGlobal += userName;
 					metadata.folderMetadata(path.string());
 					metadata.outputJson(pathGlobal + "/metadata.json");
 				}
-				else 
-				{
-					std::cout << "fisier/folder nou: " << iterator.path().string() << std::endl;
-
-					if (std::filesystem::is_directory(iterator.path())) {
-						std::filesystem::create_directory(pathGlobal / iterator.path().filename().string());
-						copyDirectoryContents(iterator.path(), pathGlobal / iterator.path().filename());
+				else {//nu exista pana acum
+					std::cout << "fisier/folder nou: " << it.path().string() << std::endl;
+					if (std::filesystem::is_directory(it.path())) {
+						std::filesystem::create_directory(pathGlobal / it.path().filename().string());
+						copyDirectoryContents(it.path(), pathGlobal / it.path().filename());
 					}
-					else 
-					{
-						if (!std::filesystem::exists(pathGlobal / iterator.path().filename())) 
-						{
-							std::filesystem::copy(iterator.path(), pathGlobal);
+					else {
+						if (!std::filesystem::exists(pathGlobal / it.path().filename())) {
+							std::filesystem::copy(it.path(), pathGlobal);
 						}
 					}
-					if (std::filesystem::exists(pathGlobal / iterator.path().filename())) 
-					{
-						Server(ServerCommand::UPDATE_FILE, iterator.path().string(), "");
+					if (std::filesystem::exists(pathGlobal / it.path().filename())) {
+						Server(ServerCommand::UPDATE_FILE, it.path().string(), "");
 					}
-
 					std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-
 					Metadata metadata;
 					std::string pathGlobal = "./StoredServerFiles/";
 					pathGlobal += userName;
@@ -457,44 +522,32 @@ void Account::syncFolderWithMetadata(const std::filesystem::path& path, const Me
 			}
 		}
 	}
-	
-	for (const auto& item : metadata.m_body.items())
-	{
-		uint16_t name = 1, hash = 1;
-
-		if (!std::filesystem::exists(path / item.key())) 
-		{
+	//cazul de stergere
+	for (const auto& item : metadata.m_body.items()) {
+		int name = 1, hash = 1;
+		if (!std::filesystem::exists(path / item.key())) {
 			name = 0;
 		}
-
-		if (hashes.find(item.value()["hash"]) == hashes.end()) 
-		{
+		if (hashes.find(item.value()["hash"]) == hashes.end()) {
 			hash = 0;
 		}
-
-		if (name == 0 && hash == 0) 
-		{
+		if (name == 0 && hash == 0) {
 			std::cout << (path / item.key()).string() << std::endl;
-
-			if (std::filesystem::is_directory(pathGlobal / item.key())) 
-			{
+			if (std::filesystem::is_directory(pathGlobal / item.key())) {
 				std::cout << "Sterg: " << pathGlobal / item.key() << std::endl;
 				std::filesystem::remove_all(pathGlobal / item.key());
 			}
-
-			else
-			{
+			else {
 				std::cout << "Sterg: " << pathGlobal / item.key() << std::endl;
 				std::filesystem::remove(pathGlobal / item.key());
 			}
-
 			Server(ServerCommand::DELETE_FILE, item.key(), "");
-
 			Metadata metadata;
 			std::string pathGlobal = "./StoredServerFiles/";
 			pathGlobal += userName;
 			metadata.folderMetadata(path.string());
 			metadata.outputJson(pathGlobal + "/metadata.json");
+			/*std::this_thread::sleep_for(std::chrono::milliseconds(250));*/
 		}
 	}
 }
@@ -539,14 +592,22 @@ void Account::showTrash()
 
 void Account::restore()
 {
+	int folderNumber = 1;
 	if (selectedTrash != "")
 	{
 		if (std::filesystem::is_directory(trashPath / selectedTrash))
 		{
-			std::filesystem::create_directory("./StoredFiles/" + userName + "/" + selectedTrash);
-			copyDirectoryContents(trashPath / selectedTrash, "./StoredFiles/" + userName + "/" + selectedTrash);
+			if (!std::filesystem::exists("./StoredFiles/" + userName + "/" + selectedTrash))
+			{
+				std::filesystem::create_directory("./StoredFiles/" + userName + "/" + selectedTrash);
+				copyDirectoryContents(trashPath / selectedTrash, "./StoredFiles/" + userName + "/" + selectedTrash);
+			}
+			else
+			{
+				QMessageBox::warning(this, "Alert!", "This file already exists!");
+			}
+			
 		}
-
 		else
 		{
 			std::filesystem::copy(trashPath / selectedTrash, "./StoredFiles/" + userName);
@@ -554,20 +615,26 @@ void Account::restore()
 		std::filesystem::remove_all((trashPath / selectedTrash));
 	}
 
+	
+
+
 	refresh();
 }
-
 void Account::addFile()
 {
 	QFileDialog* file = new QFileDialog(this);
 	QString fileSelected = file->getOpenFileName();
-
 	if (!fileSelected.isNull())
 	{
-		std::string fileName = fileSelected.toStdString();
-		std::filesystem::copy(fileName, pathLocal);
+		std::string filePath = fileSelected.toStdString();
+		std::string fileName = QFileInfo(fileSelected).fileName().toStdString();
+		if (!std::filesystem::exists(pathLocal / fileName))
+			std::filesystem::copy(filePath, pathLocal);
+		else
+		{
+			QMessageBox::warning(this, "Alert!", "This file already exists!");
+		}
 	}
-
 	refresh();
 }
 
@@ -616,7 +683,7 @@ void Account::checkLayout(QWidget* currentWidget)
 	}
 }
 
-QPixmap Account::gridLine(QPixmap pixmap, QLabel* image, QGridLayout* grid, QPushButton* label, int contorServerGrid, std::filesystem::directory_entry file)
+QPixmap Account::gridLine(QPixmap pixmap, QLabel* image, QGridLayout* grid, QPushButton* label, uint16_t contorServerGrid, std::filesystem::directory_entry file)
 {
 	pixmap = pixmap.scaled(image->size(), Qt::KeepAspectRatio);
 	image->setPixmap(pixmap);
@@ -625,13 +692,14 @@ QPixmap Account::gridLine(QPixmap pixmap, QLabel* image, QGridLayout* grid, QPus
 	label->setText(labelText);
 	image->setVisible(true);
 
+
 	grid->addWidget(image, contorServerGrid, 0);
 	grid->addWidget(label, contorServerGrid, 1);
 
 	return pixmap;
 }
 
-QPixmap Account::gridLayout(QPixmap pixmap, QLabel* image, QGridLayout* grid, QPushButton* label, int contorServerGrid, std::filesystem::directory_entry file)
+QPixmap Account::gridLayout(QPixmap pixmap, QLabel* image, QGridLayout* grid, QPushButton* label, uint16_t contorServerGrid, std::filesystem::directory_entry file)
 {
 	pixmap = pixmap.scaled(image->size(), Qt::KeepAspectRatio);
 	image->setPixmap(pixmap);
@@ -666,7 +734,7 @@ void Account::showContentLocal()
 	ui.localWidget->setLayout(gridLocal);
 	uint16_t contorServerGrid = -1;
 
-	for (auto& file : std::filesystem::directory_iterator(pathLocal))
+	for (const auto& file : std::filesystem::directory_iterator(pathLocal))
 	{
 		contorServerGrid++;
 
@@ -777,7 +845,7 @@ void Account::showContentServer()
 	ui.serverWidget->setLayout(gridServer);
 	uint16_t contorServerGrid = -1;
 
-	for (auto& file : std::filesystem::directory_iterator(pathGlobal))
+	for (const auto& file : std::filesystem::directory_iterator(pathGlobal))
 	{
 		contorServerGrid++;
 
@@ -867,7 +935,7 @@ void Account::showContentTrash()
 	ui.serverWidget->setLayout(gridServer);
 	uint16_t contorServerGrid = -1;
 
-	for (auto& file : std::filesystem::directory_iterator(trashPath))
+	for (const auto& file : std::filesystem::directory_iterator(trashPath))
 	{
 		contorServerGrid++;
 
@@ -982,8 +1050,8 @@ void Account::startup()
 	QString helloUsername = QString::fromStdString(helloUser);
 	ui.helloUsername->setText(helloUsername);
 
-	connect(this, SIGNAL(renameFileSignal(std::string)), this, SLOT(renameFileSlot(std::string)));
-	connect(this, SIGNAL(deleteFileSignal(std::string)), this, SLOT(deleteFileSlot(std::string)));
+	connect(this, SIGNAL(renameFileSignal(std::string&)), this, SLOT(renameFileSlot(std::string&)));
+	connect(this, SIGNAL(deleteFileSignal(std::string&)), this, SLOT(deleteFileSlot(std::string&)));
 	checkTrash();
 
 	connect(&pollingVariable, SIGNAL(poolingSignal()), this, SLOT(polling()));
