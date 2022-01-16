@@ -345,17 +345,17 @@ void Account::syncFolderWithMetadata(const std::filesystem::path& path, const Me
 					std::cout << it.path().string() << ": trebuie actualizat" << std::endl;
 					if (std::filesystem::exists(pathGlobal / it.path().filename())) {
 						if (std::filesystem::is_directory(it.path())) {
-							std::cout << "Deci am sters" << pathGlobal / it.path().filename()<<"\n";
+							std::cout << "Deci am sters" << pathGlobal / it.path().filename() << "\n";
 							std::filesystem::remove_all(pathGlobal / it.path().filename());
 							std::filesystem::create_directory(pathGlobal / it.path().filename());
-							copyDirectoryContents(it.path(),pathGlobal/it.path().filename());
+							copyDirectoryContents(it.path(), pathGlobal / it.path().filename());
 						}
 						else {
 							std::filesystem::remove(pathGlobal / it.path().filename());
 							std::filesystem::copy(it.path(), pathGlobal);
 						}
 					}
-					Server(ServerCommand::UPDATE_FILE, it.path().string(),"");
+					Server(ServerCommand::UPDATE_FILE, it.path().string(), "");
 					std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 					Metadata metadata;
 					std::string pathGlobal = "./StoredServerFiles/";
@@ -369,52 +369,17 @@ void Account::syncFolderWithMetadata(const std::filesystem::path& path, const Me
 				std::string renamed;
 				std::string renamedPath;
 				for (const auto& item : metadata.m_body.items()) {
-					if (std::filesystem::is_directory(it.path())) {
-						size_t hash = hashFunction.getHashOfFolder(it.path().string());
-						if (item.value()["hash"] == hash) {
-							rename = 1;
-							hashes.insert(hash);
-							renamed = item.key();
-							renamedPath = it.path().string();
-							renamedPath = renamedPath.substr(0, renamedPath.find_last_of('\\'));
-							renamedPath += "/";
-							renamedPath += renamed;
-							break;
-						}
+					size_t hash = hashFunction.hashAll(it.path().string());
+					if (item.value()["hash"] == hash&&hash!=0) {
+						rename = 1;
+						hashes.insert(hash);
+						renamed = item.key();
+						renamedPath = it.path().string();
+						renamedPath = renamedPath.substr(0, renamedPath.find_last_of('\\'));
+						renamedPath += "/";
+						renamedPath += renamed;
+						break;
 					}
-					else if (it.path().filename().string().find(".txt") != std::string::npos)
-					{
-						size_t hash = hashFunction.hashingTextFile(it.path().string());
-						if (item.value()["hash"] == hash) {
-							rename = 1;
-							hashes.insert(hash);
-							renamed = item.key();
-							renamedPath = it.path().string();
-							renamedPath = renamedPath.substr(0, renamedPath.find_last_of('\\'));
-							renamedPath += "/";
-							renamedPath += renamed;
-							break;
-						}
-
-					}
-					else
-						if (it.path().filename().string().find(".mp4") != std::string::npos ||
-							it.path().filename().string().find(".jpg") != std::string::npos ||
-							it.path().filename().string().find(".png") != std::string::npos
-							) {
-							size_t hash = hashFunction.hashingImageFileAndVideoFile(it.path().string());
-							if (item.value()["hash"] == hash) {
-								rename = 1;
-								hashes.insert(hash);
-								renamed = item.key();
-								renamedPath = it.path().string();
-								renamedPath = renamedPath.substr(0, renamedPath.find_last_of('\\'));
-								renamedPath += "/";
-								renamedPath += renamed;
-								break;
-							}
-						}
-
 				}
 				if (rename) {
 					std::cout << renamed << " fisier redenumit in: " << it.path().filename().string() << std::endl;
@@ -441,7 +406,7 @@ void Account::syncFolderWithMetadata(const std::filesystem::path& path, const Me
 						}
 					}
 					if (std::filesystem::exists(pathGlobal / it.path().filename())) {
-						Server(ServerCommand::UPDATE_FILE, it.path().string(),"");
+						Server(ServerCommand::UPDATE_FILE, it.path().string(), "");
 					}
 					std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 					Metadata metadata;
@@ -472,7 +437,7 @@ void Account::syncFolderWithMetadata(const std::filesystem::path& path, const Me
 				std::cout << "Sterg: " << pathGlobal / item.key() << std::endl;
 				std::filesystem::remove(pathGlobal / item.key());
 			}
-			Server(ServerCommand::DELETE_FILE, item.key(),"");
+			Server(ServerCommand::DELETE_FILE, item.key(), "");
 			Metadata metadata;
 			std::string pathGlobal = "./StoredServerFiles/";
 			pathGlobal += userName;
@@ -572,7 +537,7 @@ void Account::deleteLocal()
 				temp.insert(found, "Server");
 				std::filesystem::remove_all((pathLocal / selected));
 				std::filesystem::remove_all((pathGlobal / selected));
-				Server(ServerCommand::DOWNLOAD_FILE, temp,"");
+				Server(ServerCommand::DOWNLOAD_FILE, temp, "");
 				Metadata metadata;
 				std::string pathGlobal = "./StoredServerFiles/";
 				pathGlobal += userName;
@@ -966,7 +931,7 @@ void Account::startup()
 	connect(&pollingVariable, SIGNAL(poolingSignal()), this, SLOT(polling()));
 	pollingVariable.start();
 }
-void Account::Server(ServerCommand command, std::string source="", std::string destination="")
+void Account::Server(ServerCommand command, std::string source = "", std::string destination = "")
 {
 	Client client;
 	client.connectServer();
