@@ -1,10 +1,22 @@
 {
+ "Recycle Bin": {
+  "hash": 2166136261,
+  "lastWriteTime": 13286811751178
+ },
+ "efsdgdfdafsfadsdfasafds.txt": {
+  "hash": 3167244809882413490,
+  "lastWriteTime": 13286811766656
+ },
+ "fsdfsdf.txt": {
+  "hash": 2166136261,
+  "lastWriteTime": 13286811751044
+ },
  "metadata.json": {
   "hash": 0,
-  "lastWriteTime": 13286807306868
+  "lastWriteTime": 13286811765530
  },
- "turke.txt": {
-  "hash": 2166136261,
-  "lastWriteTime": 13286807306879
+ "turc.txt": {
+  "hash": 5789103219395484851,
+  "lastWriteTime": 13286811751074
  }
 }

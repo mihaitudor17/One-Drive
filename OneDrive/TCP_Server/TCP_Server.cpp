@@ -2,6 +2,15 @@
 #include <filesystem>
 #include <thread>
 bool uploadServer(Server client, std::string path) {
+	std::string temp = path;
+	std::size_t found = temp.find("StoredFiles");
+	if (found != std::string::npos)
+	{
+		found = temp.find("Files");
+		temp.insert(found, "Server");
+		path = temp;
+		//std::cout << path << std::endl;
+	}
 	while (true)
 	{
 		char fileName[FILENAME_MAX];
@@ -12,6 +21,17 @@ bool uploadServer(Server client, std::string path) {
 			return 0;
 		if (fileName == "/eof" || fileType == "/eof")
 			return 1;
+		//std::cout << fileName << " " << fileType << std::endl;
+		std::string temp = fileName;
+		std::size_t found = temp.find("StoredFiles");
+		if (found != std::string::npos)
+		{
+			found = temp.find("Files");
+			temp.insert(found, "Server");
+			strcpy(fileName, temp.c_str());
+			std::cout << fileName << std::endl;
+			std::cout << fileType << std::endl;
+		}
 		if (strstr(fileType, "folder"))
 		{
 			std::filesystem::create_directory(fileName);
@@ -19,6 +39,7 @@ bool uploadServer(Server client, std::string path) {
 		else if (strstr(fileType, "file"))
 		{
 			long size = client.recvFileSize(client.getSock());
+			std::cout << size << std::endl;
 			if (size > 0)
 			{
 
@@ -124,6 +145,7 @@ int main() {
 					strcpy(fileName, server.recvFileName(server.getSock()));
 					if (fileName == "NULL")
 						return 0;
+					if (server.sendFileName(server.getSock(), fileName));
 					std::cout << fileName << std::endl;
 					if (server.sendFile(server.getSock(), fileName) == 0)
 						return 0;
