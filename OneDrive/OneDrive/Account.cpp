@@ -411,10 +411,8 @@ void Account::syncFolderWithMetadata(const std::filesystem::path& path, const Me
 			if (metadata.m_body.find(it.path().filename().string()) != metadata.m_body.end()) {
 				long long lastWriteTime = std::chrono::duration_cast<std::chrono::milliseconds>(it.last_write_time().time_since_epoch()).count();
 				if (lastWriteTime - 10 > metadata.m_body[it.path().filename().string()]["lastWriteTime"]) {
-					std::cout << it.path().string() << ": trebuie actualizat" << std::endl;
 					if (std::filesystem::exists(pathGlobal / it.path().filename())) {
 						if (std::filesystem::is_directory(it.path())) {
-							std::cout << "Deci am sters" << pathGlobal / it.path().filename() << "\n";
 							std::filesystem::remove_all(pathGlobal / it.path().filename());
 							std::filesystem::create_directory(pathGlobal / it.path().filename());
 							copyDirectoryContents(it.path(), pathGlobal / it.path().filename());
@@ -486,9 +484,7 @@ void Account::syncFolderWithMetadata(const std::filesystem::path& path, const Me
 
 				}
 				if (rename) {
-					std::cout << renamed << " fisier redenumit in: " << it.path().filename().string() << std::endl;
 					Server(ServerCommand::RENAME_FILE, renamed, it.path().filename().string());
-					std::cout << renamed << ' ' << it.path().filename().string();
 					if (std::filesystem::exists(pathGlobal / it.path().filename().string())) {
 						std::filesystem::rename(pathGlobal / renamed, pathGlobal / it.path().filename().string());
 					}
@@ -499,7 +495,6 @@ void Account::syncFolderWithMetadata(const std::filesystem::path& path, const Me
 					metadata.outputJson(pathGlobal + "/metadata.json");
 				}
 				else {//nu exista pana acum
-					std::cout << "fisier/folder nou: " << it.path().string() << std::endl;
 					if (std::filesystem::is_directory(it.path())) {
 						std::filesystem::create_directory(pathGlobal / it.path().filename().string());
 						copyDirectoryContents(it.path(), pathGlobal / it.path().filename());
@@ -532,13 +527,10 @@ void Account::syncFolderWithMetadata(const std::filesystem::path& path, const Me
 			hash = 0;
 		}
 		if (name == 0 && hash == 0) {
-			std::cout << (path / item.key()).string() << std::endl;
 			if (std::filesystem::is_directory(pathGlobal / item.key())) {
-				std::cout << "Sterg: " << pathGlobal / item.key() << std::endl;
 				std::filesystem::remove_all(pathGlobal / item.key());
 			}
 			else {
-				std::cout << "Sterg: " << pathGlobal / item.key() << std::endl;
 				std::filesystem::remove(pathGlobal / item.key());
 			}
 			Server(ServerCommand::DELETE_FILE, item.key(), "");
@@ -555,7 +547,6 @@ void Account::syncFolderWithMetadata(const std::filesystem::path& path, const Me
 void Account::polling()
 {
 	mutex.lock();
-	std::cout << "POLL\n";
 	std::string pathGlobal = "./StoredServerFiles/";
 	std::string pathLocal = "./StoredFiles/";
 
