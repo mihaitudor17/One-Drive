@@ -22,28 +22,28 @@ class Account : public QWidget
 {
 	Q_OBJECT
 
-
 signals:
-	void renameFileSignal(std::string selected);
-	void deleteFileSignal(std::string selected);
+	void renameFileSignal(const std::string& selected);
+	void deleteFileSignal(const std::string& selected);
+
 private slots:
 	void addFolder();
 	void backFolderLocal();
 	void backFolderServer();
-	void renameFileSlot(std::string selected);
+	void renameFileSlot(const std::string& selected);
 	void renameLocalSendSignal();
 	void deleteLocalSendSignal();
 	void refreshLocal();
 	void refreshServer();
 	void refreshTrash();
-	void deleteFileSlot(std::string selected);
+	void deleteFileSlot(const std::string& selected);
 	void refresh();
 	void polling();
 	void showTrash();
 	void restore();
-	void changeTrashLogo();
 	void addFile();
 	void deleteLocal();
+
 private:
 	QPushButton* labelToBeDeselected;
 	std::string selected;
@@ -67,9 +67,8 @@ private:
 
 	void checkTrash();
 
-	QPixmap gridLine(QPixmap pixmap, QLabel* image, QGridLayout* gridLocal, QPushButton* label, int contorServerGrid, std::filesystem::directory_entry file);
-
-	QPixmap gridLayout(QPixmap pixmap, QLabel* image, QGridLayout* gridLocal, QPushButton* label, int contorServerGrid, std::filesystem::directory_entry file);
+	QPixmap gridLine(QPixmap pixmap, QLabel* image, QGridLayout* gridLocal, QPushButton* label, uint16_t contorServerGrid, std::filesystem::directory_entry file);
+	QPixmap gridLayout(QPixmap pixmap, QLabel* image, QGridLayout* gridLocal, QPushButton* label, uint16_t contorServerGrid, std::filesystem::directory_entry file);
 
 	bool checkRezervedFiles(std::filesystem::directory_entry file);
 
@@ -80,5 +79,4 @@ public:
 	std::string getUser();
 	QMutex mutex;
 	void syncFolderWithMetadata(const std::filesystem::path& path, const Metadata& metadata);
-
 };
