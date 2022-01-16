@@ -386,8 +386,3 @@ FodyWeavers.xsd
 # JetBrains Rider
 .idea/
 *.sln.iml
-
-#Foldere suplimentare
-*/StoredFiles
-*/StoredServerFiles
-*/Usernames.json
