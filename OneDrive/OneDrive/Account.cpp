@@ -238,37 +238,50 @@ bool updateFile(Client client, std::filesystem::path it) {
 	std::string temp = it.string();
 	std::size_t found = temp.find("Files");
 	temp.insert(found, "Server");
-	if (is_directory(it))
+	if (std::filesystem::exists(it))
 	{
+		for (const auto& it : std::filesystem::recursive_directory_iterator(it))
+		{
+			if (it.is_directory())
+			{
+				char fileName[FILENAME_MAX];
+				strcpy(fileName, it.path().string().c_str());
+				if (client.sendFileName(client.getSock(), fileName) == 0)
+					return 0;
+				char fileType[FILENAME_MAX];
+				strcpy(fileType, "folder");
+				if (client.sendFileName(client.getSock(), fileType) == 0)
+					return 0;
+			}
+			else
+			{
+				char fileName[FILENAME_MAX];
+				strcpy(fileName, it.path().string().c_str());
+				if (client.sendFileName(client.getSock(), fileName) == 0)
+					return 0;
+				char fileType[FILENAME_MAX];
+				strcpy(fileType, "file");
+				if (client.sendFileName(client.getSock(), fileType) == 0)
+					return 0;
+				if (client.sendFile(client.getSock(), it.path().string()) == 0)
+					return 0;
+			}
+
+		}
 		char fileName[FILENAME_MAX];
-		strcpy(fileName, temp.c_str());
+		strcpy(fileName, "/eof");
 		if (client.sendFileName(client.getSock(), fileName) == 0)
 			return 0;
-		char fileType[FILENAME_MAX];
-		strcpy(fileType, "folder");
-		if (client.sendFileName(client.getSock(), fileType) == 0)
+		if (client.sendFileName(client.getSock(), fileName) == 0)
 			return 0;
+		return 1;
 	}
 	else
 	{
-		char fileName[FILENAME_MAX];
-		strcpy(fileName, temp.c_str());
-		if (client.sendFileName(client.getSock(), fileName) == 0)
-			return 0;
-		char fileType[FILENAME_MAX];
-		strcpy(fileType, "file");
-		if (client.sendFileName(client.getSock(), fileType) == 0)
-			return 0;
-		if (client.sendFile(client.getSock(), it.string()) == 0)
-			return 0;
+		std::filesystem::create_directory(it);
+		return 1;
 	}
-	char fileName[FILENAME_MAX];
-	strcpy(fileName, "/eof");
-	if (client.sendFileName(client.getSock(), fileName) == 0)
-		return 0;
-	if (client.sendFileName(client.getSock(), fileName) == 0)
-		return 0;
-	return 1; }
+}
 bool renameFile(Client client, std::string oldName, std::string newName) { 
 	if (client.sendFileName(client.getSock(), &oldName[0]) == 0)
 		return 0;
@@ -323,7 +336,8 @@ void Account::syncFolderWithMetadata(const std::filesystem::path& path, const Me
 				//std::cout << it.path().filename().string() << " " << lastWriteTime << std::endl;
 				if (lastWriteTime-10 > metadata.m_body[it.path().filename().string()]["lastWriteTime"]) {
 					std::cout << it.path().string() << ": trebuie actualizat" << std::endl;//ok
-					//Server("updateFile", it.path().string());
+					Server("updateFile", it.path().string());
+					std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 					Metadata metadata;
 					std::string pathGlobal = "./StoredServerFiles/";
 					pathGlobal += userName;
@@ -394,7 +408,8 @@ void Account::syncFolderWithMetadata(const std::filesystem::path& path, const Me
 				}
 				else {//nu exista pana acum
 					std::cout << "fisier/folder nou: " << it.path().string() << std::endl;
-					//Server("updateFile", it.path().string());
+					Server("updateFile", it.path().string());
+					std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 					Metadata metadata;
 					std::string pathGlobal = "./StoredServerFiles/";
 					pathGlobal += userName;

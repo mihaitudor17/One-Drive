@@ -1,1 +1,10 @@
-null
+{
+ "metadata.json": {
+  "hash": 0,
+  "lastWriteTime": 13286807306868
+ },
+ "turke.txt": {
+  "hash": 2166136261,
+  "lastWriteTime": 13286807306879
+ }
+}

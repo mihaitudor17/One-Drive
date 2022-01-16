@@ -2,8 +2,6 @@
 #include <filesystem>
 #include <thread>
 bool uploadServer(Server client, std::string path) {
-	std::filesystem::remove_all(path);
-	std::filesystem::create_directory(path);
 	while (true)
 	{
 		char fileName[FILENAME_MAX];
@@ -136,41 +134,7 @@ int main() {
 				else
 					if (strstr(command, "updateFile"))
 					{
-						while (true)
-						{
-							char fileName[FILENAME_MAX];
-							char fileType[FILENAME_MAX];
-							strcpy(fileName, server.recvFileName(server.getSock()));
-							strcpy(fileType, server.recvFileName(server.getSock()));
-							if (fileName == "NULL" || fileType == "NULL")
-								return 0;
-							if (fileName == "/eof" || fileType == "/eof")
-								return 1;
-							if(std::filesystem::exists(path))
-							std::filesystem::remove_all(path);
-							if (strstr(fileType, "folder"))
-							{
-								std::filesystem::create_directory(fileName);
-							}
-							else if (strstr(fileType, "file"))
-							{
-								long size = server.recvFileSize(server.getSock());
-								if (size > 0)
-								{
-
-									if (server.writeToFile(server.getSock(), fileName, size) == 0)
-										return 0;
-
-								}
-								else if (size == 0)
-								{
-									std::ofstream file;
-									file.open(fileName);
-								}
-								else if (size == -1)
-									return 0;
-							}
-						}
+						uploadServer(server, path);
 					}
 					else
 			if (strstr(command, "download"))
@@ -181,6 +145,8 @@ int main() {
 			else
 				if (strstr(command, "upload"))
 				{
+					std::filesystem::remove_all(path);
+					std::filesystem::create_directory(path);
 					uploadServer(server, path);
 				}
 		closesocket(server.getSock());
