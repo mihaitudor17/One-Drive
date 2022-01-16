@@ -11,13 +11,14 @@ class Polling : public QThread
 public:
 signals:
 	void poolingSignal();
+
 private slots:
 	void mTimeOut();
 
 public:
 	Polling();
-protected:
 
+protected:
 	void run() override;
 
 };

@@ -17,5 +17,6 @@ public:
 	size_t hashingTextFile(const std::string& filePath);
 	size_t hashingImageFileAndVideoFile(const std::string& imagePath);
 	size_t getHashOfFolder(const std::string& folderPath);
-};
 
+	size_t hashAll(const std::string& path);
+};
