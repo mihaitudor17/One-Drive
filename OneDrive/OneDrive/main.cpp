@@ -7,8 +7,7 @@
 #include "Folder.h"
 #include <thread>
 #include "Metadata.h"
-int main(int argc, char* argv[])
-{
+void initialisations() {
 	std::string path = "./StoredFiles";
 	if (!std::filesystem::exists(path))
 		std::filesystem::create_directory(path);
@@ -21,6 +20,10 @@ int main(int argc, char* argv[])
 		std::string temp = R"({"user": [] })";
 		file << temp;
 	}
+}
+int main(int argc, char* argv[])
+{
+	initialisations();
 	QApplication a(argc, argv);
 	Window w;
 	Client client;
