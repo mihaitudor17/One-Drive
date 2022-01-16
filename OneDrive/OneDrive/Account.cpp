@@ -344,7 +344,7 @@ void Account::Server(std::string command,std::string source="",std::string desti
 void Account::syncFolderWithMetadata(const std::filesystem::path& path, const Metadata& metadata) {
 	FowlerNollVo hashFunction;
 	std::unordered_set<long long> hashes;
-	for (const auto& it : std::filesystem::directory_iterator(path)) 
+	for (const auto& it : std::filesystem::directory_iterator(path))
 	{
 		if (it.path().filename().string() != "metadata.json" && it.path().filename().string() != "Recycle Bin")
 		{
@@ -353,11 +353,10 @@ void Account::syncFolderWithMetadata(const std::filesystem::path& path, const Me
 			if (metadata.m_body.find(it.path().filename().string()) != metadata.m_body.end()) {
 				long long lastWriteTime = std::chrono::duration_cast<std::chrono::milliseconds>(it.last_write_time().time_since_epoch()).count();
 				//std::cout << it.path().filename().string() << " " << lastWriteTime << std::endl;
-				if (lastWriteTime-10 > metadata.m_body[it.path().filename().string()]["lastWriteTime"]) {
+				if (lastWriteTime - 10 > metadata.m_body[it.path().filename().string()]["lastWriteTime"]) {
 					std::cout << it.path().string() << ": trebuie actualizat" << std::endl;//ok
-					copyDirectoryContents("./StoredFiles/" + userName, "./StoredServerFiles/" + userName);
 					Server("updateFile", it.path().string());
-					std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+					std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 					Metadata metadata;
 					std::string pathGlobal = "./StoredServerFiles/";
 					pathGlobal += userName;
@@ -377,7 +376,7 @@ void Account::syncFolderWithMetadata(const std::filesystem::path& path, const Me
 							hashes.insert(hash);
 							renamed = item.key();
 							renamedPath = it.path().string();
-							renamedPath=renamedPath.substr(0,renamedPath.find_last_of('\\'));
+							renamedPath = renamedPath.substr(0, renamedPath.find_last_of('\\'));
 							renamedPath += "/";
 							renamedPath += renamed;
 							break;
@@ -420,6 +419,10 @@ void Account::syncFolderWithMetadata(const std::filesystem::path& path, const Me
 				if (rename) {
 					std::cout << renamed << " fisier redenumit in: " << it.path().filename().string() << std::endl;
 					Server("renameFile", renamed, it.path().filename().string());
+					std::cout << renamed << ' ' << it.path().filename().string();
+					if (std::filesystem::exists(pathGlobal / it.path().filename().string())) {
+						std::filesystem::rename(pathGlobal / renamed, pathGlobal / it.path().filename().string());
+					}
 					Metadata metadata;
 					std::string pathGlobal = "./StoredServerFiles/";
 					pathGlobal += userName;
@@ -428,9 +431,20 @@ void Account::syncFolderWithMetadata(const std::filesystem::path& path, const Me
 				}
 				else {//nu exista pana acum
 					std::cout << "fisier/folder nou: " << it.path().string() << std::endl;
-					copyDirectoryContents("./StoredFiles/" + userName, "./StoredServerFiles/" + userName);
-					Server("updateFile", it.path().string());
-					std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+					if (std::filesystem::is_directory(it.path())) {
+						std::filesystem::create_directory(pathGlobal / it.path().filename().string());
+						copyDirectoryContents(it.path(), pathGlobal / it.path().filename());
+					}
+					else {
+						std::cout << pathGlobal << std::endl;
+						if (!std::filesystem::exists(pathGlobal / it.path().filename())) {
+							std::filesystem::copy(it.path(), pathGlobal);
+						}
+					}
+					if (std::filesystem::exists(pathGlobal / it.path().filename())) {
+						Server("updateFile", it.path().string());
+					}
+					std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 					Metadata metadata;
 					std::string pathGlobal = "./StoredServerFiles/";
 					pathGlobal += userName;
@@ -456,7 +470,7 @@ void Account::syncFolderWithMetadata(const std::filesystem::path& path, const Me
 			std::string pathGlobal = "./StoredServerFiles/";
 			pathGlobal += userName;
 			metadata.folderMetadata(path.string());
-			metadata.outputJson(pathGlobal+"/metadata.json");
+			metadata.outputJson(pathGlobal + "/metadata.json");
 			/*std::this_thread::sleep_for(std::chrono::milliseconds(250));*/
 		}
 	}
