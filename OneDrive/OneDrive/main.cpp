@@ -9,6 +9,18 @@
 #include "Metadata.h"
 int main(int argc, char* argv[])
 {
+	std::string path = "./StoredFiles";
+	if (!std::filesystem::exists(path))
+		std::filesystem::create_directory(path);
+	path = "./StoredServerFiles";
+	if (!std::filesystem::exists(path))
+		std::filesystem::create_directory(path);
+	if (!std::filesystem::exists("./Useernames.json"))
+	{
+		std::ofstream file("Usernames.json");
+		std::string temp = R"({"user": [] })";
+		file << temp;
+	}
 	QApplication a(argc, argv);
 	Window w;
 	Client client;

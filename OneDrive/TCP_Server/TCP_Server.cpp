@@ -103,6 +103,9 @@ bool downloadServer(Server client, std::string path) {
 	}
 }
 int main() {
+	std::string path = "./StoredServerFiles";
+	if (!std::filesystem::exists(path))
+		std::filesystem::create_directory(path);
 	while (true)
 	{
 		Server server;
@@ -112,6 +115,8 @@ int main() {
 		strcpy(username, server.recvUser(server.getSock()));
 		std::string path = "./StoredServerFiles/";
 		path += username;
+		if (!std::filesystem::exists(path))
+			std::filesystem::create_directory(path);
 		strcpy(command, server.recvUser(server.getSock()));
 		if (strstr(command, "deleteFile"))
 		{
