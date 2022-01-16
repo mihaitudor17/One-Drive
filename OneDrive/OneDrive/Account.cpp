@@ -447,7 +447,6 @@ void Account::syncFolderWithMetadata(const std::filesystem::path& path, const Me
 						copyDirectoryContents(it.path(), pathGlobal / it.path().filename());
 					}
 					else {
-						std::cout << pathGlobal << std::endl;
 						if (!std::filesystem::exists(pathGlobal / it.path().filename())) {
 							std::filesystem::copy(it.path(), pathGlobal);
 						}
@@ -476,6 +475,12 @@ void Account::syncFolderWithMetadata(const std::filesystem::path& path, const Me
 		}
 		if (name == 0 && hash == 0) {
 			std::cout << (path / item.key()).string() << std::endl;
+			if (std::filesystem::is_directory(pathGlobal / item.key())) {
+				std::filesystem::remove_all(pathGlobal / item.key());
+			}
+			else {
+				std::filesystem::remove(pathGlobal / item.key());
+			}
 			Server("deleteFile", item.key());
 			Metadata metadata;
 			std::string pathGlobal = "./StoredServerFiles/";
