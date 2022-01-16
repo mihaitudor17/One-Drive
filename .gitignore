@@ -388,3 +388,4 @@ FodyWeavers.xsd
 *.sln.iml
 
 ./OneDrive/OneDrive/StoredFiles
+./OneDrive/OneDrive/Usernames.json
