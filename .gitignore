@@ -388,6 +388,6 @@ FodyWeavers.xsd
 *.sln.iml
 
 #Foldere suplimentare
-OneDrive/OneDrive/StoredFiles
-OneDrive/OneDrive/StoredServerFiles
-OneDrive/OneDrive/Usernames.json
+*/StoredFiles/*
+*/StoredServerFiles/*
+*/Usernames.json
