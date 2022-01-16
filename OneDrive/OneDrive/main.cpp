@@ -14,7 +14,7 @@ void initialisations() {
 	path = "./StoredServerFiles";
 	if (!std::filesystem::exists(path))
 		std::filesystem::create_directory(path);
-	if (!std::filesystem::exists("./Useernames.json"))
+	if (!std::filesystem::exists("./Usernames.json"))
 	{
 		std::ofstream file("Usernames.json");
 		std::string temp = R"({"user": [] })";
