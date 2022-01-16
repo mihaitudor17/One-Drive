@@ -389,5 +389,5 @@ FodyWeavers.xsd
 
 #Foldere suplimentare
 OneDrive/OneDrive/StoredFiles
-StoredServerFiles
-Usernames.json
+OneDrive/OneDrive/StoredServerFiles
+OneDrive/OneDrive/Usernames.json
