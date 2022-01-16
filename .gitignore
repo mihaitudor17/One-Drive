@@ -388,6 +388,6 @@ FodyWeavers.xsd
 *.sln.iml
 
 #Foldere suplimentare
-*/StoredFiles/*
-*/StoredServerFiles/*
+*/StoredFiles
+*/StoredServerFiles
 */Usernames.json
