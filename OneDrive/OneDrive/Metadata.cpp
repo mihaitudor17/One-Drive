@@ -51,6 +51,9 @@ void Metadata::folderMetadata(const std::string& path)
 		if (p.is_directory()) {
 			nlohmann::json data;
 			data["hash"] = hashFunction.getHashOfFolder(p.path().string());
+			if (data["hash"] == 0) {
+				data["hash"] = hashFunction.hashByName(p.path().string());
+			}
 			long long lastWriteTime = std::chrono::duration_cast<std::chrono::milliseconds>(p.last_write_time().time_since_epoch()).count();
 			data["lastWriteTime"] = lastWriteTime;
 			m_body[p.path().filename().string()] = data;

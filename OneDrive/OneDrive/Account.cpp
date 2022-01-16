@@ -33,7 +33,7 @@ void Account::backFolderLocal()
 
 void Account::backFolderServer()
 {
-	
+
 	if (!serverOrTrash)
 	{
 		std::string pathAux = pathGlobal.string();
@@ -52,9 +52,9 @@ void Account::backFolderServer()
 	else
 	{
 		std::string pathAuxTrash = trashPath.string();
-		if (pathAuxTrash == ("./StoredFiles/"+userName+"/Recycle Bin"))
+		if (pathAuxTrash == ("./StoredFiles/" + userName + "/Recycle Bin"))
 		{
-			
+
 			return;
 		}
 		while (pathAuxTrash[pathAuxTrash.length() - 1] != '/')
@@ -65,7 +65,7 @@ void Account::backFolderServer()
 		trashPath = pathAuxTrash;
 		refreshTrash();
 	}
-	
+
 }
 
 void Account::renameFileSlot(std::string selected)
@@ -130,7 +130,7 @@ void Account::renameFileSlot(std::string selected)
 void Account::addFolder()
 {
 	QString folder;
-	folder = QFileDialog::getExistingDirectory(this, tr("Open Directory"),"/home",QFileDialog::ShowDirsOnly);
+	folder = QFileDialog::getExistingDirectory(this, tr("Open Directory"), "/home", QFileDialog::ShowDirsOnly);
 	if (!folder.isNull())
 	{
 		std::filesystem::path filePath = folder.toStdString();
@@ -139,7 +139,7 @@ void Account::addFolder()
 		copyDirectoryContents(filePath, "./StoredFiles/" + userName + "/" + filePath.filename().string());
 	}
 	refresh();
-	
+
 }
 
 void Account::renameLocalSendSignal()
@@ -195,7 +195,7 @@ void Account::deleteFileSlot(std::string selected)
 
 void Account::refresh()
 {
-	
+
 	refreshLocal();
 	if (!serverOrTrash)
 		refreshServer();
@@ -233,8 +233,8 @@ bool downloadFile(Client client, std::string path) {
 		else if (size == -1)
 			return 0;
 	}
-   }
-bool updateFile(Client client, std::filesystem::path it) { 
+}
+bool updateFile(Client client, std::filesystem::path it) {
 	if (std::filesystem::is_directory(it))
 	{
 		char fileName[FILENAME_MAX];
@@ -298,17 +298,17 @@ bool updateFile(Client client, std::filesystem::path it) {
 		if (client.sendFileName(client.getSock(), fileName) == 0)
 			return 0;
 	}
-		return 1;
-	
+	return 1;
+
 }
-bool renameFile(Client client, std::string oldName, std::string newName) { 
+bool renameFile(Client client, std::string oldName, std::string newName) {
 	if (client.sendFileName(client.getSock(), &oldName[0]) == 0)
 		return 0;
 	if (client.sendFileName(client.getSock(), &newName[0]) == 0)
 		return 0;
-	return 1; 
+	return 1;
 }
-void Account::Server(std::string command,std::string source="",std::string destination="")
+void Account::Server(std::string command, std::string source = "", std::string destination = "")
 {
 	Client client;
 	client.connectServer();
@@ -326,13 +326,13 @@ void Account::Server(std::string command,std::string source="",std::string desti
 	switch (cases)
 	{
 	case 0:
-		deleteFile(client,source);
+		deleteFile(client, source);
 		break;
 	case 1:
-		downloadFile(client,source);
+		downloadFile(client, source);
 		break;
 	case 2:
-		updateFile(client,source);
+		updateFile(client, source);
 		break;
 	case 3:
 		renameFile(client, source, destination);
@@ -352,9 +352,20 @@ void Account::syncFolderWithMetadata(const std::filesystem::path& path, const Me
 			//daca exista fisierul
 			if (metadata.m_body.find(it.path().filename().string()) != metadata.m_body.end()) {
 				long long lastWriteTime = std::chrono::duration_cast<std::chrono::milliseconds>(it.last_write_time().time_since_epoch()).count();
-				//std::cout << it.path().filename().string() << " " << lastWriteTime << std::endl;
 				if (lastWriteTime - 10 > metadata.m_body[it.path().filename().string()]["lastWriteTime"]) {
-					std::cout << it.path().string() << ": trebuie actualizat" << std::endl;//ok
+					std::cout << it.path().string() << ": trebuie actualizat" << std::endl;
+					if (std::filesystem::exists(pathGlobal / it.path().filename())) {
+						if (std::filesystem::is_directory(it.path())) {
+							std::cout << "Deci am sters" << pathGlobal / it.path().filename()<<"\n";
+							std::filesystem::remove_all(pathGlobal / it.path().filename());
+							std::filesystem::create_directory(pathGlobal / it.path().filename());
+							copyDirectoryContents(it.path(),pathGlobal/it.path().filename());
+						}
+						else {
+							std::filesystem::remove(pathGlobal / it.path().filename());
+							std::filesystem::copy(it.path(), pathGlobal);
+						}
+					}
 					Server("updateFile", it.path().string());
 					std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 					Metadata metadata;
@@ -484,8 +495,9 @@ void Account::polling()
 	pathGlobal += userName;
 	pathLocal += userName;
 	Metadata metadata;
-	metadata.inputJson(pathGlobal+ "/metadata.json");
+	metadata.inputJson(pathGlobal + "/metadata.json");
 	syncFolderWithMetadata(pathLocal, metadata);
+	refresh();
 	mutex.unlock();
 }
 
@@ -515,9 +527,9 @@ void Account::restore()
 	{
 		if (std::filesystem::is_directory(trashPath / selectedTrash))
 		{
-			std::filesystem::create_directory("./StoredFiles/" + userName+"/"+ selectedTrash);
-			copyDirectoryContents(trashPath / selectedTrash, "./StoredFiles/" + userName+ "/" + selectedTrash);
-			
+			std::filesystem::create_directory("./StoredFiles/" + userName + "/" + selectedTrash);
+			copyDirectoryContents(trashPath / selectedTrash, "./StoredFiles/" + userName + "/" + selectedTrash);
+
 		}
 		else
 		{
@@ -873,7 +885,7 @@ void Account::showContentTrash()
 		if (std::filesystem::is_directory(file)) {
 			QString filename = "./Assets/FolderIcon.png";
 
-			
+
 
 			if (pix.load(filename))
 			{
@@ -936,7 +948,7 @@ void Account::showContentTrash()
 void Account::checkTrash()
 {
 	if (!std::filesystem::exists(pathLocal / "Recycle Bin")) {
-		std::filesystem::create_directory(pathLocal / "Recycle Bin");          
+		std::filesystem::create_directory(pathLocal / "Recycle Bin");
 	}
 }
 void Account::startup()
@@ -946,7 +958,7 @@ void Account::startup()
 	ui.restore->hide();
 	ui.serverTrash->setText("       Server");
 	std::string userCopy = userName;
-	std::transform(userCopy.begin(), userCopy.begin()+1, userCopy.begin(), ::toupper);
+	std::transform(userCopy.begin(), userCopy.begin() + 1, userCopy.begin(), ::toupper);
 	std::string helloUser = "Hello " + userCopy + "!";
 	QString helloUsername = QString::fromStdString(helloUser);
 	ui.helloUsername->setText(helloUsername);
