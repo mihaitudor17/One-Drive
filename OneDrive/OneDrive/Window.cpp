@@ -248,6 +248,7 @@ void Window::LoginToAccount()
 void Window::Signup()
 {
 	userName = ui.Username->text().toStdString();
+	std::transform(userName.begin(), userName.end(), userName.begin(), ::tolower);
 	if (!checkUsername(userName))
 	{
 		ui.userSucces->setVisible(false);

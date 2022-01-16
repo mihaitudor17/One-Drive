@@ -58,26 +58,25 @@ private:
 	std::string userName;
 	Polling pollingVariable;
 	bool serverOrTrash;
-
-	const int iconsOnPage = 9;
+	QMutex mutex;
+	const uint8_t iconsOnPage = 9;
 
 	void checkLayout(QWidget* currentWidget);
 	void showContentLocal();
 	void showContentServer();
 	void showContentTrash();
-	void splitFileName(std::string fileName, std::string& extension, std::string& name);
+	void splitFileName(const std::string& fileName, std::string& extension, std::string& name);
 	void checkTrash();
-
+	void startup();
 	QPixmap gridLine(QPixmap pixmap, QLabel* image, QGridLayout* grid, QPushButton* label, uint16_t contorServerGrid, std::filesystem::directory_entry file);
 	QPixmap gridLayout(QPixmap pixmap, QLabel* image, QGridLayout* grid, QPushButton* label, uint16_t contorServerGrid, std::filesystem::directory_entry file);
-
+	void syncFolderWithMetadata(const std::filesystem::path& path, const Metadata& metadata);
 	bool checkRezervedFiles(std::filesystem::directory_entry file);
 
 public:
-	void startup();
+	
 	void Server(ServerCommand, std::string, std::string);
 	Account(const std::string& userName, QWidget* parent = 0);
 	std::string getUser();
-	QMutex mutex;
-	void syncFolderWithMetadata(const std::filesystem::path& path, const Metadata& metadata);
+	
 };
